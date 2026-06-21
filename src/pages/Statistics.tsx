@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart3, Calendar, TrendingUp } from 'lucide-react';
+import { BarChart3, Calendar, TrendingUp, RefreshCw } from 'lucide-react';
 import Heatmap from '../components/Heatmap';
 import TrendChart from '../components/TrendChart';
 import PeakPeriods from '../components/PeakPeriods';
 import ErrorAlert from '../components/ErrorAlert';
+import EmptyState from '../components/EmptyState';
 import { getHeatmapData, getTrendData, getPeakPeriods } from '../utils/api';
 import type { HeatmapPoint, TrendPoint, PeakPeriod } from '../types';
 
@@ -13,6 +14,7 @@ export default function Statistics() {
   const [peakPeriods, setPeakPeriods] = useState<PeakPeriod[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasTried, setHasTried] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -30,6 +32,7 @@ export default function Statistics() {
       setError((err as Error).message);
     } finally {
       setLoading(false);
+      setHasTried(true);
     }
   }, []);
 
@@ -39,55 +42,87 @@ export default function Statistics() {
 
   const totalUsage = trendData.reduce((sum, d) => sum + d.count, 0);
   const avgDaily = trendData.length > 0 ? Math.round(totalUsage / trendData.length) : 0;
-  const maxDay = trendData.reduce((max, d) => (d.count > max.count ? d : max), { date: '', count: 0 });
+  const maxDay = trendData.reduce(
+    (max, d) => (d.count > max.count ? d : max),
+    { date: '', count: 0 }
+  );
   const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0;
+
+  const isInitialLoading = loading && !hasTried;
+  const isRefreshing = loading && hasTried;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex items-center space-x-4 mb-8">
-            <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center">
-              <BarChart3 className="w-7 h-7" />
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center">
+                <BarChart3 className="w-7 h-7" />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold">统计分析</h1>
+                <p className="text-primary-100 mt-1">近30天使用数据统计</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold">统计分析</h1>
-              <p className="text-primary-100 mt-1">近30天使用数据统计</p>
-            </div>
+            <button
+              onClick={fetchData}
+              disabled={loading}
+              className="flex items-center space-x-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur rounded-xl transition-all disabled:opacity-50 active:scale-95"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <span className="text-sm font-medium">刷新数据</span>
+            </button>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <Calendar className="w-4 h-4 text-primary-200" />
-                <span className="text-sm text-primary-100">总使用次数</span>
-              </div>
-              <p className="text-3xl font-bold">{totalUsage}</p>
-            </div>
+            {isInitialLoading ? (
+              <>
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="bg-white/10 backdrop-blur rounded-xl p-4 animate-pulse"
+                  >
+                    <div className="h-4 w-20 bg-white/20 rounded mb-2" />
+                    <div className="h-8 w-12 bg-white/20 rounded" />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Calendar className="w-4 h-4 text-primary-200" />
+                    <span className="text-sm text-primary-100">总使用次数</span>
+                  </div>
+                  <p className="text-3xl font-bold">{hasData ? totalUsage : '-'}</p>
+                </div>
 
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-primary-200" />
-                <span className="text-sm text-primary-100">日均使用</span>
-              </div>
-              <p className="text-3xl font-bold">{avgDaily}</p>
-            </div>
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <TrendingUp className="w-4 h-4 text-primary-200" />
+                    <span className="text-sm text-primary-100">日均使用</span>
+                  </div>
+                  <p className="text-3xl font-bold">{hasData ? avgDaily : '-'}</p>
+                </div>
 
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <BarChart3 className="w-4 h-4 text-primary-200" />
-                <span className="text-sm text-primary-100">最高日使用</span>
-              </div>
-              <p className="text-3xl font-bold">{maxDay.count}</p>
-            </div>
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <BarChart3 className="w-4 h-4 text-primary-200" />
+                    <span className="text-sm text-primary-100">最高日使用</span>
+                  </div>
+                  <p className="text-3xl font-bold">{hasData ? maxDay.count : '-'}</p>
+                </div>
 
-            <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <Calendar className="w-4 h-4 text-primary-200" />
-                <span className="text-sm text-primary-100">统计周期</span>
-              </div>
-              <p className="text-3xl font-bold">30 天</p>
-            </div>
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Calendar className="w-4 h-4 text-primary-200" />
+                    <span className="text-sm text-primary-100">统计周期</span>
+                  </div>
+                  <p className="text-3xl font-bold">30 天</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -101,7 +136,7 @@ export default function Statistics() {
           />
         )}
 
-        {loading ? (
+        {isInitialLoading ? (
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-pulse">
               <div className="h-6 w-40 bg-gray-200 rounded mb-4" />
@@ -175,7 +210,18 @@ export default function Statistics() {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <EmptyState
+            title={error ? '数据加载失败' : '暂无统计数据'}
+            description={
+              error
+                ? '加载统计数据时出现问题，您可以尝试刷新。若问题持续存在，请稍后再试。'
+                : '当前还没有可用的统计数据，可能是系统刚刚启用或数据还在积累中。请稍后再来查看。'
+            }
+            onRefresh={fetchData}
+            loading={isRefreshing}
+          />
+        )}
       </div>
     </div>
   );
