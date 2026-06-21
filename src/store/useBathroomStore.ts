@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord } from '../types';
+import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats } from '../types';
 import {
   getAllFloors,
   getFloorStatus,
@@ -8,6 +8,8 @@ import {
   joinQueue as apiJoinQueue,
   leaveQueue as apiLeaveQueue,
   checkAlerts,
+  getWorkOrders as apiGetWorkOrders,
+  getWorkOrderStats as apiGetWorkOrderStats,
 } from '../utils/api';
 
 interface BathroomState {
@@ -21,6 +23,9 @@ interface BathroomState {
   showAlertModal: boolean;
   currentAlert: AlertRecord | null;
   currentAlertCount: number;
+  workOrders: WorkOrder[];
+  workOrderStats: WorkOrderStats | null;
+  workOrdersLoading: boolean;
   fetchFloors: () => Promise<void>;
   fetchFloorStatus: (floorId: string) => Promise<void>;
   fetchFloorQueue: (floorId: string) => Promise<void>;
@@ -34,6 +39,8 @@ interface BathroomState {
   dismissAlert: () => void;
   checkForAlerts: () => Promise<void>;
   processNewAlerts: (newAlerts?: AlertRecord[]) => void;
+  fetchWorkOrders: () => Promise<void>;
+  fetchWorkOrderStats: (days?: number) => Promise<void>;
 }
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
@@ -50,6 +57,9 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
   showAlertModal: false,
   currentAlert: null,
   currentAlertCount: 0,
+  workOrders: [],
+  workOrderStats: null,
+  workOrdersLoading: false,
 
   processNewAlerts: (newAlerts?: AlertRecord[]) => {
     if (!newAlerts || newAlerts.length === 0) return;
@@ -223,5 +233,25 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
 
   dismissAlert: () => {
     set({ showAlertModal: false, currentAlert: null });
+  },
+
+  fetchWorkOrders: async () => {
+    set({ workOrdersLoading: true });
+    try {
+      const { data: orders } = await apiGetWorkOrders();
+      set({ workOrders: orders, workOrdersLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, workOrdersLoading: false });
+    }
+  },
+
+  fetchWorkOrderStats: async (days: number = 30) => {
+    set({ workOrdersLoading: true });
+    try {
+      const { data: stats } = await apiGetWorkOrderStats(days);
+      set({ workOrderStats: stats, workOrdersLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, workOrdersLoading: false });
+    }
   },
 }));

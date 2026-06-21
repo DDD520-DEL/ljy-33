@@ -9,6 +9,8 @@ import type {
   QueueItem,
   AlertRecord,
   AbnormalStats,
+  WorkOrder,
+  WorkOrderStats,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -92,4 +94,12 @@ export async function leaveQueue(queueId: string): Promise<{ data: QueueItem }> 
   return request<QueueItem>(`/api/queue/${queueId}`, {
     method: 'DELETE',
   });
+}
+
+export async function getWorkOrders(): Promise<{ data: WorkOrder[] }> {
+  return request<WorkOrder[]>('/api/work-orders');
+}
+
+export async function getWorkOrderStats(days: number = 30): Promise<{ data: WorkOrderStats }> {
+  return request<WorkOrderStats>(`/api/work-orders/stats?days=${days}`);
 }

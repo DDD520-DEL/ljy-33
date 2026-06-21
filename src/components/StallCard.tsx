@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, XCircle, Wrench, Clock, AlertTriangle, Timer } from 'lucide-react';
+import { CheckCircle, XCircle, Wrench, Clock, AlertTriangle, Timer, MoreVertical } from 'lucide-react';
 import { TIMEOUT_THRESHOLD_MINUTES } from '../types';
 import type { Stall, StallStatus } from '../types';
 
@@ -11,6 +11,7 @@ interface StallCardProps {
 
 export default function StallCard({ stall, onStatusChange, index }: StallCardProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const statusConfig = {
     available: {
@@ -20,8 +21,6 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
       textColor: 'text-success-700',
       iconColor: 'text-success-500',
       dotColor: 'bg-success-500',
-      actionLabel: '标记使用中',
-      actionColor: 'bg-danger-500 hover:bg-danger-600',
       Icon: CheckCircle,
     },
     occupied: {
@@ -31,8 +30,6 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
       textColor: 'text-danger-700',
       iconColor: 'text-danger-500',
       dotColor: 'bg-danger-500',
-      actionLabel: '标记空闲',
-      actionColor: 'bg-success-500 hover:bg-success-600',
       Icon: XCircle,
     },
     maintenance: {
@@ -42,8 +39,6 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
       textColor: 'text-warning-700',
       iconColor: 'text-warning-500',
       dotColor: 'bg-warning-500',
-      actionLabel: '解除维护',
-      actionColor: 'bg-gray-500 hover:bg-gray-600',
       Icon: Wrench,
     },
   };
@@ -70,13 +65,21 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
 
   const occupiedDuration = getOccupiedDuration();
 
-  const handleClick = async () => {
+  const handleQuickToggle = async () => {
     if (isUpdating) return;
-    
     setIsUpdating(true);
     const newStatus: StallStatus = stall.status === 'available' ? 'occupied' : 'available';
     await onStatusChange(stall.id, newStatus);
     setIsUpdating(false);
+    setShowMenu(false);
+  };
+
+  const handleStatusChange = async (newStatus: StallStatus) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    await onStatusChange(stall.id, newStatus);
+    setIsUpdating(false);
+    setShowMenu(false);
   };
 
   const isAbnormal = stall.isAbnormal;
@@ -128,11 +131,62 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
             </p>
           </div>
         </div>
-        <div className={`w-3 h-3 rounded-full ${
-          isAbnormal ? 'bg-danger-600 animate-bounce' : config.dotColor
-        } ${
-          stall.status === 'occupied' ? 'animate-pulse' : ''
-        }`} />
+        <div className="flex items-center space-x-2">
+          <div className={`w-3 h-3 rounded-full ${
+            isAbnormal ? 'bg-danger-600 animate-bounce' : config.dotColor
+          } ${
+            stall.status === 'occupied' ? 'animate-pulse' : ''
+          }`} />
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className="p-1.5 rounded-lg hover:bg-white/50 transition-colors"
+              disabled={isUpdating}
+            >
+              <MoreVertical className="w-4 h-4 text-gray-500" />
+            </button>
+            {showMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-20"
+                  onClick={() => setShowMenu(false)}
+                />
+                <div className="absolute right-0 top-8 z-30 bg-white rounded-xl shadow-lg border border-gray-200 py-2 w-36">
+                  {stall.status !== 'available' && (
+                    <button
+                      onClick={() => handleStatusChange('available')}
+                      disabled={isUpdating}
+                      className="w-full px-4 py-2 text-left text-sm text-success-700 hover:bg-success-50 transition-colors flex items-center space-x-2"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      <span>标记空闲</span>
+                    </button>
+                  )}
+                  {stall.status !== 'occupied' && (
+                    <button
+                      onClick={() => handleStatusChange('occupied')}
+                      disabled={isUpdating}
+                      className="w-full px-4 py-2 text-left text-sm text-danger-700 hover:bg-danger-50 transition-colors flex items-center space-x-2"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      <span>标记使用中</span>
+                    </button>
+                  )}
+                  {stall.status !== 'maintenance' && (
+                    <button
+                      onClick={() => handleStatusChange('maintenance')}
+                      disabled={isUpdating}
+                      className="w-full px-4 py-2 text-left text-sm text-warning-700 hover:bg-warning-50 transition-colors flex items-center space-x-2"
+                    >
+                      <Wrench className="w-4 h-4" />
+                      <span>标记维护中</span>
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="space-y-2 mb-4">
@@ -156,15 +210,27 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
       </div>
 
       <button
-        onClick={handleClick}
+        onClick={handleQuickToggle}
         disabled={isUpdating}
         className={`w-full py-2.5 px-4 rounded-xl text-white font-medium text-sm transition-all duration-200 ${
           isAbnormal
             ? 'bg-gradient-to-r from-danger-500 to-danger-600 hover:from-danger-600 hover:to-danger-700 shadow-lg shadow-danger-500/30'
-            : `${config.actionColor}`
+            : stall.status === 'available'
+            ? 'bg-danger-500 hover:bg-danger-600'
+            : stall.status === 'maintenance'
+            ? 'bg-gray-500 hover:bg-gray-600'
+            : 'bg-success-500 hover:bg-success-600'
         } disabled:opacity-50 disabled:cursor-not-allowed active:scale-95`}
       >
-        {isUpdating ? '更新中...' : isAbnormal ? '解除异常' : config.actionLabel}
+        {isUpdating
+          ? '更新中...'
+          : isAbnormal
+          ? '解除异常'
+          : stall.status === 'available'
+          ? '标记使用中'
+          : stall.status === 'maintenance'
+          ? '解除维护'
+          : '标记空闲'}
       </button>
 
       {stall.status === 'occupied' && !isAbnormal && (

@@ -1,18 +1,19 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin } from 'lucide-react';
+import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin, Wrench, CheckCircle2, Timer, Zap } from 'lucide-react';
 import Heatmap from '../components/Heatmap';
 import TrendChart from '../components/TrendChart';
 import PeakPeriods from '../components/PeakPeriods';
 import ErrorAlert from '../components/ErrorAlert';
 import EmptyState from '../components/EmptyState';
-import { getHeatmapData, getTrendData, getPeakPeriods, getAbnormalStats } from '../utils/api';
-import type { HeatmapPoint, TrendPoint, PeakPeriod, AbnormalStats, AlertRecord } from '../types';
+import { getHeatmapData, getTrendData, getPeakPeriods, getAbnormalStats, getWorkOrderStats } from '../utils/api';
+import type { HeatmapPoint, TrendPoint, PeakPeriod, AbnormalStats, WorkOrderStats } from '../types';
 
 export default function Statistics() {
   const [heatmapData, setHeatmapData] = useState<HeatmapPoint[]>([]);
   const [trendData, setTrendData] = useState<TrendPoint[]>([]);
   const [peakPeriods, setPeakPeriods] = useState<PeakPeriod[]>([]);
   const [abnormalStats, setAbnormalStats] = useState<AbnormalStats | null>(null);
+  const [workOrderStats, setWorkOrderStats] = useState<WorkOrderStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasTried, setHasTried] = useState(false);
@@ -21,16 +22,18 @@ export default function Statistics() {
     setLoading(true);
     setError(null);
     try {
-      const [heatmapRes, trendRes, peaksRes, abnormalRes] = await Promise.all([
+      const [heatmapRes, trendRes, peaksRes, abnormalRes, workOrderRes] = await Promise.all([
         getHeatmapData(30),
         getTrendData(30),
         getPeakPeriods(),
         getAbnormalStats(30),
+        getWorkOrderStats(30),
       ]);
       setHeatmapData(heatmapRes.data);
       setTrendData(trendRes.data);
       setPeakPeriods(peaksRes.data);
       setAbnormalStats(abnormalRes.data);
+      setWorkOrderStats(workOrderRes.data);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -49,7 +52,7 @@ export default function Statistics() {
     (max, d) => (d.count > max.count ? d : max),
     { date: '', count: 0 }
   );
-  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0 || (abnormalStats && abnormalStats.totalAbnormalCount > 0);
+  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0 || (abnormalStats && abnormalStats.totalAbnormalCount > 0) || (workOrderStats && workOrderStats.totalOrders > 0);
 
   const isInitialLoading = loading && !hasTried;
   const isRefreshing = loading && hasTried;
@@ -78,10 +81,10 @@ export default function Statistics() {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {isInitialLoading ? (
               <>
-                {[1, 2, 3, 4, 5].map((i) => (
+                {[1, 2, 3, 4, 5, 6, 7].map((i) => (
                   <div
                     key={i}
                     className="bg-white/10 backdrop-blur rounded-xl p-4 animate-pulse"
@@ -129,10 +132,32 @@ export default function Statistics() {
 
                 <div className="bg-white/10 backdrop-blur rounded-xl p-4">
                   <div className="flex items-center space-x-2 mb-2">
-                    <Calendar className="w-4 h-4 text-primary-200" />
-                    <span className="text-sm text-primary-100">统计周期</span>
+                    <Wrench className="w-4 h-4 text-warning-200" />
+                    <span className="text-sm text-primary-100">总工单</span>
                   </div>
-                  <p className="text-3xl font-bold">30 天</p>
+                  <p className="text-3xl font-bold text-warning-200">
+                    {workOrderStats ? workOrderStats.totalOrders : '-'}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <CheckCircle2 className="w-4 h-4 text-success-300" />
+                    <span className="text-sm text-primary-100">已完成</span>
+                  </div>
+                  <p className="text-3xl font-bold text-success-300">
+                    {workOrderStats ? workOrderStats.completedOrders : '-'}
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Zap className="w-4 h-4 text-blue-300" />
+                    <span className="text-sm text-primary-100">平均响应</span>
+                  </div>
+                  <p className="text-3xl font-bold text-blue-300">
+                    {workOrderStats ? `${workOrderStats.avgResponseMinutes}分` : '-'}
+                  </p>
                 </div>
               </>
             )}
@@ -324,6 +349,122 @@ export default function Statistics() {
                     )}
                   </div>
                 )}
+              </div>
+            )}
+
+            {workOrderStats && (
+              <div
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fade-in-up"
+                style={{ animationDelay: '0.5s', opacity: 0 }}
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+                  <Wrench className="w-5 h-5 text-warning-500" />
+                  <span>工单处理效率统计</span>
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                  <div className="p-4 bg-warning-50 rounded-xl border border-warning-100">
+                    <p className="text-sm text-warning-600 mb-1">近30天总工单</p>
+                    <p className="text-2xl font-bold text-warning-900">
+                      {workOrderStats.totalOrders} 单
+                    </p>
+                  </div>
+                  <div className="p-4 bg-success-50 rounded-xl border border-success-100">
+                    <p className="text-sm text-success-600 mb-1">已完成工单</p>
+                    <p className="text-2xl font-bold text-success-900">
+                      {workOrderStats.completedOrders} 单
+                    </p>
+                  </div>
+                  <div className="p-4 bg-amber-50 rounded-xl border border-amber-100">
+                    <p className="text-sm text-amber-600 mb-1">待处理工单</p>
+                    <p className="text-2xl font-bold text-amber-900">
+                      {workOrderStats.pendingOrders} 单
+                    </p>
+                  </div>
+                  <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <p className="text-sm text-blue-600 mb-1">平均响应时间</p>
+                    <p className="text-2xl font-bold text-blue-900">
+                      {workOrderStats.avgResponseMinutes} 分钟
+                    </p>
+                  </div>
+                  <div className="p-4 bg-purple-50 rounded-xl border border-purple-100">
+                    <p className="text-sm text-purple-600 mb-1">今日新增</p>
+                    <p className="text-2xl font-bold text-purple-900">
+                      {workOrderStats.todayOrders} 单
+                    </p>
+                  </div>
+                  <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <p className="text-sm text-emerald-600 mb-1">今日完成</p>
+                    <p className="text-2xl font-bold text-emerald-900">
+                      {workOrderStats.todayCompleted} 单
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <Zap className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-blue-600">响应效率</p>
+                        <p className="text-xs text-blue-500">平均处理时长</p>
+                      </div>
+                    </div>
+                    <p className="text-3xl font-bold text-blue-900">
+                      {workOrderStats.avgResponseMinutes} <span className="text-lg font-medium">分钟</span>
+                    </p>
+                    <p className="text-xs text-blue-600 mt-2">
+                      {workOrderStats.avgResponseMinutes <= 30
+                        ? '响应速度优秀，继续保持！'
+                        : workOrderStats.avgResponseMinutes <= 60
+                        ? '响应速度良好，可进一步优化'
+                        : '响应速度偏慢，建议加强管理'}
+                    </p>
+                  </div>
+
+                  <div className="p-5 bg-gradient-to-br from-success-50 to-success-100 rounded-xl border border-success-200">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-success-500 rounded-lg flex items-center justify-center">
+                        <CheckCircle2 className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-success-600">完成率</p>
+                        <p className="text-xs text-success-500">工单处理完成情况</p>
+                      </div>
+                    </div>
+                    <p className="text-3xl font-bold text-success-900">
+                      {workOrderStats.totalOrders > 0
+                        ? Math.round((workOrderStats.completedOrders / workOrderStats.totalOrders) * 100)
+                        : 0}
+                      <span className="text-lg font-medium">%</span>
+                    </p>
+                    <p className="text-xs text-success-600 mt-2">
+                      {workOrderStats.totalOrders} 单中已完成 {workOrderStats.completedOrders} 单
+                    </p>
+                  </div>
+
+                  <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl border border-amber-200">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
+                        <Timer className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-amber-600">今日进度</p>
+                        <p className="text-xs text-amber-500">今日工单处理情况</p>
+                      </div>
+                    </div>
+                    <p className="text-3xl font-bold text-amber-900">
+                      {workOrderStats.todayOrders > 0
+                        ? Math.round((workOrderStats.todayCompleted / workOrderStats.todayOrders) * 100)
+                        : 0}
+                      <span className="text-lg font-medium">%</span>
+                    </p>
+                    <p className="text-xs text-amber-600 mt-2">
+                      今日 {workOrderStats.todayOrders} 单，完成 {workOrderStats.todayCompleted} 单
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </div>

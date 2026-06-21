@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Building2, BarChart3, Menu, X } from 'lucide-react';
+import { Building2, BarChart3, Menu, X, Wrench } from 'lucide-react';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,6 +8,7 @@ export default function Navbar() {
 
   const navItems = [
     { path: '/', label: '实时状态', icon: Building2 },
+    { path: '/work-orders', label: '维护工单', icon: Wrench },
     { path: '/stats', label: '统计分析', icon: BarChart3 },
   ];
 

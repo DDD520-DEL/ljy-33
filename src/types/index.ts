@@ -87,3 +87,28 @@ export interface AbnormalStats {
   avgDurationMinutes: number;
   abnormalRecords: AlertRecord[];
 }
+
+export type WorkOrderStatus = 'pending' | 'in_progress' | 'completed';
+
+export interface WorkOrder {
+  id: string;
+  stallId: string;
+  floorId: string;
+  stallNumber: number;
+  floorNumber: number;
+  floorName: string;
+  createdAt: number;
+  completedAt?: number;
+  status: WorkOrderStatus;
+  reason: string;
+  responseMinutes?: number;
+}
+
+export interface WorkOrderStats {
+  totalOrders: number;
+  completedOrders: number;
+  pendingOrders: number;
+  avgResponseMinutes: number;
+  todayOrders: number;
+  todayCompleted: number;
+}

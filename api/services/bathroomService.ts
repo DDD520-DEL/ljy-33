@@ -11,6 +11,8 @@ import {
   checkTimeoutStalls,
   getAlerts,
   getUnresolvedAlerts,
+  getWorkOrders as dbGetWorkOrders,
+  getWorkOrderStats as dbGetWorkOrderStats,
 } from '../db/database.js';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
 import type {
@@ -24,6 +26,8 @@ import type {
   QueueItem,
   AlertRecord,
   AbnormalStats,
+  WorkOrder,
+  WorkOrderStats,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -249,6 +253,14 @@ export function getAbnormalStats(days: number = 30): AbnormalStats {
 
 export function checkForNewAlerts(): AlertRecord[] {
   return checkTimeoutStalls();
+}
+
+export function getWorkOrders(): WorkOrder[] {
+  return dbGetWorkOrders().sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export function getWorkOrderStats(days: number = 30): WorkOrderStats {
+  return dbGetWorkOrderStats(days);
 }
 
 export { initializeData };

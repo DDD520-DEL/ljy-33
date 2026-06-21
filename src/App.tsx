@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import FloorDetail from "@/pages/FloorDetail";
 import Statistics from "@/pages/Statistics";
+import WorkOrders from "@/pages/WorkOrders";
 import Navbar from "@/components/Navbar";
 import AlertModal from "@/components/AlertModal";
 import { useBathroomStore } from "@/store/useBathroomStore";
@@ -16,6 +17,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/floor/:floorId" element={<FloorDetail />} />
         <Route path="/stats" element={<Statistics />} />
+        <Route path="/work-orders" element={<WorkOrders />} />
       </Routes>
       {showAlertModal && currentAlert && (
         <AlertModal alert={currentAlert} onDismiss={dismissAlert} />

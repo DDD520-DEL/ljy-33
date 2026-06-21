@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
-import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord } from '../../shared/types.js';
+import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +14,7 @@ const STALLS_FILE = path.join(DATA_DIR, 'stalls.json');
 const USAGE_FILE = path.join(DATA_DIR, 'usage_records.json');
 const QUEUE_FILE = path.join(DATA_DIR, 'queue.json');
 const ALERTS_FILE = path.join(DATA_DIR, 'alerts.json');
+const WORK_ORDERS_FILE = path.join(DATA_DIR, 'work_orders.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -103,6 +104,84 @@ export function getUnresolvedAlerts(): AlertRecord[] {
   return alerts.filter((a) => !a.resolved);
 }
 
+export function getWorkOrders(): WorkOrder[] {
+  return readJSON<WorkOrder[]>(WORK_ORDERS_FILE, []);
+}
+
+export function saveWorkOrders(orders: WorkOrder[]): void {
+  writeJSON(WORK_ORDERS_FILE, orders);
+}
+
+export function createWorkOrder(
+  order: Omit<WorkOrder, 'id' | 'createdAt' | 'status'>
+): WorkOrder {
+  const orders = getWorkOrders();
+  const newOrder: WorkOrder = {
+    ...order,
+    id: uuidv4(),
+    createdAt: Date.now(),
+    status: 'pending',
+  };
+  orders.push(newOrder);
+  saveWorkOrders(orders);
+  return newOrder;
+}
+
+export function completeWorkOrder(stallId: string): WorkOrder | null {
+  const orders = getWorkOrders();
+  const pendingOrder = orders.find(
+    (o) => o.stallId === stallId && o.status !== 'completed'
+  );
+  if (!pendingOrder) return null;
+
+  const now = Date.now();
+  pendingOrder.status = 'completed';
+  pendingOrder.completedAt = now;
+  pendingOrder.responseMinutes = Math.round(
+    (now - pendingOrder.createdAt) / 60000
+  );
+  saveWorkOrders(orders);
+  return pendingOrder;
+}
+
+export function getPendingWorkOrderByStall(stallId: string): WorkOrder | null {
+  const orders = getWorkOrders();
+  return orders.find((o) => o.stallId === stallId && o.status !== 'completed') || null;
+}
+
+export function getWorkOrderStats(days: number = 30): WorkOrderStats {
+  const orders = getWorkOrders();
+  const now = Date.now();
+  const startTime = now - days * 24 * 60 * 60 * 1000;
+
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const todayStart = startOfToday.getTime();
+
+  const filteredOrders = orders.filter((o) => o.createdAt >= startTime);
+  const completedOrders = filteredOrders.filter((o) => o.status === 'completed');
+  const pendingOrders = filteredOrders.filter((o) => o.status !== 'completed');
+
+  const todayOrders = orders.filter((o) => o.createdAt >= todayStart);
+  const todayCompleted = todayOrders.filter((o) => o.status === 'completed');
+
+  const avgResponseMinutes = completedOrders.length > 0
+    ? Math.round(
+        completedOrders.reduce((sum, o) => sum + (o.responseMinutes || 0), 0) /
+          completedOrders.length
+      )
+    : 0;
+
+  return {
+    totalOrders: filteredOrders.length,
+    completedOrders: completedOrders.length,
+    pendingOrders: pendingOrders.length,
+    avgResponseMinutes,
+    todayOrders: todayOrders.length,
+    todayCompleted: todayCompleted.length,
+  };
+}
+
 export function getQueue(): QueueItem[] {
   return readJSON<QueueItem[]>(QUEUE_FILE, []);
 }
@@ -182,6 +261,23 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
   const now = Date.now();
   stall.status = status;
   stall.lastUpdated = now;
+
+  if (previousStatus !== 'maintenance' && status === 'maintenance') {
+    const floors = getFloors();
+    const floor = floors.find((f) => f.id === stall.floorId);
+    if (floor) {
+      createWorkOrder({
+        stallId: stall.id,
+        floorId: stall.floorId,
+        stallNumber: stall.stallNumber,
+        floorNumber: floor.floorNumber,
+        floorName: floor.floorName,
+        reason: '设施清洁维护',
+      });
+    }
+  } else if (previousStatus === 'maintenance' && status === 'available') {
+    completeWorkOrder(stallId);
+  }
 
   if (previousStatus === 'available' && status === 'occupied') {
     stall.occupiedStartTime = now;
