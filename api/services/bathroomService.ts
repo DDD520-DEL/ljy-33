@@ -28,6 +28,7 @@ import type {
   AbnormalStats,
   WorkOrder,
   WorkOrderStats,
+  StallDurationRank,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -261,6 +262,50 @@ export function getWorkOrders(): WorkOrder[] {
 
 export function getWorkOrderStats(days: number = 30): WorkOrderStats {
   return dbGetWorkOrderStats(days);
+}
+
+export function getStallDurationRanking(days: number = 30, floorId?: string): StallDurationRank[] {
+  const records = getUsageRecords();
+  const stalls = getStalls();
+  const floors = getFloors();
+  const now = Date.now();
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
+
+  let filteredRecords = records.filter((r) => r.startTime >= cutoff);
+
+  if (floorId) {
+    filteredRecords = filteredRecords.filter((r) => r.floorId === floorId);
+  }
+
+  const stallStats: Record<string, { totalDuration: number; count: number }> = {};
+
+  filteredRecords.forEach((record) => {
+    if (!stallStats[record.stallId]) {
+      stallStats[record.stallId] = { totalDuration: 0, count: 0 };
+    }
+    stallStats[record.stallId].totalDuration += record.durationSeconds;
+    stallStats[record.stallId].count += 1;
+  });
+
+  const ranking: StallDurationRank[] = Object.entries(stallStats)
+    .map(([stallId, stats]) => {
+      const stall = stalls.find((s) => s.id === stallId);
+      const floor = floors.find((f) => f.id === stall?.floorId);
+
+      return {
+        stallId,
+        stallNumber: stall?.stallNumber || 0,
+        floorId: stall?.floorId || '',
+        floorNumber: floor?.floorNumber || 0,
+        floorName: floor?.floorName || '',
+        avgDurationMinutes: Math.round((stats.totalDuration / stats.count) / 60 * 10) / 10,
+        totalUsageCount: stats.count,
+        totalDurationMinutes: Math.round(stats.totalDuration / 60),
+      };
+    })
+    .sort((a, b) => b.avgDurationMinutes - a.avgDurationMinutes);
+
+  return ranking;
 }
 
 export { initializeData };

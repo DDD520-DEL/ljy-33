@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin, Wrench, CheckCircle2, Timer, Zap } from 'lucide-react';
+import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin, Wrench, CheckCircle2, Timer, Zap, Trophy, ChevronDown, Filter } from 'lucide-react';
 import Heatmap from '../components/Heatmap';
 import TrendChart from '../components/TrendChart';
 import PeakPeriods from '../components/PeakPeriods';
 import ErrorAlert from '../components/ErrorAlert';
 import EmptyState from '../components/EmptyState';
-import { getHeatmapData, getTrendData, getPeakPeriods, getAbnormalStats, getWorkOrderStats } from '../utils/api';
-import type { HeatmapPoint, TrendPoint, PeakPeriod, AbnormalStats, WorkOrderStats } from '../types';
+import { getHeatmapData, getTrendData, getPeakPeriods, getAbnormalStats, getWorkOrderStats, getStallDurationRanking } from '../utils/api';
+import { getAllFloors } from '../utils/api';
+import type { HeatmapPoint, TrendPoint, PeakPeriod, AbnormalStats, WorkOrderStats, StallDurationRank, FloorWithStatus } from '../types';
 
 export default function Statistics() {
   const [heatmapData, setHeatmapData] = useState<HeatmapPoint[]>([]);
@@ -14,33 +15,41 @@ export default function Statistics() {
   const [peakPeriods, setPeakPeriods] = useState<PeakPeriod[]>([]);
   const [abnormalStats, setAbnormalStats] = useState<AbnormalStats | null>(null);
   const [workOrderStats, setWorkOrderStats] = useState<WorkOrderStats | null>(null);
+  const [stallDurationRanking, setStallDurationRanking] = useState<StallDurationRank[]>([]);
+  const [floors, setFloors] = useState<FloorWithStatus[]>([]);
+  const [selectedFloorId, setSelectedFloorId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasTried, setHasTried] = useState(false);
+  const [showFloorDropdown, setShowFloorDropdown] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const [heatmapRes, trendRes, peaksRes, abnormalRes, workOrderRes] = await Promise.all([
+      const [heatmapRes, trendRes, peaksRes, abnormalRes, workOrderRes, floorsRes, rankingRes] = await Promise.all([
         getHeatmapData(30),
         getTrendData(30),
         getPeakPeriods(),
         getAbnormalStats(30),
         getWorkOrderStats(30),
+        getAllFloors(),
+        getStallDurationRanking(30, selectedFloorId || undefined),
       ]);
       setHeatmapData(heatmapRes.data);
       setTrendData(trendRes.data);
       setPeakPeriods(peaksRes.data);
       setAbnormalStats(abnormalRes.data);
       setWorkOrderStats(workOrderRes.data);
+      setFloors(floorsRes.data);
+      setStallDurationRanking(rankingRes.data);
     } catch (err) {
       setError((err as Error).message);
     } finally {
       setLoading(false);
       setHasTried(true);
     }
-  }, []);
+  }, [selectedFloorId]);
 
   useEffect(() => {
     fetchData();
@@ -52,7 +61,7 @@ export default function Statistics() {
     (max, d) => (d.count > max.count ? d : max),
     { date: '', count: 0 }
   );
-  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0 || (abnormalStats && abnormalStats.totalAbnormalCount > 0) || (workOrderStats && workOrderStats.totalOrders > 0);
+  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0 || (abnormalStats && abnormalStats.totalAbnormalCount > 0) || (workOrderStats && workOrderStats.totalOrders > 0) || stallDurationRanking.length > 0;
 
   const isInitialLoading = loading && !hasTried;
   const isRefreshing = loading && hasTried;
@@ -467,6 +476,120 @@ export default function Statistics() {
                 </div>
               </div>
             )}
+
+            <div
+              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fade-in-up"
+              style={{ animationDelay: '0.6s', opacity: 0 }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
+                  <Trophy className="w-5 h-5 text-amber-500" />
+                  <span>蹲位使用时长排行榜</span>
+                  <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-sm rounded-full">
+                    近30天
+                  </span>
+                </h3>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowFloorDropdown(!showFloorDropdown)}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-sm font-medium text-gray-700 transition-colors border border-gray-200"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span>{selectedFloorId ? floors.find(f => f.id === selectedFloorId)?.floorName + ' ' + floors.find(f => f.id === selectedFloorId)?.floorNumber + '楼' : '全部楼层'}</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${showFloorDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+                  {showFloorDropdown && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setShowFloorDropdown(false)}
+                      />
+                      <div className="absolute right-0 top-12 z-20 bg-white rounded-xl shadow-lg border border-gray-200 py-2 w-48">
+                        <button
+                          onClick={() => {
+                            setSelectedFloorId('');
+                            setShowFloorDropdown(false);
+                          }}
+                          className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors ${
+                            !selectedFloorId ? 'text-primary-600 bg-primary-50 font-medium' : 'text-gray-700'
+                          }`}
+                        >
+                          全部楼层
+                        </button>
+                        {floors.map((floor) => (
+                          <button
+                            key={floor.id}
+                            onClick={() => {
+                              setSelectedFloorId(floor.id);
+                              setShowFloorDropdown(false);
+                            }}
+                            className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors ${
+                              selectedFloorId === floor.id ? 'text-primary-600 bg-primary-50 font-medium' : 'text-gray-700'
+                            }`}
+                          >
+                            {floor.floorNumber}楼 {floor.floorName}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {stallDurationRanking.length > 0 ? (
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {stallDurationRanking.map((stall, index) => (
+                    <div
+                      key={stall.stallId}
+                      className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 hover:shadow-md ${
+                        index === 0
+                          ? 'bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200'
+                          : index === 1
+                          ? 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'
+                          : index === 2
+                          ? 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'
+                          : 'bg-gray-50 border-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
+                          index === 0
+                            ? 'bg-amber-400 text-white shadow-lg shadow-amber-400/30'
+                            : index === 1
+                            ? 'bg-gray-400 text-white shadow-lg shadow-gray-400/30'
+                            : index === 2
+                            ? 'bg-orange-400 text-white shadow-lg shadow-orange-400/30'
+                            : 'bg-gray-200 text-gray-600'
+                        }`}>
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900">
+                            {stall.floorNumber}楼 {stall.floorName}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {stall.stallNumber} 号隔间
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-gray-900">
+                          {stall.avgDurationMinutes} <span className="text-sm font-medium text-gray-500">分钟</span>
+                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          平均使用时长 · 共使用 {stall.totalUsageCount} 次
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 text-center">
+                  <Trophy className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">暂无排行数据</p>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <EmptyState

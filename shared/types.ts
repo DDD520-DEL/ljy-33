@@ -112,3 +112,14 @@ export interface WorkOrderStats {
   todayOrders: number;
   todayCompleted: number;
 }
+
+export interface StallDurationRank {
+  stallId: string;
+  stallNumber: number;
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  avgDurationMinutes: number;
+  totalUsageCount: number;
+  totalDurationMinutes: number;
+}

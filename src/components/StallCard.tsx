@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, XCircle, Wrench, Clock, AlertTriangle, Timer, MoreVertical } from 'lucide-react';
+import { CheckCircle, XCircle, Wrench, Clock, AlertTriangle, Timer, MoreVertical, BarChart3 } from 'lucide-react';
 import { TIMEOUT_THRESHOLD_MINUTES } from '../types';
 import type { Stall, StallStatus } from '../types';
 
@@ -7,9 +7,10 @@ interface StallCardProps {
   stall: Stall;
   onStatusChange: (stallId: string, status: StallStatus) => void;
   index: number;
+  avgDurationMinutes?: number;
 }
 
-export default function StallCard({ stall, onStatusChange, index }: StallCardProps) {
+export default function StallCard({ stall, onStatusChange, index, avgDurationMinutes }: StallCardProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -194,6 +195,12 @@ export default function StallCard({ stall, onStatusChange, index }: StallCardPro
           <Clock className="w-3.5 h-3.5" />
           <span>最后更新: {formatTime(stall.lastUpdated)}</span>
         </div>
+        {avgDurationMinutes !== undefined && (
+          <div className="flex items-center space-x-1 text-xs text-blue-600">
+            <BarChart3 className="w-3.5 h-3.5" />
+            <span>近7天平均: {avgDurationMinutes} 分钟</span>
+          </div>
+        )}
         {occupiedDuration && (
           <div className={`flex items-center space-x-1 text-xs ${
             isAbnormal ? 'text-danger-600 font-semibold' : 'text-amber-600'

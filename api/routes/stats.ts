@@ -4,6 +4,7 @@ import {
   getTrendData,
   getPeakPeriods,
   getAbnormalStats,
+  getStallDurationRanking,
 } from '../services/bathroomService.js';
 
 const router = Router();
@@ -71,6 +72,24 @@ router.get('/abnormal', (req: Request, res: Response): void => {
     res.status(500).json({
       success: false,
       error: 'Failed to get abnormal stats',
+    });
+  }
+});
+
+router.get('/stall-duration', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const floorId = req.query.floorId as string | undefined;
+    const data = getStallDurationRanking(days, floorId);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get stall duration ranking error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get stall duration ranking',
     });
   }
 });

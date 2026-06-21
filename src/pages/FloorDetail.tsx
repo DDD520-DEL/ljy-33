@@ -4,7 +4,8 @@ import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, Al
 import { useBathroomStore } from '../store/useBathroomStore';
 import StallCard from '../components/StallCard';
 import ErrorAlert from '../components/ErrorAlert';
-import type { StallStatus, QueueItem } from '../types';
+import { getStallDurationRanking } from '../utils/api';
+import type { StallStatus, QueueItem, StallDurationRank } from '../types';
 
 export default function FloorDetail() {
   const { floorId } = useParams<{ floorId: string }>();
@@ -29,6 +30,8 @@ export default function FloorDetail() {
   const [myQueueItem, setMyQueueItem] = useState<QueueItem | null>(null);
   const [joinError, setJoinError] = useState<string | null>(null);
   const [isJoining, setIsJoining] = useState(false);
+  const [stallDurations, setStallDurations] = useState<StallDurationRank[]>([]);
+  const [durationsLoading, setDurationsLoading] = useState(false);
 
   useEffect(() => {
     if (floorId) {
@@ -38,6 +41,29 @@ export default function FloorDetail() {
     }
     return () => stopPolling();
   }, [floorId, fetchFloorStatus, fetchFloorQueue, startPolling, stopPolling]);
+
+  const fetchStallDurations = async (floorId: string) => {
+    setDurationsLoading(true);
+    try {
+      const { data } = await getStallDurationRanking(7, floorId);
+      setStallDurations(data);
+    } catch (err) {
+      console.error('Fetch stall durations error:', err);
+    } finally {
+      setDurationsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (floorId) {
+      fetchStallDurations(floorId);
+    }
+  }, [floorId]);
+
+  const getAvgDurationForStall = (stallId: string): number | undefined => {
+    const stall = stallDurations.find((s) => s.stallId === stallId);
+    return stall?.avgDurationMinutes;
+  };
 
   useEffect(() => {
     if (myQueueItem && currentQueue) {
@@ -427,6 +453,7 @@ export default function FloorDetail() {
                     stall={stall}
                     onStatusChange={handleStatusChange}
                     index={index}
+                    avgDurationMinutes={getAvgDurationForStall(stall.id)}
                   />
                 ))}
             </div>

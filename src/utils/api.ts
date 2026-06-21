@@ -11,6 +11,7 @@ import type {
   AbnormalStats,
   WorkOrder,
   WorkOrderStats,
+  StallDurationRank,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -102,4 +103,16 @@ export async function getWorkOrders(): Promise<{ data: WorkOrder[] }> {
 
 export async function getWorkOrderStats(days: number = 30): Promise<{ data: WorkOrderStats }> {
   return request<WorkOrderStats>(`/api/work-orders/stats?days=${days}`);
+}
+
+export async function getStallDurationRanking(
+  days: number = 30,
+  floorId?: string
+): Promise<{ data: StallDurationRank[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorId) {
+    params.append('floorId', floorId);
+  }
+  return request<StallDurationRank[]>(`/api/stats/stall-duration?${params.toString()}`);
 }
