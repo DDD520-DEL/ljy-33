@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import StallCard from '../components/StallCard';
 import ErrorAlert from '../components/ErrorAlert';
@@ -92,6 +92,9 @@ export default function FloorDetail() {
 
   const hasAvailable = currentFloor ? currentFloor.availableStalls > 0 : true;
   const allOccupied = currentFloor ? currentFloor.availableStalls === 0 && currentFloor.occupiedStalls > 0 : false;
+  const abnormalCount = currentFloor
+    ? currentFloor.stalls.filter((s) => s.isAbnormal).length
+    : 0;
 
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -138,7 +141,7 @@ export default function FloorDetail() {
           )}
 
           {currentFloor ? (
-            <div className="grid grid-cols-4 gap-4 mt-8">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
               <div className="bg-white/10 backdrop-blur rounded-xl p-4">
                 <div className="flex items-center space-x-2 mb-2">
                   <Clock className="w-4 h-4 text-white/60" />
@@ -176,10 +179,30 @@ export default function FloorDetail() {
                   {queueLoading ? '...' : currentQueue?.count ?? 0}
                 </p>
               </div>
+
+              <div className={`backdrop-blur rounded-xl p-4 transition-all duration-300 ${
+                abnormalCount > 0
+                  ? 'bg-danger-500/40 border-2 border-danger-400 animate-pulse'
+                  : 'bg-white/10'
+              }`}>
+                <div className="flex items-center space-x-2 mb-2">
+                  <AlertTriangle className={`w-4 h-4 ${
+                    abnormalCount > 0 ? 'text-white' : 'text-white/60'
+                  }`} />
+                  <span className={`text-sm ${
+                    abnormalCount > 0 ? 'text-white' : 'text-white/70'
+                  }`}>异常</span>
+                </div>
+                <p className={`text-2xl font-bold ${
+                  abnormalCount > 0 ? 'text-white' : 'text-white'
+                }`}>
+                  {abnormalCount}
+                </p>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-4 mt-8">
-              {[1, 2, 3, 4].map((i) => (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
+              {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-4 animate-pulse">
                   <div className="h-4 w-16 bg-white/20 rounded mb-2" />
                   <div className="h-8 w-12 bg-white/20 rounded" />
@@ -370,8 +393,30 @@ export default function FloorDetail() {
                   <span className="w-3 h-3 rounded-full bg-warning-500" />
                   <span className="text-gray-600">维护中</span>
                 </div>
+                <div className="flex items-center space-x-1.5">
+                  <span className="w-3 h-3 rounded-full bg-danger-600 ring-2 ring-danger-400 animate-bounce" />
+                  <span className="text-danger-600 font-semibold">超时异常</span>
+                </div>
               </div>
             </div>
+
+            {abnormalCount > 0 && (
+              <div className="mb-6 bg-danger-50 border-2 border-danger-200 rounded-2xl p-5 animate-pulse-slow">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 rounded-xl bg-danger-100 flex items-center justify-center flex-shrink-0">
+                    <AlertTriangle className="w-6 h-6 text-danger-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-danger-900 text-lg">
+                      发现 {abnormalCount} 个超时占用的蹲位
+                    </h3>
+                    <p className="text-sm text-danger-700 mt-1">
+                      以下蹲位连续占用时间已超过 20 分钟，请及时确认是否存在异常情况，确保使用安全。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {currentFloor.stalls

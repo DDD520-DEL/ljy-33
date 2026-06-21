@@ -8,7 +8,11 @@ import {
   addToQueue as dbAddToQueue,
   removeFromQueue as dbRemoveFromQueue,
   isVisitorInQueue as dbIsVisitorInQueue,
+  checkTimeoutStalls,
+  getAlerts,
+  getUnresolvedAlerts,
 } from '../db/database.js';
+import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
 import type {
   FloorWithStatus,
   Stall,
@@ -18,13 +22,16 @@ import type {
   PeakPeriod,
   FloorQueue,
   QueueItem,
+  AlertRecord,
+  AbnormalStats,
 } from '../../shared/types.js';
 
-export function getAllFloors(): FloorWithStatus[] {
+export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
+  const newAlerts = checkTimeoutStalls();
   const floors = getFloors();
   const stalls = getStalls();
 
-  return floors.map((floor) => {
+  const floorsWithStatus = floors.map((floor) => {
     const floorStalls = stalls.filter((s) => s.floorId === floor.id);
     const availableStalls = floorStalls.filter((s) => s.status === 'available').length;
     const occupiedStalls = floorStalls.filter((s) => s.status === 'occupied').length;
@@ -36,14 +43,17 @@ export function getAllFloors(): FloorWithStatus[] {
       stalls: floorStalls,
     };
   });
+
+  return { floors: floorsWithStatus, newAlerts };
 }
 
-export function getFloorById(floorId: string): FloorWithStatus | null {
-  const floors = getAllFloors();
-  return floors.find((f) => f.id === floorId) || null;
+export function getFloorById(floorId: string): { floor: FloorWithStatus | null; newAlerts: AlertRecord[] } {
+  const { floors, newAlerts } = getAllFloors();
+  return { floor: floors.find((f) => f.id === floorId) || null, newAlerts };
 }
 
 export function getStallsByFloor(floorId: string): Stall[] {
+  checkTimeoutStalls();
   const stalls = getStalls();
   return stalls.filter((s) => s.floorId === floorId);
 }
@@ -192,6 +202,53 @@ export function joinQueue(floorId: string, visitorName: string): QueueItem {
 
 export function leaveQueue(queueId: string): QueueItem | null {
   return dbRemoveFromQueue(queueId);
+}
+
+export function getAbnormalStats(days: number = 30): AbnormalStats {
+  const alerts = getAlerts();
+  const usageRecords = getUsageRecords();
+  const now = Date.now();
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
+
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayStartTime = todayStart.getTime();
+
+  const filteredAlerts = alerts.filter((a) => a.alertedAt >= cutoff);
+  const todayAlerts = alerts.filter((a) => a.alertedAt >= todayStartTime);
+  const unresolvedAlerts = getUnresolvedAlerts();
+
+  const abnormalUsageRecords = usageRecords.filter(
+    (r) => r.isAbnormal && r.startTime >= cutoff
+  );
+
+  const totalAbnormalCount = abnormalUsageRecords.length;
+  const todayAbnormalCount = abnormalUsageRecords.filter(
+    (r) => r.startTime >= todayStartTime
+  ).length;
+  const currentAbnormalCount = unresolvedAlerts.length;
+
+  const avgDurationMinutes =
+    filteredAlerts.length > 0
+      ? Math.round(
+          filteredAlerts.reduce((sum, a) => sum + a.durationMinutes, 0) /
+            filteredAlerts.length
+        )
+      : 0;
+
+  return {
+    totalAbnormalCount,
+    todayAbnormalCount,
+    currentAbnormalCount,
+    avgDurationMinutes,
+    abnormalRecords: filteredAlerts.sort(
+      (a, b) => b.alertedAt - a.alertedAt
+    ),
+  };
+}
+
+export function checkForNewAlerts(): AlertRecord[] {
+  return checkTimeoutStalls();
 }
 
 export { initializeData };

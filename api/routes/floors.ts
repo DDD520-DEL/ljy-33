@@ -2,16 +2,19 @@ import { Router, type Request, type Response } from 'express';
 import {
   getAllFloors,
   getFloorById,
+  checkForNewAlerts,
 } from '../services/bathroomService.js';
+import type { AlertRecord } from '../../shared/types.js';
 
 const router = Router();
 
 router.get('/', (req: Request, res: Response): void => {
   try {
-    const floors = getAllFloors();
+    const { floors, newAlerts } = getAllFloors();
     res.status(200).json({
       success: true,
       data: floors,
+      newAlerts,
     });
   } catch (error) {
     console.error('Get floors error:', error);
@@ -25,7 +28,7 @@ router.get('/', (req: Request, res: Response): void => {
 router.get('/:id/status', (req: Request, res: Response): void => {
   try {
     const { id } = req.params;
-    const floor = getFloorById(id);
+    const { floor, newAlerts } = getFloorById(id);
 
     if (!floor) {
       res.status(404).json({
@@ -38,12 +41,29 @@ router.get('/:id/status', (req: Request, res: Response): void => {
     res.status(200).json({
       success: true,
       data: floor,
+      newAlerts,
     });
   } catch (error) {
     console.error('Get floor status error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to get floor status',
+    });
+  }
+});
+
+router.get('/alerts/check', (req: Request, res: Response): void => {
+  try {
+    const newAlerts = checkForNewAlerts();
+    res.status(200).json({
+      success: true,
+      data: newAlerts,
+    });
+  } catch (error) {
+    console.error('Check alerts error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to check alerts',
     });
   }
 });

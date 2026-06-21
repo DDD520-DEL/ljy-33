@@ -7,15 +7,18 @@ import type {
   StallStatus,
   FloorQueue,
   QueueItem,
+  AlertRecord,
+  AbnormalStats,
 } from '../types';
 
 interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
+  newAlerts?: AlertRecord[];
 }
 
-async function request<T>(url: string, options?: RequestInit): Promise<T> {
+async function request<T>(url: string, options?: RequestInit): Promise<{ data: T; newAlerts?: AlertRecord[] }> {
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -30,51 +33,62 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
     throw new Error(result.error || 'Request failed');
   }
 
-  return result.data as T;
+  return {
+    data: result.data as T,
+    newAlerts: result.newAlerts,
+  };
 }
 
-export async function getAllFloors(): Promise<FloorWithStatus[]> {
+export async function getAllFloors(): Promise<{ data: FloorWithStatus[]; newAlerts?: AlertRecord[] }> {
   return request<FloorWithStatus[]>('/api/floors');
 }
 
-export async function getFloorStatus(floorId: string): Promise<FloorWithStatus> {
+export async function getFloorStatus(floorId: string): Promise<{ data: FloorWithStatus; newAlerts?: AlertRecord[] }> {
   return request<FloorWithStatus>(`/api/floors/${floorId}/status`);
+}
+
+export async function checkAlerts(): Promise<{ data: AlertRecord[] }> {
+  return request<AlertRecord[]>('/api/floors/alerts/check');
+}
+
+export async function getAbnormalStats(days: number = 30): Promise<{ data: AbnormalStats }> {
+  return request<AbnormalStats>(`/api/stats/abnormal?days=${days}`);
 }
 
 export async function updateStallStatus(
   stallId: string,
   status: StallStatus,
-): Promise<Stall> {
+): Promise<{ data: Stall }> {
   return request<Stall>(`/api/stalls/${stallId}/status`, {
     method: 'PUT',
     body: JSON.stringify({ status }),
   });
 }
 
-export async function getHeatmapData(days: number = 30): Promise<HeatmapPoint[]> {
+export async function getHeatmapData(days: number = 30): Promise<{ data: HeatmapPoint[] }> {
   return request<HeatmapPoint[]>(`/api/stats/heatmap?days=${days}`);
 }
 
-export async function getTrendData(days: number = 30): Promise<TrendPoint[]> {
+export async function getTrendData(days: number = 30): Promise<{ data: TrendPoint[] }> {
   return request<TrendPoint[]>(`/api/stats/trend?days=${days}`);
 }
 
-export async function getPeakPeriods(): Promise<PeakPeriod[]> {
+export async function getPeakPeriods(): Promise<{ data: PeakPeriod[] }> {
   return request<PeakPeriod[]>('/api/stats/peak');
 }
 
-export async function getFloorQueue(floorId: string): Promise<FloorQueue> {
+export async function getFloorQueue(floorId: string): Promise<{ data: FloorQueue }> {
   return request<FloorQueue>(`/api/queue/${floorId}`);
 }
 
-export async function joinQueue(floorId: string, visitorName: string): Promise<QueueItem> {
+export async function joinQueue(floorId: string, visitorName: string): Promise<{ data: QueueItem }> {
   return request<QueueItem>(`/api/queue/${floorId}/join`, {
     method: 'POST',
     body: JSON.stringify({ visitorName }),
   });
 }
 
-export async function leaveQueue(queueId: string): Promise<QueueItem> {
+export async function leaveQueue(queueId: string): Promise<{ data: QueueItem }> {
   return request<QueueItem>(`/api/queue/${queueId}`, {
     method: 'DELETE',
   });

@@ -4,195 +4,223 @@
     "floorId": "floor-1",
     "stallNumber": 1,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782068322141,
+    "isAbnormal": false
   },
   {
     "id": "stall-1-2",
     "floorId": "floor-1",
     "stallNumber": 2,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-1-3",
     "floorId": "floor-1",
     "stallNumber": 3,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-1-4",
     "floorId": "floor-1",
     "stallNumber": 4,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-1-5",
     "floorId": "floor-1",
     "stallNumber": 5,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-1-6",
     "floorId": "floor-1",
     "stallNumber": 6,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-2-1",
     "floorId": "floor-2",
     "stallNumber": 1,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-2-2",
     "floorId": "floor-2",
     "stallNumber": 2,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-2-3",
     "floorId": "floor-2",
     "stallNumber": 3,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-2-4",
     "floorId": "floor-2",
     "stallNumber": 4,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-2-5",
     "floorId": "floor-2",
     "stallNumber": 5,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-2-6",
     "floorId": "floor-2",
     "stallNumber": 6,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-3-1",
     "floorId": "floor-3",
     "stallNumber": 1,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-3-2",
     "floorId": "floor-3",
     "stallNumber": 2,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-3-3",
     "floorId": "floor-3",
     "stallNumber": 3,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-3-4",
     "floorId": "floor-3",
     "stallNumber": 4,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-3-5",
     "floorId": "floor-3",
     "stallNumber": 5,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-3-6",
     "floorId": "floor-3",
     "stallNumber": 6,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-4-1",
     "floorId": "floor-4",
     "stallNumber": 1,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-4-2",
     "floorId": "floor-4",
     "stallNumber": 2,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-4-3",
     "floorId": "floor-4",
     "stallNumber": 3,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-4-4",
     "floorId": "floor-4",
     "stallNumber": 4,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-4-5",
     "floorId": "floor-4",
     "stallNumber": 5,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-4-6",
     "floorId": "floor-4",
     "stallNumber": 6,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-5-1",
     "floorId": "floor-5",
     "stallNumber": 1,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-5-2",
     "floorId": "floor-5",
     "stallNumber": 2,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-5-3",
     "floorId": "floor-5",
     "stallNumber": 3,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   },
   {
     "id": "stall-5-4",
     "floorId": "floor-5",
     "stallNumber": 4,
     "status": "available",
-    "lastUpdated": 1781977868920
+    "lastUpdated": 1782067998267,
+    "isAbnormal": false
   }
 ]

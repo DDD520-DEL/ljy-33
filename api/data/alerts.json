@@ -1,0 +1,15 @@
+[
+  {
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "stallNumber": 1,
+    "floorNumber": 1,
+    "floorName": "1楼 大堂",
+    "startTime": 1782068141733,
+    "alertedAt": 1782068152158,
+    "resolved": true,
+    "durationMinutes": 3,
+    "id": "285c2c7b-310e-4ca7-92da-7d9080ab82cc",
+    "resolvedAt": 1782068322150
+  }
+]

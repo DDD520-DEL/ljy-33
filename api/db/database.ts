@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue } from '../../shared/types.js';
+import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
+import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,6 +13,7 @@ const FLOORS_FILE = path.join(DATA_DIR, 'floors.json');
 const STALLS_FILE = path.join(DATA_DIR, 'stalls.json');
 const USAGE_FILE = path.join(DATA_DIR, 'usage_records.json');
 const QUEUE_FILE = path.join(DATA_DIR, 'queue.json');
+const ALERTS_FILE = path.join(DATA_DIR, 'alerts.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -59,6 +61,46 @@ export function saveStalls(stalls: Stall[]): void {
 
 export function saveUsageRecords(records: UsageRecord[]): void {
   writeJSON(USAGE_FILE, records);
+}
+
+export function getAlerts(): AlertRecord[] {
+  return readJSON<AlertRecord[]>(ALERTS_FILE, []);
+}
+
+export function saveAlerts(alerts: AlertRecord[]): void {
+  writeJSON(ALERTS_FILE, alerts);
+}
+
+export function addAlert(alert: Omit<AlertRecord, 'id'>): AlertRecord {
+  const alerts = getAlerts();
+  const newAlert: AlertRecord = {
+    ...alert,
+    id: uuidv4(),
+  };
+  alerts.push(newAlert);
+  saveAlerts(alerts);
+  return newAlert;
+}
+
+export function resolveAlert(stallId: string): AlertRecord | null {
+  const alerts = getAlerts();
+  const unresolvedAlert = alerts.find(
+    (a) => a.stallId === stallId && !a.resolved
+  );
+  if (!unresolvedAlert) return null;
+
+  unresolvedAlert.resolved = true;
+  unresolvedAlert.resolvedAt = Date.now();
+  unresolvedAlert.durationMinutes = Math.round(
+    (Date.now() - unresolvedAlert.startTime) / 60000
+  );
+  saveAlerts(alerts);
+  return unresolvedAlert;
+}
+
+export function getUnresolvedAlerts(): AlertRecord[] {
+  const alerts = getAlerts();
+  return alerts.filter((a) => !a.resolved);
 }
 
 export function getQueue(): QueueItem[] {
@@ -137,26 +179,76 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
   if (!stall) return null;
 
   const previousStatus = stall.status;
+  const now = Date.now();
   stall.status = status;
-  stall.lastUpdated = Date.now();
-  saveStalls(stalls);
+  stall.lastUpdated = now;
 
   if (previousStatus === 'available' && status === 'occupied') {
-    (stall as unknown as { _startTime: number })._startTime = Date.now();
+    stall.occupiedStartTime = now;
+    stall.isAbnormal = false;
   } else if (previousStatus === 'occupied' && status === 'available') {
-    const startTime = (stall as unknown as { _startTime?: number })._startTime || stall.lastUpdated - 300000;
-    const endTime = Date.now();
+    const startTime = stall.occupiedStartTime || stall.lastUpdated - 300000;
+    const endTime = now;
+    const durationMs = endTime - startTime;
+    const isAbnormal = durationMs >= TIMEOUT_THRESHOLD_MS;
+
     addUsageRecord({
       stallId: stall.id,
       floorId: stall.floorId,
       startTime,
       endTime,
-      durationSeconds: Math.floor((endTime - startTime) / 1000),
+      durationSeconds: Math.floor(durationMs / 1000),
+      isAbnormal,
     });
+
+    stall.occupiedStartTime = undefined;
+    stall.isAbnormal = false;
+
+    resolveAlert(stallId);
     popFromQueue(stall.floorId);
   }
 
+  saveStalls(stalls);
   return stall;
+}
+
+export function checkTimeoutStalls(): AlertRecord[] {
+  const stalls = getStalls();
+  const floors = getFloors();
+  const unresolvedAlerts = getUnresolvedAlerts();
+  const unresolvedStallIds = new Set(unresolvedAlerts.map((a) => a.stallId));
+  const now = Date.now();
+  const newAlerts: AlertRecord[] = [];
+
+  stalls.forEach((stall) => {
+    if (stall.status === 'occupied' && stall.occupiedStartTime) {
+      const occupiedDuration = now - stall.occupiedStartTime;
+      if (occupiedDuration >= TIMEOUT_THRESHOLD_MS) {
+        stall.isAbnormal = true;
+
+        if (!unresolvedStallIds.has(stall.id)) {
+          const floor = floors.find((f) => f.id === stall.floorId);
+          if (floor) {
+            const newAlert = addAlert({
+              stallId: stall.id,
+              floorId: stall.floorId,
+              stallNumber: stall.stallNumber,
+              floorNumber: floor.floorNumber,
+              floorName: floor.floorName,
+              startTime: stall.occupiedStartTime,
+              alertedAt: now,
+              resolved: false,
+              durationMinutes: Math.round(occupiedDuration / 60000),
+            });
+            newAlerts.push(newAlert);
+          }
+        }
+      }
+    }
+  });
+
+  saveStalls(stalls);
+  return newAlerts;
 }
 
 export function initializeData(): void {
@@ -180,6 +272,8 @@ export function initializeData(): void {
         stallNumber: i,
         status: 'available',
         lastUpdated: Date.now(),
+        occupiedStartTime: undefined,
+        isAbnormal: false,
       });
     }
   });
@@ -212,6 +306,8 @@ function generateMockUsageData(): void {
         const stall = stalls[Math.floor(Math.random() * stalls.length)];
         const minute = Math.floor(Math.random() * 60);
         const duration = Math.floor(Math.random() * 10) + 3;
+        const isAbnormal = Math.random() < 0.05;
+        const finalDuration = isAbnormal ? Math.floor(Math.random() * 30) + 25 : duration;
         const startTime = dayTime + hour * 60 * 60 * 1000 + minute * 60 * 1000;
 
         records.push({
@@ -219,8 +315,9 @@ function generateMockUsageData(): void {
           stallId: stall.id,
           floorId: stall.floorId,
           startTime,
-          endTime: startTime + duration * 60 * 1000,
-          durationSeconds: duration * 60,
+          endTime: startTime + finalDuration * 60 * 1000,
+          durationSeconds: finalDuration * 60,
+          isAbnormal,
         });
       }
     });

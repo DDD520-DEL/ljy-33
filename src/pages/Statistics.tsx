@@ -1,17 +1,18 @@
 import { useEffect, useState, useCallback } from 'react';
-import { BarChart3, Calendar, TrendingUp, RefreshCw } from 'lucide-react';
+import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin } from 'lucide-react';
 import Heatmap from '../components/Heatmap';
 import TrendChart from '../components/TrendChart';
 import PeakPeriods from '../components/PeakPeriods';
 import ErrorAlert from '../components/ErrorAlert';
 import EmptyState from '../components/EmptyState';
-import { getHeatmapData, getTrendData, getPeakPeriods } from '../utils/api';
-import type { HeatmapPoint, TrendPoint, PeakPeriod } from '../types';
+import { getHeatmapData, getTrendData, getPeakPeriods, getAbnormalStats } from '../utils/api';
+import type { HeatmapPoint, TrendPoint, PeakPeriod, AbnormalStats, AlertRecord } from '../types';
 
 export default function Statistics() {
   const [heatmapData, setHeatmapData] = useState<HeatmapPoint[]>([]);
   const [trendData, setTrendData] = useState<TrendPoint[]>([]);
   const [peakPeriods, setPeakPeriods] = useState<PeakPeriod[]>([]);
+  const [abnormalStats, setAbnormalStats] = useState<AbnormalStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasTried, setHasTried] = useState(false);
@@ -20,14 +21,16 @@ export default function Statistics() {
     setLoading(true);
     setError(null);
     try {
-      const [heatmap, trend, peaks] = await Promise.all([
+      const [heatmapRes, trendRes, peaksRes, abnormalRes] = await Promise.all([
         getHeatmapData(30),
         getTrendData(30),
         getPeakPeriods(),
+        getAbnormalStats(30),
       ]);
-      setHeatmapData(heatmap);
-      setTrendData(trend);
-      setPeakPeriods(peaks);
+      setHeatmapData(heatmapRes.data);
+      setTrendData(trendRes.data);
+      setPeakPeriods(peaksRes.data);
+      setAbnormalStats(abnormalRes.data);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -46,7 +49,7 @@ export default function Statistics() {
     (max, d) => (d.count > max.count ? d : max),
     { date: '', count: 0 }
   );
-  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0;
+  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0 || (abnormalStats && abnormalStats.totalAbnormalCount > 0);
 
   const isInitialLoading = loading && !hasTried;
   const isRefreshing = loading && hasTried;
@@ -75,10 +78,10 @@ export default function Statistics() {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {isInitialLoading ? (
               <>
-                {[1, 2, 3, 4].map((i) => (
+                {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
                     className="bg-white/10 backdrop-blur rounded-xl p-4 animate-pulse"
@@ -112,6 +115,16 @@ export default function Statistics() {
                     <span className="text-sm text-primary-100">最高日使用</span>
                   </div>
                   <p className="text-3xl font-bold">{hasData ? maxDay.count : '-'}</p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <AlertTriangle className="w-4 h-4 text-danger-300" />
+                    <span className="text-sm text-primary-100">异常占用</span>
+                  </div>
+                  <p className="text-3xl font-bold text-danger-300">
+                    {abnormalStats ? abnormalStats.totalAbnormalCount : '-'}
+                  </p>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur rounded-xl p-4">
@@ -209,6 +222,110 @@ export default function Statistics() {
                 </div>
               </div>
             </div>
+
+            {abnormalStats && (
+              <div
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fade-in-up"
+                style={{ animationDelay: '0.4s', opacity: 0 }}
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+                  <AlertTriangle className="w-5 h-5 text-danger-500" />
+                  <span>异常占用统计</span>
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="p-4 bg-danger-50 rounded-xl border border-danger-100">
+                    <p className="text-sm text-danger-600 mb-1">累计异常</p>
+                    <p className="text-2xl font-bold text-danger-900">
+                      {abnormalStats.totalAbnormalCount} 次
+                    </p>
+                  </div>
+                  <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                    <p className="text-sm text-orange-600 mb-1">今日异常</p>
+                    <p className="text-2xl font-bold text-orange-900">
+                      {abnormalStats.todayAbnormalCount} 次
+                    </p>
+                  </div>
+                  <div className="p-4 bg-red-50 rounded-xl border border-red-100">
+                    <p className="text-sm text-red-600 mb-1">当前异常</p>
+                    <p className="text-2xl font-bold text-red-900">
+                      {abnormalStats.currentAbnormalCount} 个
+                    </p>
+                  </div>
+                  <div className="p-4 bg-amber-50 rounded-xl border border-amber-100">
+                    <p className="text-sm text-amber-600 mb-1">平均时长</p>
+                    <p className="text-2xl font-bold text-amber-900">
+                      {abnormalStats.avgDurationMinutes} 分钟
+                    </p>
+                  </div>
+                </div>
+
+                {abnormalStats.abnormalRecords.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-3">最近异常记录</h4>
+                    <div className="space-y-3 max-h-80 overflow-y-auto">
+                      {abnormalStats.abnormalRecords.slice(0, 10).map((record, index) => (
+                        <div
+                          key={record.id}
+                          className={`p-4 rounded-xl border transition-all duration-300 ${
+                            record.resolved
+                              ? 'bg-gray-50 border-gray-200'
+                              : 'bg-danger-50 border-danger-300 animate-pulse-slow'
+                          }`}
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start space-x-3">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                record.resolved
+                                  ? 'bg-gray-200'
+                                  : 'bg-danger-200'
+                              }`}>
+                                <MapPin className={`w-5 h-5 ${
+                                  record.resolved
+                                    ? 'text-gray-600'
+                                    : 'text-danger-600'
+                                }`} />
+                              </div>
+                              <div>
+                                <p className="font-semibold text-gray-900">
+                                  {record.floorNumber}楼 {record.floorName} · {record.stallNumber}号隔间
+                                </p>
+                                <div className="flex items-center space-x-4 mt-1 text-xs text-gray-500">
+                                  <span className="flex items-center space-x-1">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    <span>
+                                      {new Date(record.startTime).toLocaleString('zh-CN', {
+                                        month: 'numeric',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                      })}
+                                    </span>
+                                  </span>
+                                  <span>持续 {record.durationMinutes} 分钟</span>
+                                </div>
+                              </div>
+                            </div>
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                              record.resolved
+                                ? 'bg-gray-200 text-gray-700'
+                                : 'bg-danger-500 text-white'
+                            }`}>
+                              {record.resolved ? '已处理' : '待处理'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {abnormalStats.abnormalRecords.length > 10 && (
+                      <p className="text-center text-sm text-gray-500 mt-4">
+                        还有 {abnormalStats.abnormalRecords.length - 10} 条历史记录...
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <EmptyState

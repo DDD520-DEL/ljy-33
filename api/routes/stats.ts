@@ -3,6 +3,7 @@ import {
   getHeatmapData,
   getTrendData,
   getPeakPeriods,
+  getAbnormalStats,
 } from '../services/bathroomService.js';
 
 const router = Router();
@@ -53,6 +54,23 @@ router.get('/peak', (req: Request, res: Response): void => {
     res.status(500).json({
       success: false,
       error: 'Failed to get peak periods',
+    });
+  }
+});
+
+router.get('/abnormal', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const data = getAbnormalStats(days);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get abnormal stats error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get abnormal stats',
     });
   }
 });

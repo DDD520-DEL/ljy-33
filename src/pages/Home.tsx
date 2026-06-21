@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { Building2, Users, CheckCircle, RefreshCw } from 'lucide-react';
+import { Building2, Users, CheckCircle, RefreshCw, AlertTriangle } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import FloorCard from '../components/FloorCard';
 import ErrorAlert from '../components/ErrorAlert';
 
 export default function Home() {
-  const { floors, loading, error, fetchFloors, startPolling, stopPolling, clearError } = useBathroomStore();
+  const { floors, loading, error, currentAlertCount, fetchFloors, startPolling, stopPolling, clearError } = useBathroomStore();
 
   useEffect(() => {
     fetchFloors();
@@ -34,7 +34,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="bg-white/10 backdrop-blur rounded-xl p-4">
               <div className="flex items-center space-x-2 mb-2">
                 <Building2 className="w-4 h-4 text-primary-200" />
@@ -72,6 +72,26 @@ export default function Home() {
                 overallOccupancy >= 80 ? 'text-warning-300' : 'text-white'
               }`}>
                 {overallOccupancy}%
+              </p>
+            </div>
+
+            <div className={`backdrop-blur rounded-xl p-4 transition-all duration-300 ${
+              currentAlertCount > 0
+                ? 'bg-danger-500/30 border-2 border-danger-400 animate-pulse'
+                : 'bg-white/10'
+            }`}>
+              <div className="flex items-center space-x-2 mb-2">
+                <AlertTriangle className={`w-4 h-4 ${
+                  currentAlertCount > 0 ? 'text-danger-300' : 'text-primary-200'
+                }`} />
+                <span className={`text-sm ${
+                  currentAlertCount > 0 ? 'text-white' : 'text-primary-100'
+                }`}>异常告警</span>
+              </div>
+              <p className={`text-3xl font-bold ${
+                currentAlertCount > 0 ? 'text-white' : 'text-white'
+              }`}>
+                {currentAlertCount}
               </p>
             </div>
           </div>
