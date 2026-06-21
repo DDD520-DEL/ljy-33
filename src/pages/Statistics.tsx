@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { BarChart3, Calendar, TrendingUp } from 'lucide-react';
 import Heatmap from '../components/Heatmap';
 import TrendChart from '../components/TrendChart';
 import PeakPeriods from '../components/PeakPeriods';
+import ErrorAlert from '../components/ErrorAlert';
 import { getHeatmapData, getTrendData, getPeakPeriods } from '../utils/api';
 import type { HeatmapPoint, TrendPoint, PeakPeriod } from '../types';
 
@@ -11,32 +12,35 @@ export default function Statistics() {
   const [trendData, setTrendData] = useState<TrendPoint[]>([]);
   const [peakPeriods, setPeakPeriods] = useState<PeakPeriod[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [heatmap, trend, peaks] = await Promise.all([
+        getHeatmapData(30),
+        getTrendData(30),
+        getPeakPeriods(),
+      ]);
+      setHeatmapData(heatmap);
+      setTrendData(trend);
+      setPeakPeriods(peaks);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [heatmap, trend, peaks] = await Promise.all([
-          getHeatmapData(30),
-          getTrendData(30),
-          getPeakPeriods(),
-        ]);
-        setHeatmapData(heatmap);
-        setTrendData(trend);
-        setPeakPeriods(peaks);
-      } catch (error) {
-        console.error('Failed to fetch stats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const totalUsage = trendData.reduce((sum, d) => sum + d.count, 0);
   const avgDaily = trendData.length > 0 ? Math.round(totalUsage / trendData.length) : 0;
   const maxDay = trendData.reduce((max, d) => (d.count > max.count ? d : max), { date: '', count: 0 });
+  const hasData = trendData.length > 0 || heatmapData.length > 0 || peakPeriods.length > 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -89,6 +93,14 @@ export default function Statistics() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {error && (
+          <ErrorAlert
+            message={error}
+            onRetry={fetchData}
+            onDismiss={() => setError(null)}
+          />
+        )}
+
         {loading ? (
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-pulse">
@@ -106,7 +118,7 @@ export default function Statistics() {
               </div>
             </div>
           </div>
-        ) : (
+        ) : hasData ? (
           <div className="space-y-6">
             <div className="animate-fade-in-up" style={{ opacity: 0 }}>
               <Heatmap data={heatmapData} />
@@ -163,7 +175,7 @@ export default function Statistics() {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

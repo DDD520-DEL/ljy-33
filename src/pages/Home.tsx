@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import { Building2, Users, CheckCircle, RefreshCw } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import FloorCard from '../components/FloorCard';
+import ErrorAlert from '../components/ErrorAlert';
 
 export default function Home() {
-  const { floors, loading, fetchFloors, startPolling, stopPolling } = useBathroomStore();
+  const { floors, loading, error, fetchFloors, startPolling, stopPolling, clearError } = useBathroomStore();
 
   useEffect(() => {
     fetchFloors();
@@ -78,6 +79,14 @@ export default function Home() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {error && (
+          <ErrorAlert
+            message={error}
+            onRetry={fetchFloors}
+            onDismiss={clearError}
+          />
+        )}
+
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">各楼层状态</h2>
           <button

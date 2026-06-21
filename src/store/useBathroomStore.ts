@@ -12,6 +12,7 @@ interface BathroomState {
   updateStallStatus: (stallId: string, status: StallStatus) => Promise<void>;
   startPolling: (floorId?: string) => void;
   stopPolling: () => void;
+  clearError: () => void;
 }
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
@@ -99,5 +100,9 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
       clearInterval(pollInterval);
       pollInterval = null;
     }
+  },
+
+  clearError: () => {
+    set({ error: null });
   },
 }));
