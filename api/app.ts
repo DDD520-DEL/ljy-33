@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import floorRoutes from './routes/floors.js'
 import stallRoutes from './routes/stalls.js'
 import statsRoutes from './routes/stats.js'
+import queueRoutes from './routes/queue.js'
 import { initializeData } from './services/bathroomService.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 app.use('/api/floors', floorRoutes)
 app.use('/api/stalls', stallRoutes)
 app.use('/api/stats', statsRoutes)
+app.use('/api/queue', queueRoutes)
 
 app.use(
   '/api/health',

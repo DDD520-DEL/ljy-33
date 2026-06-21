@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import type { Stall, Floor, UsageRecord, StallStatus } from '../../shared/types.js';
+import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +11,7 @@ const DATA_DIR = path.join(__dirname, '..', 'data');
 const FLOORS_FILE = path.join(DATA_DIR, 'floors.json');
 const STALLS_FILE = path.join(DATA_DIR, 'stalls.json');
 const USAGE_FILE = path.join(DATA_DIR, 'usage_records.json');
+const QUEUE_FILE = path.join(DATA_DIR, 'queue.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -60,6 +61,65 @@ export function saveUsageRecords(records: UsageRecord[]): void {
   writeJSON(USAGE_FILE, records);
 }
 
+export function getQueue(): QueueItem[] {
+  return readJSON<QueueItem[]>(QUEUE_FILE, []);
+}
+
+export function saveQueue(queue: QueueItem[]): void {
+  writeJSON(QUEUE_FILE, queue);
+}
+
+export function getQueueByFloor(floorId: string): FloorQueue {
+  const allItems = getQueue();
+  const items = allItems
+    .filter((item) => item.floorId === floorId)
+    .sort((a, b) => a.joinedAt - b.joinedAt)
+    .map((item, index) => ({ ...item, position: index + 1 }));
+  return {
+    floorId,
+    items,
+    count: items.length,
+  };
+}
+
+export function addToQueue(floorId: string, visitorName: string): QueueItem {
+  const queue = getQueue();
+  const newItem: QueueItem = {
+    id: uuidv4(),
+    floorId,
+    visitorName,
+    joinedAt: Date.now(),
+    position: 0,
+  };
+  queue.push(newItem);
+  saveQueue(queue);
+  const floorQueue = getQueueByFloor(floorId);
+  const itemWithPosition = floorQueue.items.find((i) => i.id === newItem.id)!;
+  return itemWithPosition;
+}
+
+export function removeFromQueue(queueId: string): QueueItem | null {
+  const queue = getQueue();
+  const index = queue.findIndex((item) => item.id === queueId);
+  if (index === -1) return null;
+  const removed = queue.splice(index, 1)[0];
+  saveQueue(queue);
+  return removed;
+}
+
+export function popFromQueue(floorId: string): QueueItem | null {
+  const floorQueue = getQueueByFloor(floorId);
+  if (floorQueue.items.length === 0) return null;
+  const firstItem = floorQueue.items[0];
+  removeFromQueue(firstItem.id);
+  return firstItem;
+}
+
+export function isVisitorInQueue(floorId: string, visitorName: string): boolean {
+  const queue = getQueue();
+  return queue.some((item) => item.floorId === floorId && item.visitorName === visitorName);
+}
+
 export function addUsageRecord(record: Omit<UsageRecord, 'id'>): UsageRecord {
   const records = getUsageRecords();
   const newRecord: UsageRecord = {
@@ -93,6 +153,7 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
       endTime,
       durationSeconds: Math.floor((endTime - startTime) / 1000),
     });
+    popFromQueue(stall.floorId);
   }
 
   return stall;

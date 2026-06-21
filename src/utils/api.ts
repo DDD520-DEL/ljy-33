@@ -5,6 +5,8 @@ import type {
   TrendPoint,
   PeakPeriod,
   StallStatus,
+  FloorQueue,
+  QueueItem,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -59,4 +61,21 @@ export async function getTrendData(days: number = 30): Promise<TrendPoint[]> {
 
 export async function getPeakPeriods(): Promise<PeakPeriod[]> {
   return request<PeakPeriod[]>('/api/stats/peak');
+}
+
+export async function getFloorQueue(floorId: string): Promise<FloorQueue> {
+  return request<FloorQueue>(`/api/queue/${floorId}`);
+}
+
+export async function joinQueue(floorId: string, visitorName: string): Promise<QueueItem> {
+  return request<QueueItem>(`/api/queue/${floorId}/join`, {
+    method: 'POST',
+    body: JSON.stringify({ visitorName }),
+  });
+}
+
+export async function leaveQueue(queueId: string): Promise<QueueItem> {
+  return request<QueueItem>(`/api/queue/${queueId}`, {
+    method: 'DELETE',
+  });
 }

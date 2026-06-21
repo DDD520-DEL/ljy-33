@@ -4,15 +4,20 @@ import {
   getUsageRecords,
   updateStallStatus as dbUpdateStallStatus,
   initializeData,
+  getQueueByFloor as dbGetQueueByFloor,
+  addToQueue as dbAddToQueue,
+  removeFromQueue as dbRemoveFromQueue,
+  isVisitorInQueue as dbIsVisitorInQueue,
 } from '../db/database.js';
 import type {
-  Floor,
   FloorWithStatus,
   Stall,
   StallStatus,
   HeatmapPoint,
   TrendPoint,
   PeakPeriod,
+  FloorQueue,
+  QueueItem,
 } from '../../shared/types.js';
 
 export function getAllFloors(): FloorWithStatus[] {
@@ -162,6 +167,31 @@ export function getPeakPeriods(): PeakPeriod[] {
       avgCount: Math.round((count / weekdayCount) * 10) / 10,
     };
   });
+}
+
+export function getFloorQueue(floorId: string): FloorQueue {
+  return dbGetQueueByFloor(floorId);
+}
+
+export function joinQueue(floorId: string, visitorName: string): QueueItem {
+  const floor = getFloorById(floorId);
+  if (!floor) {
+    throw new Error('Floor not found');
+  }
+
+  if (!visitorName || visitorName.trim().length === 0) {
+    throw new Error('Visitor name is required');
+  }
+
+  if (dbIsVisitorInQueue(floorId, visitorName.trim())) {
+    throw new Error('您已在排队中');
+  }
+
+  return dbAddToQueue(floorId, visitorName.trim());
+}
+
+export function leaveQueue(queueId: string): QueueItem | null {
+  return dbRemoveFromQueue(queueId);
 }
 
 export { initializeData };

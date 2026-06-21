@@ -1,15 +1,27 @@
 import { create } from 'zustand';
-import type { FloorWithStatus, Stall, StallStatus } from '../types';
-import { getAllFloors, getFloorStatus, updateStallStatus as apiUpdateStallStatus } from '../utils/api';
+import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem } from '../types';
+import {
+  getAllFloors,
+  getFloorStatus,
+  updateStallStatus as apiUpdateStallStatus,
+  getFloorQueue as apiGetFloorQueue,
+  joinQueue as apiJoinQueue,
+  leaveQueue as apiLeaveQueue,
+} from '../utils/api';
 
 interface BathroomState {
   floors: FloorWithStatus[];
   currentFloor: FloorWithStatus | null;
+  currentQueue: FloorQueue | null;
   loading: boolean;
+  queueLoading: boolean;
   error: string | null;
   fetchFloors: () => Promise<void>;
   fetchFloorStatus: (floorId: string) => Promise<void>;
+  fetchFloorQueue: (floorId: string) => Promise<void>;
   updateStallStatus: (stallId: string, status: StallStatus) => Promise<void>;
+  joinQueue: (floorId: string, visitorName: string) => Promise<QueueItem>;
+  leaveQueue: (queueId: string) => Promise<void>;
   startPolling: (floorId?: string) => void;
   stopPolling: () => void;
   clearError: () => void;
@@ -20,7 +32,9 @@ let pollInterval: ReturnType<typeof setInterval> | null = null;
 export const useBathroomStore = create<BathroomState>((set, get) => ({
   floors: [],
   currentFloor: null,
+  currentQueue: null,
   loading: false,
+  queueLoading: false,
   error: null,
 
   fetchFloors: async () => {
@@ -43,11 +57,21 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
     }
   },
 
+  fetchFloorQueue: async (floorId: string) => {
+    set({ queueLoading: true });
+    try {
+      const queue = await apiGetFloorQueue(floorId);
+      set({ currentQueue: queue, queueLoading: false });
+    } catch {
+      set({ queueLoading: false });
+    }
+  },
+
   updateStallStatus: async (stallId: string, status: StallStatus) => {
     try {
       const updatedStall = await apiUpdateStallStatus(stallId, status);
       
-      const { currentFloor, floors } = get();
+      const { currentFloor, floors, currentQueue } = get();
       
       if (currentFloor) {
         const updatedStalls = currentFloor.stalls.map((s) =>
@@ -77,8 +101,27 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
         return floor;
       });
       set({ floors: updatedFloors });
+
+      if (currentQueue && status === 'available') {
+        const floorId = currentQueue.floorId;
+        await get().fetchFloorQueue(floorId);
+      }
     } catch (err) {
       set({ error: (err as Error).message });
+    }
+  },
+
+  joinQueue: async (floorId: string, visitorName: string): Promise<QueueItem> => {
+    const item = await apiJoinQueue(floorId, visitorName);
+    await get().fetchFloorQueue(floorId);
+    return item;
+  },
+
+  leaveQueue: async (queueId: string) => {
+    const { currentQueue } = get();
+    await apiLeaveQueue(queueId);
+    if (currentQueue) {
+      await get().fetchFloorQueue(currentQueue.floorId);
     }
   },
 
@@ -87,9 +130,10 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
       clearInterval(pollInterval);
     }
     pollInterval = setInterval(() => {
-      const { fetchFloors, fetchFloorStatus } = get();
+      const { fetchFloors, fetchFloorStatus, fetchFloorQueue } = get();
       if (floorId) {
         fetchFloorStatus(floorId);
+        fetchFloorQueue(floorId);
       }
       fetchFloors();
     }, 5000);

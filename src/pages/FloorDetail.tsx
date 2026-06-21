@@ -1,25 +1,89 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import StallCard from '../components/StallCard';
 import ErrorAlert from '../components/ErrorAlert';
-import type { StallStatus } from '../types';
+import type { StallStatus, QueueItem } from '../types';
 
 export default function FloorDetail() {
   const { floorId } = useParams<{ floorId: string }>();
-  const { currentFloor, loading, error, fetchFloorStatus, updateStallStatus, startPolling, stopPolling, clearError } = useBathroomStore();
+  const {
+    currentFloor,
+    currentQueue,
+    loading,
+    queueLoading,
+    error,
+    fetchFloorStatus,
+    fetchFloorQueue,
+    updateStallStatus,
+    joinQueue,
+    leaveQueue,
+    startPolling,
+    stopPolling,
+    clearError,
+  } = useBathroomStore();
+
+  const [visitorName, setVisitorName] = useState('');
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [myQueueItem, setMyQueueItem] = useState<QueueItem | null>(null);
+  const [joinError, setJoinError] = useState<string | null>(null);
+  const [isJoining, setIsJoining] = useState(false);
 
   useEffect(() => {
     if (floorId) {
       fetchFloorStatus(floorId);
+      fetchFloorQueue(floorId);
       startPolling(floorId);
     }
     return () => stopPolling();
-  }, [floorId, fetchFloorStatus, startPolling, stopPolling]);
+  }, [floorId, fetchFloorStatus, fetchFloorQueue, startPolling, stopPolling]);
+
+  useEffect(() => {
+    if (myQueueItem && currentQueue) {
+      const found = currentQueue.items.find((item) => item.id === myQueueItem.id);
+      if (found) {
+        setMyQueueItem(found);
+      } else {
+        const wasFirst = myQueueItem.position === 1;
+        if (wasFirst && currentFloor?.availableStalls && currentFloor.availableStalls > 0) {
+          setMyQueueItem(null);
+        } else {
+          setMyQueueItem(null);
+        }
+      }
+    }
+  }, [currentQueue, currentFloor, myQueueItem]);
 
   const handleStatusChange = async (stallId: string, status: StallStatus) => {
     await updateStallStatus(stallId, status);
+  };
+
+  const handleJoinQueue = async () => {
+    if (!floorId || !visitorName.trim()) return;
+
+    setIsJoining(true);
+    setJoinError(null);
+    try {
+      const item = await joinQueue(floorId, visitorName.trim());
+      setMyQueueItem(item);
+      setShowJoinModal(false);
+      setVisitorName('');
+    } catch (err) {
+      setJoinError((err as Error).message);
+    } finally {
+      setIsJoining(false);
+    }
+  };
+
+  const handleLeaveQueue = async () => {
+    if (!myQueueItem) return;
+    try {
+      await leaveQueue(myQueueItem.id);
+      setMyQueueItem(null);
+    } catch (err) {
+      console.error('Leave queue error:', err);
+    }
   };
 
   const occupancyRate = currentFloor
@@ -27,6 +91,12 @@ export default function FloorDetail() {
     : 0;
 
   const hasAvailable = currentFloor ? currentFloor.availableStalls > 0 : true;
+  const allOccupied = currentFloor ? currentFloor.availableStalls === 0 && currentFloor.occupiedStalls > 0 : false;
+
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -68,7 +138,7 @@ export default function FloorDetail() {
           )}
 
           {currentFloor ? (
-            <div className="grid grid-cols-3 gap-4 mt-8">
+            <div className="grid grid-cols-4 gap-4 mt-8">
               <div className="bg-white/10 backdrop-blur rounded-xl p-4">
                 <div className="flex items-center space-x-2 mb-2">
                   <Clock className="w-4 h-4 text-white/60" />
@@ -96,10 +166,20 @@ export default function FloorDetail() {
                   {currentFloor.occupiedStalls}
                 </p>
               </div>
+
+              <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Timer className="w-4 h-4 text-amber-300" />
+                  <span className="text-sm text-white/70">排队中</span>
+                </div>
+                <p className="text-2xl font-bold text-amber-300">
+                  {queueLoading ? '...' : currentQueue?.count ?? 0}
+                </p>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-4 mt-8">
-              {[1, 2, 3].map((i) => (
+            <div className="grid grid-cols-4 gap-4 mt-8">
+              {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-4 animate-pulse">
                   <div className="h-4 w-16 bg-white/20 rounded mb-2" />
                   <div className="h-8 w-12 bg-white/20 rounded" />
@@ -134,6 +214,123 @@ export default function FloorDetail() {
             onRetry={() => floorId && fetchFloorStatus(floorId)}
             onDismiss={clearError}
           />
+        )}
+
+        {myQueueItem && (
+          <div className="mb-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                  <Timer className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-sm text-white/80">您正在排队</p>
+                  <p className="text-2xl font-bold">
+                    第 {myQueueItem.position} 位
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-white/80 mb-1">
+                  预计等待约 {Math.max(1, myQueueItem.position * 3)} 分钟
+                </p>
+                <button
+                  onClick={handleLeaveQueue}
+                  className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"
+                >
+                  取消排队
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {allOccupied && !myQueueItem && (
+          <div className="mb-6 bg-amber-50 border-2 border-amber-200 rounded-2xl p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+                  <AlertCircle className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-amber-900">所有隔间已满</h3>
+                  <p className="text-sm text-amber-700 mt-0.5">
+                    当前有 {currentQueue?.count ?? 0} 人在排队，加入队列后空位释放时自动通知您
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowJoinModal(true)}
+                className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl transition-colors flex items-center space-x-2"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>加入排队</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {currentQueue && currentQueue.count > 0 && (
+          <div className="mb-6 bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-gray-900 flex items-center space-x-2">
+                <Timer className="w-5 h-5 text-amber-500" />
+                <span>等待队列</span>
+                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-sm rounded-full">
+                  {currentQueue.count} 人
+                </span>
+              </h3>
+            </div>
+            <div className="space-y-2">
+              {currentQueue.items.slice(0, 5).map((item) => (
+                <div
+                  key={item.id}
+                  className={`flex items-center justify-between p-3 rounded-xl ${
+                    myQueueItem?.id === item.id
+                      ? 'bg-primary-50 border border-primary-200'
+                      : 'bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                      item.position === 1
+                        ? 'bg-amber-500 text-white'
+                        : item.position === 2
+                        ? 'bg-gray-400 text-white'
+                        : item.position === 3
+                        ? 'bg-amber-700 text-white'
+                        : 'bg-gray-200 text-gray-600'
+                    }`}>
+                      {item.position}
+                    </div>
+                    <div>
+                      <p className={`font-medium ${
+                        myQueueItem?.id === item.id ? 'text-primary-700' : 'text-gray-800'
+                      }`}>
+                        {item.visitorName}
+                        {myQueueItem?.id === item.id && (
+                          <span className="ml-2 text-xs text-primary-500">(我)</span>
+                        )}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        加入时间: {formatTime(item.joinedAt)}
+                      </p>
+                    </div>
+                  </div>
+                  {item.position === 1 && (
+                    <span className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full font-medium">
+                      下一位
+                    </span>
+                  )}
+                </div>
+              ))}
+              {currentQueue.count > 5 && (
+                <p className="text-center text-sm text-gray-500 pt-2">
+                  还有 {currentQueue.count - 5} 人在排队...
+                </p>
+              )}
+            </div>
+          </div>
         )}
 
         {!currentFloor && loading ? (
@@ -195,11 +392,88 @@ export default function FloorDetail() {
                 <li>• 请在进入隔间后及时标记"使用中"</li>
                 <li>• 使用完毕后请记得标记"空闲"，方便他人查看</li>
                 <li>• 如发现设施故障，请联系物业进行维修</li>
+                <li>• 所有隔间满时可加入等待队列，有空位时自动按顺序通知</li>
               </ul>
             </div>
           </>
         ) : null}
       </div>
+
+      {showJoinModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900">加入排队</h3>
+              <button
+                onClick={() => {
+                  setShowJoinModal(false);
+                  setVisitorName('');
+                  setJoinError(null);
+                }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="mb-4 p-4 bg-gray-50 rounded-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">楼层</span>
+                <span className="font-medium text-gray-900">
+                  {currentFloor?.floorNumber}楼 {currentFloor?.floorName}
+                </span>
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-gray-600">当前排队人数</span>
+                <span className="font-medium text-amber-600">
+                  {currentQueue?.count ?? 0} 人
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                您的称呼
+              </label>
+              <input
+                type="text"
+                value={visitorName}
+                onChange={(e) => setVisitorName(e.target.value)}
+                placeholder="请输入您的称呼"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleJoinQueue();
+                  }
+                }}
+              />
+              {joinError && (
+                <p className="mt-2 text-sm text-red-600">{joinError}</p>
+              )}
+            </div>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={() => {
+                  setShowJoinModal(false);
+                  setVisitorName('');
+                  setJoinError(null);
+                }}
+                className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleJoinQueue}
+                disabled={!visitorName.trim() || isJoining}
+                className="flex-1 py-3 px-4 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isJoining ? '加入中...' : '确认排队'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -36,3 +36,17 @@ export interface PeakPeriod {
   period: string;
   avgCount: number;
 }
+
+export interface QueueItem {
+  id: string;
+  floorId: string;
+  visitorName: string;
+  joinedAt: number;
+  position: number;
+}
+
+export interface FloorQueue {
+  floorId: string;
+  items: QueueItem[];
+  count: number;
+}
