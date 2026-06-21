@@ -1,0 +1,4178 @@
+[
+  {
+    "id": "a0070b05-830d-44b4-b59c-751d065da4dd",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779414728922,
+    "endTime": 1779415268922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "99f4e61c-e3de-4cbe-b116-02c3bf19edd3",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1779419948922,
+    "endTime": 1779420128922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "0e31c8d4-5bcc-4f1e-abae-b4bf4277ae27",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779420488922,
+    "endTime": 1779420728922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "16c33e29-6c24-4467-afa5-83957cde08c1",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1779421808922,
+    "endTime": 1779422528922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "363ff1f6-76c6-489d-89cb-95b192e43ccc",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1779424808922,
+    "endTime": 1779425168922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "9c28e820-d94f-44d7-8ed1-620e35006b4a",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1779422768922,
+    "endTime": 1779423128922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "fbeb9806-a23f-4597-a8b2-4fdb1306eee3",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779427268922,
+    "endTime": 1779427928922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "135f4521-528a-4e35-a111-b697a0a6f110",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1779428708922,
+    "endTime": 1779429308922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "beeb6bee-52c7-4f40-ba0a-d2ee79a79c00",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1779429608922,
+    "endTime": 1779430148922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "eab56330-8ad6-4aad-8f95-5bea5ab24891",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1779430088922,
+    "endTime": 1779430328922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "8554b013-38e2-45aa-9638-a0bacbcf2932",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1779430568922,
+    "endTime": 1779430928922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "6b187e19-7f60-442b-aadd-0acf4bc85ccd",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779430748922,
+    "endTime": 1779431048922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "513f99ee-813a-480f-81af-79ae935c5a5e",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1779435548922,
+    "endTime": 1779436028922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "b33b1d58-a46c-4314-86f2-a5169d77ce7f",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1779433148922,
+    "endTime": 1779433328922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "f670120b-534d-4d18-8a70-a8d46e1022e4",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779436688922,
+    "endTime": 1779437228922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "bb519c7a-b1b3-4c9c-abc3-c24f68a95076",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1779437828922,
+    "endTime": 1779438308922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "79ae329c-20ea-41eb-938b-4f412f942327",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1779437828922,
+    "endTime": 1779438008922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "83721314-538d-42b5-8634-2a693e494c4e",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1779439748922,
+    "endTime": 1779440228922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "f8a08e92-78be-40a7-ae97-006f4add12df",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779441128922,
+    "endTime": 1779441848922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "1f09fa0c-2b3a-45f7-a29d-25b55d534e75",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1779440648922,
+    "endTime": 1779441368922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "3ae5577c-3db7-4d41-a3e8-73e16820e3a1",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1779444188922,
+    "endTime": 1779444548922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "26133968-97ce-4b62-83be-9e3a146cb03f",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1779445028922,
+    "endTime": 1779445568922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "3a0bcd31-a877-46b2-a526-200ff080ba48",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1779449948922,
+    "endTime": 1779450128922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "0490bd64-92c3-4b01-81cf-500d6b20fe5b",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1779448448922,
+    "endTime": 1779449168922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "41f09d4d-86d3-4922-bf28-0ba44cba5db3",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779451088922,
+    "endTime": 1779451628922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "73736f5a-fd86-4975-bc72-42e60eb7a6c6",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1779674708922,
+    "endTime": 1779675068922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "f296c2c7-b2c3-41a6-8ee1-b1865e496f23",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1779674168922,
+    "endTime": 1779674408922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "2511392c-da25-4244-b221-884e2ce5566f",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779678668922,
+    "endTime": 1779679328922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "a87bca10-9f38-4a4f-ae54-6f639774866a",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779678608922,
+    "endTime": 1779678908922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "8d251a53-60dc-42ab-a12d-d0359d102b71",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779677528922,
+    "endTime": 1779678128922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "c1973597-ca9b-4fca-8deb-03fc41916f54",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1779681248922,
+    "endTime": 1779681548922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "85893df5-6f52-41a2-906c-ee17a4d670dd",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1779681848922,
+    "endTime": 1779682028922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "7da2ab67-5460-4032-bbd2-f08db4799c22",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1779687068922,
+    "endTime": 1779687668922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "c0b4fd7e-0a79-410b-b031-81ec7f0925bf",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1779690308922,
+    "endTime": 1779690488922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "61e5cf14-57b7-4c5b-9c7f-216cfbb2113e",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1779688328922,
+    "endTime": 1779689048922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "6b11a34a-7c7c-4306-a51c-db63d9033c67",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1779690188922,
+    "endTime": 1779690908922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "1659989c-7f2c-4935-b074-3d09d0f3fe95",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1779691388922,
+    "endTime": 1779692108922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "346bcf78-aeb7-48b6-9da8-f4c73559ad23",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1779690308922,
+    "endTime": 1779690788922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "ad326cf8-3b9a-4e03-ac01-106ccd4226c8",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779693968922,
+    "endTime": 1779694388922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "18f9952b-69a7-45be-9127-6968b4d8f05c",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1779693668922,
+    "endTime": 1779694388922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "2ac03c3b-11a5-4d8b-9d02-0b8b3280f8d8",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1779696128922,
+    "endTime": 1779696788922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "dde57f72-d9e2-47d8-8eff-83e4b47654c4",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779696428922,
+    "endTime": 1779696968922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "86ba93bd-642e-43d9-9ccd-79a7ca9dbe90",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1779696848922,
+    "endTime": 1779697028922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "8938c18f-966a-4683-9839-a6032182aeb8",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1779696548922,
+    "endTime": 1779697028922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "32a32638-7840-4c3b-98e6-9a380edd8a0c",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1779702368922,
+    "endTime": 1779702668922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "d4a277da-3f4b-490d-bcb9-a02769bc8334",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779699908922,
+    "endTime": 1779700508922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "95b17656-2c4b-4ccd-9a45-53ad8f85c663",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779705548922,
+    "endTime": 1779705968922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "0aab0ae1-0d61-45c3-864f-8abf6b5c6431",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1779706928922,
+    "endTime": 1779707168922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "6fb5aef1-cd86-464d-ac7f-cbeb109392ac",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1779708968922,
+    "endTime": 1779709148922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "77ac7977-20c7-4952-8ede-108fa9bd7663",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1779710708922,
+    "endTime": 1779710948922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "947bd2bd-b219-4bc2-ab9d-c22ee3bdee6d",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779710588922,
+    "endTime": 1779711008922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "10e22b60-c6fa-4061-8a63-cb3a05670199",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1779763748922,
+    "endTime": 1779764288922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "a2ec08a1-ccee-4850-b9e4-018da945f049",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1779760688922,
+    "endTime": 1779761408922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "51a1afe0-5a84-4c13-949d-67b7fde30961",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779767288922,
+    "endTime": 1779767648922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "63e4b668-833b-4df2-9806-85031cbefdfa",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779765608922,
+    "endTime": 1779765848922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "ac45fb69-f9a6-4593-bc2d-fbace27b12ef",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1779769568922,
+    "endTime": 1779769928922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "314e7e3c-476e-4438-97aa-e855c63f3f7c",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1779770288922,
+    "endTime": 1779770948922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "6d0e0e29-6e93-4418-9a2f-8042fe53412c",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779773408922,
+    "endTime": 1779773708922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "6c29a2c1-25e7-4be9-abed-1396474a9154",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1779772448922,
+    "endTime": 1779772808922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "49eec282-1909-45d4-b769-b3b9119ae0d2",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1779775388922,
+    "endTime": 1779775688922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "a58c3fbc-66b6-4464-9552-48711e165265",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1779778028922,
+    "endTime": 1779778268922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "a47f974d-d2fa-4bc1-8aa4-bcf16d6a6ded",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1779777188922,
+    "endTime": 1779777428922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "67a19f6b-eaa1-46ae-9256-c59ddf668cfd",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1779777608922,
+    "endTime": 1779778148922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "2308bb12-6f06-4e6c-a2ac-7a9878befe1d",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1779777368922,
+    "endTime": 1779778028922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "b58495d6-1d44-403c-9958-3c5ecbfd489d",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1779779648922,
+    "endTime": 1779779888922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "bd697f68-bc54-461d-90d7-34c990e6f1c6",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1779783728922,
+    "endTime": 1779784388922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "f490db0c-8540-40f4-a93f-26032d5362fa",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1779782468922,
+    "endTime": 1779782828922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "9c41d018-0ae1-4fca-aa5d-aed02741829f",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1779783728922,
+    "endTime": 1779784328922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "0e4817cf-d920-4595-b108-691d860c5983",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779784208922,
+    "endTime": 1779784688922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "cbbe4db1-7322-49b9-b046-feab3cf9c5ec",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779784808922,
+    "endTime": 1779785468922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "ffb1805f-807d-4c6e-ac5f-25ae3fd5f93d",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779787628922,
+    "endTime": 1779788168922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "5cda8891-b720-4be1-b774-10517b2c2d78",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779787388922,
+    "endTime": 1779788108922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "da8d3ebc-71f1-4065-98ca-6c9a1a2945d5",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779789668922,
+    "endTime": 1779790088922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "f0630d33-f8f7-4481-b803-45b9089760cf",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1779792908922,
+    "endTime": 1779793628922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "4b61c652-691a-4770-aa4c-8900bc163363",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779795908922,
+    "endTime": 1779796568922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "72faf588-d3d9-4073-8f8a-7e863c962f7a",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1779795248922,
+    "endTime": 1779795788922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "78f24c64-75ae-4452-9b65-5d7bac9280f0",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779798728922,
+    "endTime": 1779799388922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "fb544894-18cc-4589-96b0-993112df5877",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1779848468922,
+    "endTime": 1779849128922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "d6bbe556-b5b8-40d5-ac48-e9b84c1bee99",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1779850808922,
+    "endTime": 1779851108922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "16b04efd-3b79-471b-a312-8b27218e6cde",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1779853568922,
+    "endTime": 1779854048922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "946571ab-6751-4fbb-8871-7ec72d75c1c0",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1779856268922,
+    "endTime": 1779856508922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "7e1593c0-cb51-42d5-a681-6514cf0469c3",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779854468922,
+    "endTime": 1779854948922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "e7ccfd06-e47f-4ea8-a12f-fb2b6b49d2f3",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1779859388922,
+    "endTime": 1779859568922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "c48a3430-af57-4bd4-813d-fd6dd11fffd1",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1779862268922,
+    "endTime": 1779862448922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "1cb458dc-4699-4c32-a162-b190ea9e3232",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1779861368922,
+    "endTime": 1779861848922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "d4a43b4c-c59e-4376-ac3b-bad7f1cff59b",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1779861848922,
+    "endTime": 1779862328922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "68195cc2-f47d-4fb8-9e40-6fe6967cda45",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779864428922,
+    "endTime": 1779864788922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "92afd83e-c6fa-4054-a4eb-fe1a61fff783",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1779861068922,
+    "endTime": 1779861248922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "ac0fab6d-4bcd-429c-a1e8-a2a053e03549",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1779864788922,
+    "endTime": 1779864968922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "16f9a889-f4b7-4751-a8ce-6dbf5ca88fd4",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779865208922,
+    "endTime": 1779865688922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "8b939151-bb24-484c-a3e9-91f7a6a78eec",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779870428922,
+    "endTime": 1779870848922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "6b778487-9487-45b2-ab45-4193553d9afb",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1779870488922,
+    "endTime": 1779871148922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "0fcc435c-4ee0-4f03-8d0d-568f5984c5b6",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1779870308922,
+    "endTime": 1779870548922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "a57b97e0-9356-4140-aa71-81ceb12c7acb",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1779871568922,
+    "endTime": 1779871928922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "98c0b57f-9ccd-42ae-82d9-945bacd7edea",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1779871208922,
+    "endTime": 1779871568922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "27688bbf-f4ef-40bf-bdc7-7c9a2315530f",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779875408922,
+    "endTime": 1779875888922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "432934b3-744f-468e-b4a4-8afdcd52b341",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1779877388922,
+    "endTime": 1779877628922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "6204c157-11af-414e-8e53-a15543868bd2",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1779877748922,
+    "endTime": 1779877928922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "c7912df0-3092-43d0-b267-bbded14b0345",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779880928922,
+    "endTime": 1779881228922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "1a08b205-5559-46da-b7d1-7922b3b6c0da",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1779881648922,
+    "endTime": 1779882068922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "35b1d6df-99ed-4006-a62f-b7841ba7a5e3",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1779881708922,
+    "endTime": 1779882428922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "ad67956a-98a8-4e27-ad13-333c1c71d6bf",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779883208922,
+    "endTime": 1779883928922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "6e7755c8-84dc-4e98-80ee-81dd0b5178d5",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779884108922,
+    "endTime": 1779884648922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "f0ab1a2d-c6b1-4233-b769-d71e9c598e55",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1779935228922,
+    "endTime": 1779935408922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "cff9a485-2534-4420-8ee0-0c9b0c2f4d54",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1779940088922,
+    "endTime": 1779940748922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "1c7c245e-9a9a-44a0-a460-d2dfec15785a",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1779938108922,
+    "endTime": 1779938288922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "ff1c7a7a-0ba2-45d4-b91a-516d8b5558d4",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1779939788922,
+    "endTime": 1779940088922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "7c69c650-596e-4378-bbec-f6dc22e49cfb",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1779942428922,
+    "endTime": 1779943088922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "36f1da51-340b-457e-a93c-9d1f1b378dd7",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1779944408922,
+    "endTime": 1779944648922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "58c94251-9255-4e87-8e2a-d41741617777",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1779944708922,
+    "endTime": 1779945068922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "2aff5d80-15cd-4c75-a6a0-ea6df3f6a930",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1779949448922,
+    "endTime": 1779949808922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "6b7dd1a9-43b5-4a2d-9889-737fc9ebb1db",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1779949328922,
+    "endTime": 1779949808922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "2b751fe3-9693-4a61-9839-c164b1daee7e",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779949868922,
+    "endTime": 1779950528922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "0fa41665-3d43-42cc-86ce-eea277cfddbb",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1779948668922,
+    "endTime": 1779948908922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "b9135224-f7b6-480c-8748-7e2be66389a4",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1779952628922,
+    "endTime": 1779953048922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "75f74fd8-1ea9-41d0-a7d0-64762f2d7827",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1779952388922,
+    "endTime": 1779952748922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "203ea4ad-a3f0-4a43-9e9d-999e672c08ae",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1779958148922,
+    "endTime": 1779958388922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "de21cc33-37ae-40d9-84c0-5f184e021f9f",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1779955028922,
+    "endTime": 1779955568922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "d3cf5b9a-8b9a-485d-a0e2-3b693eca9b4f",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1779957488922,
+    "endTime": 1779958148922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "c201589a-ceb0-4b53-8b72-0af50fe85bde",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779960788922,
+    "endTime": 1779961208922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "6dc4e235-c2b0-4cdf-ad3a-71df273ae206",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1779962708922,
+    "endTime": 1779963188922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "f3f9b837-8637-4c0e-86d8-3640a09d6c03",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1779967208922,
+    "endTime": 1779967508922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "8b474a5c-02f0-4945-b596-7bb9a8a31e20",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1779966908922,
+    "endTime": 1779967148922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "2f960d41-ebe4-4712-893c-a482a5ec3575",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1779966188922,
+    "endTime": 1779966848922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "bb15617f-a6d1-44f2-8b38-c1606717318b",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1779972188922,
+    "endTime": 1779972368922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "a26b094c-89b5-40cd-9b98-2c75c30b4e45",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1779969968922,
+    "endTime": 1779970448922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "32b3816c-ac70-4ef5-8e25-fa4bca82dd82",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780020008922,
+    "endTime": 1780020488922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "a41e23d5-4795-46e4-a233-c6fc2c28d455",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780022528922,
+    "endTime": 1780022948922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "8b1230f3-a676-4762-9d39-a8a832d90347",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780025768922,
+    "endTime": 1780025948922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "2a954473-dfcb-4a73-afa6-91e63ecb378c",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780024088922,
+    "endTime": 1780024568922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "ff18c118-4b0a-435a-8bd8-4a63eeae9266",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1780024148922,
+    "endTime": 1780024388922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "cfd0e32d-670c-49bc-99f9-eb15aa86b207",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780026308922,
+    "endTime": 1780026908922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "c1123b66-231d-42f3-95a5-45b52535ee97",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780027088922,
+    "endTime": 1780027508922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "d4e05299-2578-435a-9528-182edb1ca929",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1780028168922,
+    "endTime": 1780028348922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "70e7ffce-6fee-46c9-ba94-d8d18c88c69a",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780030388922,
+    "endTime": 1780031048922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "59150746-2b1a-4eaf-827b-d748a9c0e89a",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780034708922,
+    "endTime": 1780035068922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "c576b2d0-670b-44d1-9193-340db67d8fee",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780034588922,
+    "endTime": 1780034948922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "bd3d2a4b-e188-414c-b24c-2b942f082cef",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780036748922,
+    "endTime": 1780037048922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "09397b4f-6eec-4c23-b773-958c80c9149e",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1780036328922,
+    "endTime": 1780036688922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "f1fb734e-eff1-4d6d-8ac4-64b70d17a875",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780036508922,
+    "endTime": 1780037048922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "d71c5847-50f7-48d5-b9b8-8086f7a5dde9",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780039388922,
+    "endTime": 1780039868922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "62e6af3d-5003-4b63-9ee7-70be75d7f3cc",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1780039028922,
+    "endTime": 1780039328922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "34c32f8a-7ffe-409e-8697-be373c33c337",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780043108922,
+    "endTime": 1780043408922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "56550387-6da9-4d10-9dc9-9e61ac5a60e4",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1780041668922,
+    "endTime": 1780041908922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "33174a7c-0a4c-4141-9d41-8c1cb2f2fda1",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780042088922,
+    "endTime": 1780042688922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "ec9b1882-e300-4f47-9601-7680fad18442",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780044308922,
+    "endTime": 1780044668922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "194641c7-fea6-4ecd-b592-0c5ce9da0185",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1780046408922,
+    "endTime": 1780046888922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "041aa6cd-748b-4981-966e-92f2b19c88a1",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780047368922,
+    "endTime": 1780047608922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "f88b3bc4-c27a-4ad5-83bb-bbb296b57dc2",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1780051508922,
+    "endTime": 1780051808922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "b77e3c53-93e4-49b3-bcef-78c2a32d0b22",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780053248922,
+    "endTime": 1780053908922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "1e3cba0e-2b63-405f-bad3-fc62a11c86d1",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780055288922,
+    "endTime": 1780055768922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "82946d31-9a60-439c-8094-47669d75dc91",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1780052648922,
+    "endTime": 1780053128922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "601776d3-c92f-4a69-810c-a96e44323e7b",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780056608922,
+    "endTime": 1780056788922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "ac9c49c2-6bca-4a46-936c-de2f54cc012e",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780279028922,
+    "endTime": 1780279568922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "2c8f775b-2099-4fd9-9b3a-2cf9c96af8f0",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780285508922,
+    "endTime": 1780285808922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "2eed3564-2b9c-476c-a3ff-76201e292c77",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780283828922,
+    "endTime": 1780284128922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "d88cc5f1-0181-4f0a-b950-b1632a7c0c12",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1780285208922,
+    "endTime": 1780285748922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "71e3bef8-e117-471e-9a36-868e6075f155",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780285148922,
+    "endTime": 1780285568922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "1c18f5e4-3863-4d2e-90f8-73cfbedf35da",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780282328922,
+    "endTime": 1780282508922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "b5842bf6-5c74-486a-91ee-12c796cea9bd",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780285928922,
+    "endTime": 1780286528922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "67c8ce23-63be-4f2f-8e79-73b47eaac97c",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1780288508922,
+    "endTime": 1780288868922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "60e7dfe9-58b3-4dd1-81c5-eb56e71e99c2",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1780291628922,
+    "endTime": 1780292168922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "84dd4d01-97a6-4925-ac4f-247bd10d4b43",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780292948922,
+    "endTime": 1780293668922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "9f972489-75db-4c23-8159-033621a6a26b",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1780295108922,
+    "endTime": 1780295708922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "bb713a9e-5cab-4038-a30a-d7dffe733d82",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780295468922,
+    "endTime": 1780295708922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "afed7966-05e0-446f-9494-310bf907d173",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780295828922,
+    "endTime": 1780296428922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "e0239327-66e1-4da9-a1a6-d228df36ce45",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780293068922,
+    "endTime": 1780293248922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "16d3407a-d61c-429b-a332-2ae47ae57ed7",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780297868922,
+    "endTime": 1780298588922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "5ddb7c10-0caa-4f6c-93b0-9f73bd4529f1",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780296728922,
+    "endTime": 1780296908922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "95b273f7-35ea-46f7-a8d2-49ab53976c2c",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780303688922,
+    "endTime": 1780304168922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "5fcef269-f5d8-4c75-bb4f-3f2d63c46a40",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780301408922,
+    "endTime": 1780301708922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "a18d75a0-245e-4410-b032-4dca7c36c3ee",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780306448922,
+    "endTime": 1780306688922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "9239154e-f787-4fef-b4bb-4623d188bdcd",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780309568922,
+    "endTime": 1780309988922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "a0d48472-dd3a-4e18-97a7-3fffbcef0e70",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780311248922,
+    "endTime": 1780311548922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "fbd7af42-7fac-4669-b6d2-966997bd00f1",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780311488922,
+    "endTime": 1780311848922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "82eff9a3-8084-4769-83bb-c1572f290b26",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1780311428922,
+    "endTime": 1780311728922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "9003a349-466b-42b7-9a7b-d039d694ee67",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780314368922,
+    "endTime": 1780314968922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "e00620f7-5c0d-4327-9db0-a0579b2b2a58",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780318148922,
+    "endTime": 1780318448922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "d12e12e4-e626-42c6-9aa4-bff67988f088",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1780368308922,
+    "endTime": 1780368908922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "516ba71c-5059-4d7d-ad47-62d44e1cee3f",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780367768922,
+    "endTime": 1780368308922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "a74b09ee-f2ae-4fa1-9284-ba5485daa478",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780371008922,
+    "endTime": 1780371608922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "2a6efdba-a393-492c-b3d6-10b864084fd5",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780370588922,
+    "endTime": 1780370948922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "831b1115-8109-4349-9415-e335abd0a766",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780368908922,
+    "endTime": 1780369508922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "7e93f9da-d896-47ce-99b0-d92fd47f9d5c",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780371788922,
+    "endTime": 1780372388922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "1fb8c18c-83e5-4274-b977-1c9e948caf82",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780370648922,
+    "endTime": 1780370888922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "39da25e5-e354-4716-bd9a-f0a72c7f72a9",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1780374128922,
+    "endTime": 1780374788922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "8e0a1ce1-a286-481f-b570-a36849136c81",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780374548922,
+    "endTime": 1780375148922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "5f8ae99b-67df-494c-a14a-16cde6ec2872",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1780378688922,
+    "endTime": 1780379108922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "fdbfe66d-3f8e-4155-8eaf-68349d105ca0",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780376648922,
+    "endTime": 1780376828922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "6c02cbed-7f71-45f1-907b-6ce22f9afcf8",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780379648922,
+    "endTime": 1780380128922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "af440368-3b5c-4266-8407-2d7ba30ce5db",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780382348922,
+    "endTime": 1780383008922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "404c58d6-08f0-4dd2-b98e-27f4a72be9c1",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1780383008922,
+    "endTime": 1780383728922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "24086192-d3cf-423b-a626-0c2bf85a40a5",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1780381028922,
+    "endTime": 1780381448922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "a78358ca-617b-4c4d-bb3c-3f2609a5a663",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780380548922,
+    "endTime": 1780381148922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "0aabe309-9731-41cb-8fcb-bc04fcf269d5",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1780385708922,
+    "endTime": 1780386368922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "9806bf6e-8143-41a7-a9b0-157425bbc65e",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780389908922,
+    "endTime": 1780390388922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "7af4093e-c69e-4bee-bbcf-0b9ad067e03b",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1780389608922,
+    "endTime": 1780390328922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "bfd93901-5767-4a1a-833a-6b731b41cc36",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780389248922,
+    "endTime": 1780389968922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "561fb77b-7e37-4771-9cd8-dbeefdc53a6d",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780389608922,
+    "endTime": 1780389968922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "3399a4b4-7147-484b-b589-d9f388996a65",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780389068922,
+    "endTime": 1780389488922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "0172d789-c365-4975-825b-0696510a725b",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780391348922,
+    "endTime": 1780391828922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "6f6fb90c-c0b7-4e34-b455-8a41f248c83d",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1780397408922,
+    "endTime": 1780398068922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "aeb4e204-1969-4b89-ba49-840bc30d2c24",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1780397468922,
+    "endTime": 1780397648922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "b31c5f55-85f7-4907-93cd-427cdfdef891",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1780400408922,
+    "endTime": 1780400588922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "f8d40776-4994-4e28-9b8e-8170ded9e1c1",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780398008922,
+    "endTime": 1780398308922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "3bb4f793-902c-4a95-a78a-1405977e392d",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1780402928922,
+    "endTime": 1780403108922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "0404ef41-8fc8-4760-989c-b71038a191bb",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780452908922,
+    "endTime": 1780453508922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "465ecea0-fdb6-48b6-a5c7-f474b9c00276",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780455968922,
+    "endTime": 1780456628922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "738a162c-5026-4999-ab99-4c88e0cbd143",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780456628922,
+    "endTime": 1780456868922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "22389251-76a8-4d7d-8c29-6f40ed80711c",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780455128922,
+    "endTime": 1780455848922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "cdd991a8-2906-488f-855a-f5382c1a59de",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1780460168922,
+    "endTime": 1780460888922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "4d9e1c84-57fd-4a56-8b78-3be0c56c2b8e",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780459448922,
+    "endTime": 1780459748922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "d5892526-3497-4530-9297-1c09a92c50bf",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780463708922,
+    "endTime": 1780464188922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "d09e5513-74a7-4062-841b-a47ea22a9823",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780463528922,
+    "endTime": 1780463708922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "4a041635-01b2-44d1-bbc1-25cb2eb3f452",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1780468508922,
+    "endTime": 1780468988922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "37d65c00-8026-4092-bcaa-d0a5ba878069",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1780469288922,
+    "endTime": 1780469768922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "6f65ccd8-2a8a-4b05-b3a4-22fad2613561",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1780468388922,
+    "endTime": 1780468748922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "82355439-31dc-4f40-a3f1-1032501eb7b7",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780470608922,
+    "endTime": 1780470968922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "dd4c3339-f0c3-4790-a72c-342e9ffe6db5",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780475408922,
+    "endTime": 1780475588922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "d251c491-ec06-481a-82da-27a2835c83ca",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780473488922,
+    "endTime": 1780474208922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "a6e90e89-aca8-4f9b-a521-e164a81f2b9c",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1780474748922,
+    "endTime": 1780475048922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "c4c75245-0af0-4739-9ad9-fcd1f880a279",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780473788922,
+    "endTime": 1780474328922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "49e404e2-f246-482d-9a5a-aeb359c3f251",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780475888922,
+    "endTime": 1780476368922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "e3b7a32a-4c35-452e-b98c-e4ba041dd9bf",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780478048922,
+    "endTime": 1780478288922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "a5989818-c827-4e42-958f-5c704851d797",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780482788922,
+    "endTime": 1780483148922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "e30acb41-7dd7-4a9b-8f86-0111cd8f80e8",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1780480628922,
+    "endTime": 1780481168922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "b8fdc96d-7324-4dfe-a852-e4e488110fa1",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780485308922,
+    "endTime": 1780486028922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "41e3eb87-e8e6-48a8-9846-f88a12c52d39",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780484468922,
+    "endTime": 1780484888922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "71c6d8ae-b32a-44e7-b9f3-6ff109b233b9",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1780487708922,
+    "endTime": 1780488008922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "f7dca071-ef46-419b-891f-9ba410d846a9",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780541408922,
+    "endTime": 1780542128922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "070c5507-596d-43a9-917e-6510bddc8b09",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780538948922,
+    "endTime": 1780539308922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "8da04f44-9aa3-4f1d-9019-0d4d644afb64",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1780541828922,
+    "endTime": 1780542308922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "d30e589f-31f4-4792-9f9c-0807e78495cb",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780541648922,
+    "endTime": 1780542308922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "754a531b-183d-4ff7-9458-974eea3983b6",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780544708922,
+    "endTime": 1780545308922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "d3466dff-c98b-4724-91a1-c32837ee3917",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780543088922,
+    "endTime": 1780543628922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "715d8b90-b5f4-4ecf-9c7e-56caf18c538a",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1780543868922,
+    "endTime": 1780544468922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "5c9bd9be-6871-48a9-b3f8-6fa142e538a5",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1780545788922,
+    "endTime": 1780546148922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "f25fbd45-6897-407d-be82-738ccca6cd6c",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1780551128922,
+    "endTime": 1780551728922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "df473e97-7e8e-45dd-ab2e-4ed6f142da5b",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780554068922,
+    "endTime": 1780554668922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "3cc80f82-e687-4295-aac6-adf92e46216a",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780553888922,
+    "endTime": 1780554548922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "0407137c-57dd-46eb-bb75-310238abbc84",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780558088922,
+    "endTime": 1780558508922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "222161c0-c299-4572-a210-a566a00c7197",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780557368922,
+    "endTime": 1780557908922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "993c976c-ab36-4eb3-b4fa-678c729ff10d",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1780561268922,
+    "endTime": 1780561508922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "754aa41a-8817-4726-96ec-2ebc05c66de3",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780561748922,
+    "endTime": 1780561928922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "b5dcc8ac-d9fc-4386-9cb9-9114bb621fc4",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1780561448922,
+    "endTime": 1780561628922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "1d96ad72-4d98-4cbf-bd6e-a748935c6455",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780559828922,
+    "endTime": 1780560008922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "797b198a-4f0f-42fa-a661-a05d6a17565e",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780560728922,
+    "endTime": 1780561268922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "ed6de0fd-c8a8-4bc1-b4fa-9a80555048d2",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780564568922,
+    "endTime": 1780564748922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "ea467d03-6022-4fa5-95ab-ee22d86fb08b",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780569608922,
+    "endTime": 1780570328922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "dfa6652f-5208-49ba-b985-88930d6f59f6",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1780569488922,
+    "endTime": 1780569968922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "d0b71dce-56c3-472c-a7bc-933a4cb5adf6",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780571288922,
+    "endTime": 1780571648922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "381b216d-f06a-483f-9428-11576f9871d4",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780571588922,
+    "endTime": 1780572188922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "1925cfa3-469c-4e29-bab4-50bdf0b024bc",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780572848922,
+    "endTime": 1780573448922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "c8b093f3-a283-47ab-bc69-cbeefe132a8a",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780576748922,
+    "endTime": 1780577288922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "b40289ff-c006-4ed8-9a15-d7ee10349dfa",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780574708922,
+    "endTime": 1780575068922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "e09dee8f-c36f-44f9-bce4-286ab5c395ea",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780627028922,
+    "endTime": 1780627388922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "81c78e05-3d0a-403c-9fff-2a86882a69ee",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780628168922,
+    "endTime": 1780628648922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "021eb565-5167-4273-8869-615f1cfd8d48",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1780628768922,
+    "endTime": 1780629188922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "6ef52f8c-f517-4678-a721-da6e92de1b07",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1780630088922,
+    "endTime": 1780630508922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "61c163c7-4946-45cc-8cc6-f5ea6f9cd570",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1780629668922,
+    "endTime": 1780629968922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "2b5cfa39-79cb-44a1-bd0f-f4b97ffa092f",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780633088922,
+    "endTime": 1780633388922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "906ddd88-e338-4115-b3ae-0eaaca225f43",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1780638248922,
+    "endTime": 1780638668922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "19dc5701-e943-4498-9709-1c6a7b54fa35",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780636808922,
+    "endTime": 1780637288922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "c2758c7e-7604-475f-99fa-ed71854744e8",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780639028922,
+    "endTime": 1780639268922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "e48db178-2706-4473-94e9-1e4b148ccc5f",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780641068922,
+    "endTime": 1780641608922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "320b44ff-8eef-416a-9a10-84d9753fdee5",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1780640528922,
+    "endTime": 1780641248922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "b3b8175a-850f-4552-9807-6890617d94ed",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780641248922,
+    "endTime": 1780641788922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "d2aac234-c77c-495b-b842-e6dc4f43a4e7",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780643228922,
+    "endTime": 1780643588922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "30c45184-e185-40b6-aa63-80b944d5f70c",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780647728922,
+    "endTime": 1780648088922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "12f5a3c5-4e47-4bb9-a4a1-240eeb93122d",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1780646468922,
+    "endTime": 1780647188922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "f08f795e-2bd3-461c-bec0-9813bcc6b268",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1780646588922,
+    "endTime": 1780646948922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "383b428c-b449-4366-be48-12f736fb8609",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1780652228922,
+    "endTime": 1780652588922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "e5b1267e-6b52-468e-b22b-ee0e8e3f7bd0",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1780654208922,
+    "endTime": 1780654748922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "da92bc8b-38bf-41d0-8337-0c002b963b09",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780659428922,
+    "endTime": 1780660088922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "33abc978-e1a1-4da8-8189-c8369ef2dc2c",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1780657088922,
+    "endTime": 1780657748922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "a841054a-0647-46a6-af0a-b9380383a166",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780658048922,
+    "endTime": 1780658768922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "751badd2-2c21-4500-976b-dccae667e987",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1780657748922,
+    "endTime": 1780658228922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "b101e83e-3937-4b62-910c-b4021c18fe58",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1780663568922,
+    "endTime": 1780663868922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "c84cb4ae-0fd0-40c6-b473-1608af27160e",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1780661768922,
+    "endTime": 1780662008922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "31da9bb7-64b1-430e-bd6d-e538bc5e4cbf",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1780884488922,
+    "endTime": 1780885088922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "db2dd607-4461-4dbb-8b8a-5229bdbccf78",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780885568922,
+    "endTime": 1780886288922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "0e83e52f-8269-4b05-8719-89d9741266bd",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780888328922,
+    "endTime": 1780888868922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "a18e3dc2-c4e0-4bd2-861f-0cba2d8ff547",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780888088922,
+    "endTime": 1780888808922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "78b7ad50-8080-44c0-9058-0b2c084c161d",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1780890728922,
+    "endTime": 1780891448922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "43a87c77-97d5-4c93-bfd6-1fe301e27024",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1780891388922,
+    "endTime": 1780891808922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "01142dcd-1750-49a5-a15b-71c8799db635",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1780894568922,
+    "endTime": 1780894868922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "a09c46db-b954-4e8c-b758-457cca31c0a0",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1780901408922,
+    "endTime": 1780901948922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "766de630-a991-4505-aa9e-99811ec75fcb",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780898588922,
+    "endTime": 1780899188922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "930404f5-2ac0-4b62-80b6-b811e754b2cb",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780904708922,
+    "endTime": 1780905248922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "5b86cd14-a831-4674-ab08-1f14cfed11ad",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780905248922,
+    "endTime": 1780905428922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "030bf4c6-8da3-4957-a430-a5ba9f5e6ec6",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780907948922,
+    "endTime": 1780908428922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "f34ad604-ef02-4255-9987-c649b746cefd",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780910048922,
+    "endTime": 1780910408922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "9e771f90-6af5-44e8-9f56-fa752542d3e9",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1780911068922,
+    "endTime": 1780911488922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "191c8c8b-70f7-46d4-ba93-204364b6e1a5",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1780913408922,
+    "endTime": 1780913648922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "cbb8573c-7892-4a66-b177-ce73b486afeb",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1780917068922,
+    "endTime": 1780917668922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "a8cc9034-ba66-4b05-bec0-45a9e8140e25",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780916168922,
+    "endTime": 1780916768922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "7dc64dd4-8566-461f-934e-652a05ad2f89",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1780915868922,
+    "endTime": 1780916588922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "b948445c-d347-40ba-9f52-037379ec945b",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780918508922,
+    "endTime": 1780919108922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "89f55a6e-cb1b-4ef6-8576-0e2b3c5a1248",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1780917488922,
+    "endTime": 1780917968922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "6eeecfab-470e-4004-9750-a67c8861dad8",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1780922168922,
+    "endTime": 1780922828922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "0f4255e8-347b-4778-b7c6-c95232b58449",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780919588922,
+    "endTime": 1780919888922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "a04c21a0-7125-4138-a71b-7a603040e64f",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780970948922,
+    "endTime": 1780971368922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "91573992-47b7-4b6d-9ef2-17b2984b9b77",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1780975988922,
+    "endTime": 1780976168922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "71ef46b2-21c5-43c7-b8ae-f097c41f8318",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1780976648922,
+    "endTime": 1780977128922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "466718e7-4236-4316-8fb7-0bc064a19703",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1780973588922,
+    "endTime": 1780974008922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "1dd2f7c9-0203-4817-a964-ea3c3a9e1ce0",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1780976468922,
+    "endTime": 1780976888922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "9c53e66a-95b7-423b-81dd-8186c9e3e562",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1780980188922,
+    "endTime": 1780980608922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "9789d89e-edcf-4115-a447-bfe465c45195",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1780982948922,
+    "endTime": 1780983188922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "4290adb5-549b-47cf-a4f9-0787809b69e8",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1780984628922,
+    "endTime": 1780984868922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "fc800447-e573-4adf-ae50-f1a47dbebffb",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780987568922,
+    "endTime": 1780988108922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "f3a6833c-becc-40a7-ba3f-5c10eb3e51f3",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780989128922,
+    "endTime": 1780989308922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "02702fd3-4137-4f8e-a18b-c1d54f718b54",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1780990988922,
+    "endTime": 1780991408922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "934194ef-d2de-4a28-8d05-db0196abee72",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1780994648922,
+    "endTime": 1780994888922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "7bc8bee6-26c4-4cd2-8447-fffb4863a991",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1780992128922,
+    "endTime": 1780992788922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "8a8fe05d-f16c-4152-b8fc-ff4473da14b6",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1780992788922,
+    "endTime": 1780993328922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "2e736da1-df6c-4db3-a4da-1c55eb91612c",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1780993208922,
+    "endTime": 1780993388922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "f2266839-4bae-4c1a-9038-2f3efa145897",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1780997828922,
+    "endTime": 1780998488922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "a2418bc8-1a17-4c0c-b6f5-32b7154535ba",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781000348922,
+    "endTime": 1781001068922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "f1b785f0-cc7d-4e86-94d6-ecefe71141ff",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781003768922,
+    "endTime": 1781004068922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "b1594bd1-6b84-473c-9f92-d2f1ff3d2d13",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781004128922,
+    "endTime": 1781004728922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "1472e0ca-fafb-49dc-9d30-b34618a5f959",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781002628922,
+    "endTime": 1781003348922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "a9aaf07d-40c5-45f6-95f1-c58f8a713d25",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781008748922,
+    "endTime": 1781008928922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "713a6866-31ee-4b5f-a69d-803a85c0a375",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781057768922,
+    "endTime": 1781058368922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "f449e58c-bd7a-48f2-aebf-30502b126dc9",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1781059088922,
+    "endTime": 1781059388922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "7eb1d0cb-1712-4ca2-b61a-eaf1542524ae",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781062028922,
+    "endTime": 1781062688922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "2e8b64ea-789c-4e4d-89f8-6d1a58911ed8",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781061668922,
+    "endTime": 1781062088922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "aacb5353-48b8-4469-88cb-b04daa4d693e",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781062388922,
+    "endTime": 1781063108922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "d5d24da7-3520-45f8-a7ef-5d43ac925da2",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781060408922,
+    "endTime": 1781060708922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "689a6ea3-0037-410a-a9c0-161674e59ca0",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781063288922,
+    "endTime": 1781063528922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "1fa06aac-0d31-411d-b82e-cb26b00e2658",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781064788922,
+    "endTime": 1781065388922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "886f2baf-1cd0-40ab-b2d3-20745bc30ef8",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781065988922,
+    "endTime": 1781066288922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "987b82d4-7352-41cf-8b87-b258712a1c48",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1781069288922,
+    "endTime": 1781070008922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "730b4273-821f-4997-91ee-546e9faad566",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1781069948922,
+    "endTime": 1781070128922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "91c9deb7-58f1-45a3-b450-c5548027a6b2",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781071628922,
+    "endTime": 1781072048922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "6d4ff7ca-60bd-485e-b503-ee6edced0a49",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781072948922,
+    "endTime": 1781073548922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "4239d1a2-2093-40a4-b5ca-0fb66c934697",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781073188922,
+    "endTime": 1781073728922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "d40bdca4-693c-4d53-9c4b-c76dbb6e0d0a",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781075048922,
+    "endTime": 1781075528922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "f6951426-efb7-4825-a824-36029d5c5be6",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781074448922,
+    "endTime": 1781075108922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "b99a9f26-3841-4336-adff-93645860f931",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781078768922,
+    "endTime": 1781079488922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "722b4f50-316a-4e8d-bfb0-503fe638e03e",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781078228922,
+    "endTime": 1781078888922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "a1f7b4ca-a51d-4cdb-8da2-671b31837378",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1781080388922,
+    "endTime": 1781080868922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "7dbc1255-514a-456a-9ba2-972480d0e329",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781079368922,
+    "endTime": 1781079908922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "52d35747-1b05-4756-a1b1-e2c1ebc78c28",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781080448922,
+    "endTime": 1781080628922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "fda15cf8-89b1-44ba-82a5-8f0064d9a2a4",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781083088922,
+    "endTime": 1781083448922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "165c9c9c-448d-45fb-aed1-3dac4809f550",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781082188922,
+    "endTime": 1781082548922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "5d66d9fb-eef1-4d8f-9e25-7287495fec57",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1781085908922,
+    "endTime": 1781086508922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "f900b23e-5944-49b8-be57-c7e0ceed0b95",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781089628922,
+    "endTime": 1781089988922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "45eba282-dd4b-4275-95aa-a86deb95cec6",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1781089148922,
+    "endTime": 1781089868922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "1399ac0b-9782-48b5-a25d-71a9cb640cf4",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781091608922,
+    "endTime": 1781092148922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "89925681-cfe8-4402-9e20-62425f9c7bee",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1781094488922,
+    "endTime": 1781095088922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "149f0917-de16-4659-96fd-6c801a8ee15a",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781093348922,
+    "endTime": 1781093768922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "39e0e7ba-6942-4af7-a29f-9ca2377830d4",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781142848922,
+    "endTime": 1781143448922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "d1ced662-c1d5-43b3-9590-adbf829323b8",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781143148922,
+    "endTime": 1781143688922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "b8ce6b76-4c7f-407b-b9cd-d00aba8e670a",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781149688922,
+    "endTime": 1781150168922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "98f41967-fbb7-4e8d-baba-1da7263ca202",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781148188922,
+    "endTime": 1781148908922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "bc3ab2d0-bf47-4496-852e-fa24c7b959de",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1781148308922,
+    "endTime": 1781148968922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "c046ec42-a226-4757-96f2-a2acdda9e73d",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1781153288922,
+    "endTime": 1781153468922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "4c357d21-baa3-4401-b928-9022a977b6b5",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781153468922,
+    "endTime": 1781153948922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "c022cb9f-19bc-44ff-b96d-0f232acb29eb",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781160008922,
+    "endTime": 1781160488922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "dfd39b22-c3ff-4f3d-bea6-f377d1d5d254",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781160008922,
+    "endTime": 1781160308922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "c16817b0-1840-43a1-9aca-924346baff6d",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781160248922,
+    "endTime": 1781160548922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "581ede09-8f63-4aa2-905b-2fdd54e0d5fa",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781160968922,
+    "endTime": 1781161628922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "b3534b24-e1e6-4c10-b1b1-bbde4c8bd6d9",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781161088922,
+    "endTime": 1781161748922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "09c007d6-c15b-4611-9742-2a960d5a4163",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781167028922,
+    "endTime": 1781167628922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "54982ce3-25d0-41f9-b02f-1cb17f8cbbef",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781164748922,
+    "endTime": 1781165108922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "5e8af61d-1fcf-434c-b7ee-e5f17b286a73",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781164508922,
+    "endTime": 1781165108922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "afa46812-4e2f-4aee-b352-8ee4db17a017",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1781165048922,
+    "endTime": 1781165528922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "2dd1e490-543f-4d07-a798-bb4ced640647",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1781166608922,
+    "endTime": 1781167268922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "a41ce992-352e-4cb7-9c2b-fb30e5b3bfb8",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781170868922,
+    "endTime": 1781171228922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "fff2e498-88e9-488d-8379-c702233d1c9a",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781169608922,
+    "endTime": 1781170148922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "d8d1a85f-325d-4252-993d-577fe599aa72",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781174648922,
+    "endTime": 1781174888922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "f5200b91-3046-46a4-8270-71f67ae2d068",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781175668922,
+    "endTime": 1781176148922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "60d67195-ea37-4d08-88e7-c6d7a79988e8",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781177648922,
+    "endTime": 1781177828922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "645136e2-730e-4dbd-a9c4-637e49b25df8",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781176508922,
+    "endTime": 1781176868922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "9209d080-c410-41e3-ad06-5d826f7c138d",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781181848922,
+    "endTime": 1781182148922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "1d8e2c3d-6006-4f95-979c-6f65bab64796",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781179208922,
+    "endTime": 1781179388922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "f7589111-2bb7-4b39-98f1-6ac4b3c13bd5",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781232608922,
+    "endTime": 1781233268922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "aa006985-feb4-41b4-a3d0-b7e46a67600f",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781233328922,
+    "endTime": 1781233628922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "f9ca411d-4852-4639-98a9-03695a97a7f3",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781233688922,
+    "endTime": 1781233988922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "6c4bce2f-4b03-4dbe-ae3b-121ebeb5d744",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781234768922,
+    "endTime": 1781235368922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "cceb01be-94c6-48ac-87b7-0cd79e55b59f",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781235548922,
+    "endTime": 1781236208922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "9341aa5e-b080-40c7-9cc1-32f03020cd74",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1781238548922,
+    "endTime": 1781238968922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "8b42860e-92d1-4b05-baae-0658fd8b7334",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781242388922,
+    "endTime": 1781242628922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "f6efd6e6-f12b-4401-b3ad-94d9d5aa1762",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781244428922,
+    "endTime": 1781244788922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "9534c0a1-e5fa-41c1-9e68-744516fd1123",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1781244428922,
+    "endTime": 1781244608922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "99275ba3-eefa-4504-beac-de18697ceb51",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781246228922,
+    "endTime": 1781246708922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "b4280aeb-c232-4cf4-84dc-8faf19ce929f",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781245808922,
+    "endTime": 1781246108922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "f9843ca5-1262-42c6-8a79-51f8ac7a7949",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781247668922,
+    "endTime": 1781248388922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "a0572ad0-56ec-4864-98c3-6a7389b264e1",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1781252828922,
+    "endTime": 1781253008922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "8c32a631-3774-4a70-b9f7-87fad344fe33",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781251268922,
+    "endTime": 1781251508922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "d5a848dc-3add-459f-a858-4dedb4be6929",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781253788922,
+    "endTime": 1781254328922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "9a8ee0c7-4781-428f-8f85-f0c327ceda81",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781253548922,
+    "endTime": 1781254028922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "c253d409-7b99-4640-b0c4-12b4fe203094",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1781254808922,
+    "endTime": 1781255228922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "765db608-54e6-4102-a4cd-604bb6703683",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1781258708922,
+    "endTime": 1781258948922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "3e56f8b5-28ce-4009-9afd-dd9ab489f11a",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781263568922,
+    "endTime": 1781263868922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "486be72f-a754-4115-9088-73fde9cf9a09",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781261708922,
+    "endTime": 1781262248922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "426fca00-fd54-4f31-b30a-8d48681ac554",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781261708922,
+    "endTime": 1781261888922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "a5df0a56-ecb7-4f2b-ab27-e11dbbaa4a6f",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781266628922,
+    "endTime": 1781266868922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "c1131a9f-768c-4bdf-9799-de05e0e16923",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781268188922,
+    "endTime": 1781268548922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "958ce117-af76-497e-8073-d998d760f9a1",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781490068922,
+    "endTime": 1781490428922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "d1f504b0-defd-46c8-825c-475a068f3269",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781489228922,
+    "endTime": 1781489468922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "fdfd5a5c-7416-437d-8cf8-3e91b9b5c3b4",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781493008922,
+    "endTime": 1781493488922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "8ed1217a-1c34-43b8-8179-42728b36b2b9",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781493368922,
+    "endTime": 1781494028922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "ed7745e5-06b0-4fef-8a4e-2c776759e137",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781497868922,
+    "endTime": 1781498528922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "1664d4bc-def7-4389-a84f-cffe1885e667",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781497448922,
+    "endTime": 1781497808922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "7deaffba-66df-4f63-9a89-b1bdc63bc136",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781500448922,
+    "endTime": 1781500688922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "76b9839a-3caf-403a-9dac-fde779ab8962",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1781502668922,
+    "endTime": 1781502848922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "c64ade78-5fff-4233-aa1c-794be9357ee1",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781503028922,
+    "endTime": 1781503328922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "4c41b10c-a5d1-4314-a244-286332f4ebdb",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781503628922,
+    "endTime": 1781504348922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "b0d42b0f-938a-46f3-a865-63f33d8f938d",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781503508922,
+    "endTime": 1781503868922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "925428c2-8528-45bf-85fd-35a67df10d8e",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781508128922,
+    "endTime": 1781508788922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "8e666ef8-5441-49d4-b0a4-223b9b1c219b",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1781511368922,
+    "endTime": 1781511968922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "23b87c08-fdd5-451c-a03b-c9aa61c0b2ee",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781512928922,
+    "endTime": 1781513648922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "64ad071d-f8aa-4101-8cb0-f0df9c2fd4c7",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781511428922,
+    "endTime": 1781512088922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "21047659-35c5-4b66-8167-f000d4df9393",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781513408922,
+    "endTime": 1781513888922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "df3b557a-cca9-4c34-bbc7-a9a6b8932ef2",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781516768922,
+    "endTime": 1781517188922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "b8532f97-f0e2-470c-956e-9d6fd24d17a6",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781517188922,
+    "endTime": 1781517608922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "585ffc90-14cc-4798-a167-54d25fa59e22",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781523788922,
+    "endTime": 1781524268922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "95afb49a-59cf-4c35-ba07-4e7517be814c",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781522048922,
+    "endTime": 1781522228922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "841a0c13-5970-409a-9bc4-20ae2a5e378a",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781523788922,
+    "endTime": 1781524208922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "6be74ec7-01d6-4bb3-8084-cd3326519d7b",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781521568922,
+    "endTime": 1781521868922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "3575e826-6842-41b8-954c-a704c530eb30",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781521628922,
+    "endTime": 1781521868922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "7e673258-00e3-444e-8447-19977b5d6742",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1781527508922,
+    "endTime": 1781527988922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "bb388b33-6b63-4e53-9207-e74f812dfb0b",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781526488922,
+    "endTime": 1781527208922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "67de639b-5d5c-4561-9ce3-4da646534bdb",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1781577128922,
+    "endTime": 1781577308922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "ebfd8adf-bcdb-4e3c-85d5-b6062f0b0a54",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781575148922,
+    "endTime": 1781575688922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "67ce0f87-a87e-4547-8e45-354c99d1510f",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781579468922,
+    "endTime": 1781579708922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "bc3f0231-f6ca-4ea5-9d75-c59d5bb28cfa",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781579468922,
+    "endTime": 1781580128922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "6572708a-ded9-4c5b-9aa2-d512e5e78a08",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781584748922,
+    "endTime": 1781585048922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "36d7eba0-05b5-4ced-a279-4a90c2067093",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781587508922,
+    "endTime": 1781588228922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "e26fbf1f-03d9-4608-9f1d-d441c7ff2b2f",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781590448922,
+    "endTime": 1781590988922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "e5a0a075-b2fc-460e-a11c-cda4c1f643c2",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781589608922,
+    "endTime": 1781590208922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "387e355b-1a8e-43f7-b1b7-1d0459360471",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781593028922,
+    "endTime": 1781593508922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "3329248c-6b8f-4190-aba5-6ee254852ddd",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1781596748922,
+    "endTime": 1781597348922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "d1880ac3-ed0c-4662-8e7c-91eb44600158",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1781599328922,
+    "endTime": 1781599688922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "8be42cdd-167d-4058-915d-e782d19f1bf7",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781599568922,
+    "endTime": 1781599748922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "c4c2e23c-a3b3-404d-8cc4-efea2202a680",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1781597168922,
+    "endTime": 1781597768922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "72ed87a0-6404-49cb-abac-e4448965fb8d",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1781599448922,
+    "endTime": 1781599868922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "c78a93fe-c8a9-43ee-a056-f3e888367be3",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781600408922,
+    "endTime": 1781600888922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "662fdbb3-b4b6-4f8b-95b2-8cb57adc664c",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781601788922,
+    "endTime": 1781602268922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "10853031-c4f1-4073-8b69-408ae41f01e0",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781605088922,
+    "endTime": 1781605388922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "561e8415-50a3-493e-9e6b-78d128a6472c",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781603588922,
+    "endTime": 1781603948922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "34c3534e-2a34-4816-a5ed-76f1d1e4c45e",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781608988922,
+    "endTime": 1781609468922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "858a90d9-44f8-4871-a109-84dcded2de60",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781609348922,
+    "endTime": 1781610068922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "1cf514ab-42b3-41af-b440-3c3de3c21a7c",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781608208922,
+    "endTime": 1781608808922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "17e24079-9105-495a-b5bf-7a8d74fe7551",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781610188922,
+    "endTime": 1781610488922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "36ba5fca-a398-407a-9927-289dc12b7205",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1781613548922,
+    "endTime": 1781614148922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "b718fc5f-978f-44f8-8e75-89271cecb3dd",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781614028922,
+    "endTime": 1781614748922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "e9d70490-0b21-4bc7-ae84-ac194e2b4323",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1781661488922,
+    "endTime": 1781662028922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "3611ae40-b217-45fd-9810-6248fe2d7398",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781666528922,
+    "endTime": 1781666948922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "3c6dea3f-07c9-4db9-af75-0b5133103917",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1781666228922,
+    "endTime": 1781666408922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "66c3a17f-c384-4a47-b9ce-ec4d7c420138",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1781664788922,
+    "endTime": 1781665088922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "d6c3bacb-fa42-4670-9ccf-9462ac5ab176",
+    "stallId": "stall-2-6",
+    "floorId": "floor-2",
+    "startTime": 1781668208922,
+    "endTime": 1781668808922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "f1766c29-24f3-44ac-85fb-f450df88c00b",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781668808922,
+    "endTime": 1781669228922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "5fae61fb-3e60-4c46-853f-5b640892f7ac",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781670668922,
+    "endTime": 1781670968922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "1dba75df-c3e2-4b88-bc40-6be9f7c298c3",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781674328922,
+    "endTime": 1781674868922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "f3d7d019-e72a-4fb8-8efe-2d5ff61a3482",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781678708922,
+    "endTime": 1781679068922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "c408bce1-e81a-402c-9706-6438cc3c3fc9",
+    "stallId": "stall-3-1",
+    "floorId": "floor-3",
+    "startTime": 1781678408922,
+    "endTime": 1781678768922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "9c2bae5e-6b24-45a1-8f82-1b0d32d6e673",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781675588922,
+    "endTime": 1781676188922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "bd3c689b-4d57-4b2e-8971-d229fbea621f",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781677628922,
+    "endTime": 1781678288922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "695ed4ca-695a-4242-8eeb-58a4eb385199",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781678048922,
+    "endTime": 1781678288922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "f260b1c8-61e9-415b-91d2-0e851b097208",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781681168922,
+    "endTime": 1781681408922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "47272d27-045c-41c8-892e-6b22f32e7263",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1781682488922,
+    "endTime": 1781682848922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "ebb291ec-dcec-4f66-a633-b50d7e865714",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781685908922,
+    "endTime": 1781686088922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "0c02f93a-128a-42a0-965b-6c237053edcd",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781685008922,
+    "endTime": 1781685668922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "cb6ba99e-a370-4224-856d-745c6d24503e",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781684348922,
+    "endTime": 1781684708922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "3b371d64-48a2-484a-a475-adbeb68b7525",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1781688188922,
+    "endTime": 1781688908922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "3c5d2f25-7d1b-4ba9-b2ca-f09ac9751170",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781690168922,
+    "endTime": 1781690588922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "f7e39b52-9809-4138-9557-30c76d1b8062",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1781692088922,
+    "endTime": 1781692328922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "b59263ab-acff-4a18-8681-c4c30fca20f9",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1781695928922,
+    "endTime": 1781696408922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "ba1064f8-4f28-4254-915b-5c85d7197190",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781695988922,
+    "endTime": 1781696528922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "69217d40-1dca-49cd-8880-f8d0c1ea7f2d",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781697008922,
+    "endTime": 1781697668922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "813afaae-fc5d-4d1d-85e2-6d0e471a6499",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781697548922,
+    "endTime": 1781698208922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "480039fb-105d-4b4f-acf7-50f47d80c954",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781699348922,
+    "endTime": 1781699708922,
+    "durationSeconds": 360
+  },
+  {
+    "id": "49ad7cba-7f57-44c6-acbf-a4dd5afb8e8b",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781748248922,
+    "endTime": 1781748908922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "8c971340-f92a-4576-b7a0-8435d1b2d6fe",
+    "stallId": "stall-2-5",
+    "floorId": "floor-2",
+    "startTime": 1781751428922,
+    "endTime": 1781751848922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "f9121da5-5a32-4ac7-a9f1-e31daa71193b",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781754308922,
+    "endTime": 1781754728922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "b9bb90a2-95dd-4ad8-a116-1fc95f8c1d68",
+    "stallId": "stall-1-1",
+    "floorId": "floor-1",
+    "startTime": 1781755988922,
+    "endTime": 1781756288922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "9d8c951d-8c11-4418-9032-b21abf630b6f",
+    "stallId": "stall-1-3",
+    "floorId": "floor-1",
+    "startTime": 1781756648922,
+    "endTime": 1781757308922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "22542410-8d47-49dd-884b-eb8f9785d281",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1781760008922,
+    "endTime": 1781760308922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "b1e1ec0a-8bf3-48a2-88f4-33147a27e7f8",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1781760908922,
+    "endTime": 1781761508922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "d6b4feb1-40ab-4beb-ae6f-a35e53ec4fab",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781763248922,
+    "endTime": 1781763548922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "80c9ae96-bf7f-453d-9fba-6deb6f423b82",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781762828922,
+    "endTime": 1781763008922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "965732c9-87f2-4fb7-961a-28bec7e7d838",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781763368922,
+    "endTime": 1781764028922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "d3b2eae8-35c0-4de0-8721-491a3d37873b",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781767568922,
+    "endTime": 1781768168922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "6203532a-ab8d-4471-ade3-36327b75a053",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781767268922,
+    "endTime": 1781767868922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "aab5fa79-92b6-4b30-b5c3-cf07359b20c4",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781771528922,
+    "endTime": 1781772068922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "e613cb12-65cf-4168-a8ae-e2815d310a3f",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781771108922,
+    "endTime": 1781771288922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "ad7763aa-b77b-4b75-a9d4-cd7edc294abb",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781770868922,
+    "endTime": 1781771468922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "9da6fcbf-f431-4178-a8e1-f8b9d07bd5b2",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781772728922,
+    "endTime": 1781772908922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "f5b03580-c45e-48ee-90dd-8d2f5b9ee02d",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781778188922,
+    "endTime": 1781778368922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "d18a3a61-5969-41a1-8e81-37a2510f2c6c",
+    "stallId": "stall-2-2",
+    "floorId": "floor-2",
+    "startTime": 1781778128922,
+    "endTime": 1781778788922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "365c3d63-9c73-465f-82e9-2a6dfa6caeb5",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781780528922,
+    "endTime": 1781781128922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "0bd2c34a-4c3c-480a-920e-d3837abc247e",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781780588922,
+    "endTime": 1781781008922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "45d97567-3490-4038-aca6-8f5756606695",
+    "stallId": "stall-4-2",
+    "floorId": "floor-4",
+    "startTime": 1781782568922,
+    "endTime": 1781782988922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "e76c56ff-ecc9-40cb-b4a4-d262f189a9f8",
+    "stallId": "stall-2-3",
+    "floorId": "floor-2",
+    "startTime": 1781785328922,
+    "endTime": 1781785628922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "7b43019f-3dc3-4c66-a235-e494916cf377",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781833928922,
+    "endTime": 1781834228922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "1c349214-2250-49be-a555-b30af43ae6d1",
+    "stallId": "stall-5-4",
+    "floorId": "floor-5",
+    "startTime": 1781835908922,
+    "endTime": 1781836148922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "65e9f705-4272-4207-b772-4a7ad1ece5da",
+    "stallId": "stall-4-1",
+    "floorId": "floor-4",
+    "startTime": 1781838068922,
+    "endTime": 1781838728922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "caf42778-9d60-41cc-9420-49411455ffbc",
+    "stallId": "stall-4-6",
+    "floorId": "floor-4",
+    "startTime": 1781838488922,
+    "endTime": 1781839148922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "7a78e55c-b7cb-400d-bb64-8c67936b1e71",
+    "stallId": "stall-1-6",
+    "floorId": "floor-1",
+    "startTime": 1781839568922,
+    "endTime": 1781840288922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "65a87c71-7275-40d9-b950-6ef27861c5df",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1781840588922,
+    "endTime": 1781841068922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "cf1dfa47-94e6-40af-975e-7c913d5c6617",
+    "stallId": "stall-1-2",
+    "floorId": "floor-1",
+    "startTime": 1781841968922,
+    "endTime": 1781842388922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "cf6f0a17-d397-4162-b8fe-b29c2bdd6502",
+    "stallId": "stall-1-4",
+    "floorId": "floor-1",
+    "startTime": 1781848148922,
+    "endTime": 1781848688922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "8aad3322-1284-48fa-b9a3-98fd283d3fde",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781850968922,
+    "endTime": 1781851388922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "2a7688e4-454d-4b92-aa23-12083e5556be",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781851448922,
+    "endTime": 1781851988922,
+    "durationSeconds": 540
+  },
+  {
+    "id": "d0e8a003-c686-4a60-b4a2-6534a5b3afee",
+    "stallId": "stall-5-2",
+    "floorId": "floor-5",
+    "startTime": 1781850248922,
+    "endTime": 1781850548922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "32eb34b6-3865-4500-8963-b498c323501f",
+    "stallId": "stall-3-3",
+    "floorId": "floor-3",
+    "startTime": 1781849348922,
+    "endTime": 1781849828922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "e5d3f607-46b7-4d0e-85b9-b99dc9091ab6",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1781850068922,
+    "endTime": 1781850248922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "324b966f-8f4d-465e-88c3-58f1874f4e24",
+    "stallId": "stall-3-5",
+    "floorId": "floor-3",
+    "startTime": 1781852768922,
+    "endTime": 1781853068922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "49731f14-c544-40ce-8cde-9ae1b17d3f7e",
+    "stallId": "stall-2-4",
+    "floorId": "floor-2",
+    "startTime": 1781852528922,
+    "endTime": 1781853188922,
+    "durationSeconds": 660
+  },
+  {
+    "id": "122c212c-4f43-45f4-a1d3-0a889cc80630",
+    "stallId": "stall-3-6",
+    "floorId": "floor-3",
+    "startTime": 1781856968922,
+    "endTime": 1781857688922,
+    "durationSeconds": 720
+  },
+  {
+    "id": "3821e256-e262-47bd-add2-50c6a5f195dc",
+    "stallId": "stall-3-2",
+    "floorId": "floor-3",
+    "startTime": 1781855828922,
+    "endTime": 1781856068922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "ded001a6-edd8-4a99-8827-ff4128ac3e19",
+    "stallId": "stall-4-4",
+    "floorId": "floor-4",
+    "startTime": 1781855468922,
+    "endTime": 1781855708922,
+    "durationSeconds": 240
+  },
+  {
+    "id": "4cdb5f40-ce29-499c-be90-dde9bde8de0b",
+    "stallId": "stall-5-1",
+    "floorId": "floor-5",
+    "startTime": 1781856248922,
+    "endTime": 1781856548922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "aa5bb308-ff29-4f51-986f-9ffd23080187",
+    "stallId": "stall-5-3",
+    "floorId": "floor-5",
+    "startTime": 1781859188922,
+    "endTime": 1781859668922,
+    "durationSeconds": 480
+  },
+  {
+    "id": "425b2b26-18fe-4150-9d95-c7213350821a",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1781862728922,
+    "endTime": 1781863148922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "59a3a1ec-0787-4259-b681-4c621f9425ce",
+    "stallId": "stall-4-3",
+    "floorId": "floor-4",
+    "startTime": 1781869508922,
+    "endTime": 1781869928922,
+    "durationSeconds": 420
+  },
+  {
+    "id": "7627b6b1-7979-447a-8132-8afcde32f9e3",
+    "stallId": "stall-3-4",
+    "floorId": "floor-3",
+    "startTime": 1781869268922,
+    "endTime": 1781869568922,
+    "durationSeconds": 300
+  },
+  {
+    "id": "c1e7d536-9d45-4526-81f1-6ef1adfa2216",
+    "stallId": "stall-2-1",
+    "floorId": "floor-2",
+    "startTime": 1781866748922,
+    "endTime": 1781867348922,
+    "durationSeconds": 600
+  },
+  {
+    "id": "2ad2014c-8fea-4060-a1b5-55e1aa55c661",
+    "stallId": "stall-1-5",
+    "floorId": "floor-1",
+    "startTime": 1781872088922,
+    "endTime": 1781872268922,
+    "durationSeconds": 180
+  },
+  {
+    "id": "c4a229a9-986f-439b-b536-702b8eb5b07a",
+    "stallId": "stall-4-5",
+    "floorId": "floor-4",
+    "startTime": 1781872508922,
+    "endTime": 1781873228922,
+    "durationSeconds": 720
+  }
+]

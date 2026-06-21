@@ -1,0 +1,32 @@
+[
+  {
+    "id": "floor-1",
+    "floorNumber": 1,
+    "floorName": "1楼 大堂",
+    "totalStalls": 6
+  },
+  {
+    "id": "floor-2",
+    "floorNumber": 2,
+    "floorName": "2楼 办公区",
+    "totalStalls": 6
+  },
+  {
+    "id": "floor-3",
+    "floorNumber": 3,
+    "floorName": "3楼 办公区",
+    "totalStalls": 6
+  },
+  {
+    "id": "floor-4",
+    "floorNumber": 4,
+    "floorName": "4楼 办公区",
+    "totalStalls": 6
+  },
+  {
+    "id": "floor-5",
+    "floorNumber": 5,
+    "floorName": "5楼 高管层",
+    "totalStalls": 4
+  }
+]
