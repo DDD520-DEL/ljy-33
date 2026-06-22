@@ -266,10 +266,10 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
     return occupyReservedStall(stallId);
   }
 
-  stall.status = status;
   stall.lastUpdated = now;
 
   if (previousStatus !== 'maintenance' && status === 'maintenance') {
+    stall.status = status;
     const floors = getFloors();
     const floor = floors.find((f) => f.id === stall.floorId);
     if (floor) {
@@ -283,20 +283,55 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
       });
     }
   } else if (previousStatus === 'maintenance' && status === 'available') {
+    stall.status = status;
     completeWorkOrder(stallId);
-  }
+  } else if (previousStatus === 'reserved' && status === 'available') {
+    const reservations = getReservations();
+    const oldReservationId = stall.reservedByReservationId;
 
-  if (previousStatus === 'reserved' && status === 'available') {
+    if (oldReservationId) {
+      const oldR = reservations.find((r) => r.id === oldReservationId);
+      if (oldR && oldR.status === 'fulfilled') {
+        oldR.status = 'cancelled';
+        oldR.cancelledAt = now;
+      }
+    }
+
     stall.reservedByReservationId = undefined;
     stall.reservedUntil = undefined;
 
-    const reservations = getReservations();
-    const pendingReservation = getFirstPendingReservation(stall.floorId);
-    if (pendingReservation) {
-      fulfillReservation(pendingReservation.id, stall.id, stall.stallNumber);
+    const nextReservation = (() => {
+      const GRACE_BEFORE = 5 * 60 * 1000;
+      const ready = reservations
+        .filter((r) => r.floorId === stall.floorId && r.status === 'pending')
+        .filter((r) => {
+          const slotTime = new Date(r.timeSlot).getTime();
+          return now >= slotTime - GRACE_BEFORE;
+        })
+        .sort((a, b) => {
+          const slotA = new Date(a.timeSlot).getTime();
+          const slotB = new Date(b.timeSlot).getTime();
+          if (slotA !== slotB) return slotA - slotB;
+          return a.createdAt - b.createdAt;
+        });
+      return ready.length > 0 ? ready[0] : null;
+    })();
+
+    if (nextReservation) {
+      nextReservation.status = 'fulfilled';
+      nextReservation.fulfilledAt = now;
+      nextReservation.assignedStallId = stall.id;
+      nextReservation.assignedStallNumber = stall.stallNumber;
+      stall.status = 'reserved';
+      stall.reservedByReservationId = nextReservation.id;
+      stall.reservedUntil = now + RESERVATION_TIMEOUT_MINUTES * 60 * 1000;
+    } else {
+      stall.status = 'available';
     }
+
     saveReservations(reservations);
   } else if (previousStatus === 'available' && status === 'occupied') {
+    stall.status = status;
     stall.occupiedStartTime = now;
     stall.isAbnormal = false;
   } else if (previousStatus === 'occupied' && status === 'available') {
@@ -319,12 +354,40 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
 
     resolveAlert(stallId);
 
-    const pendingReservation = getFirstPendingReservation(stall.floorId);
-    if (pendingReservation) {
-      fulfillReservation(pendingReservation.id, stall.id, stall.stallNumber);
+    const reservations = getReservations();
+    const nextReservation = (() => {
+      const GRACE_BEFORE = 5 * 60 * 1000;
+      const ready = reservations
+        .filter((r) => r.floorId === stall.floorId && r.status === 'pending')
+        .filter((r) => {
+          const slotTime = new Date(r.timeSlot).getTime();
+          return now >= slotTime - GRACE_BEFORE;
+        })
+        .sort((a, b) => {
+          const slotA = new Date(a.timeSlot).getTime();
+          const slotB = new Date(b.timeSlot).getTime();
+          if (slotA !== slotB) return slotA - slotB;
+          return a.createdAt - b.createdAt;
+        });
+      return ready.length > 0 ? ready[0] : null;
+    })();
+
+    if (nextReservation) {
+      nextReservation.status = 'fulfilled';
+      nextReservation.fulfilledAt = now;
+      nextReservation.assignedStallId = stall.id;
+      nextReservation.assignedStallNumber = stall.stallNumber;
+      stall.status = 'reserved';
+      stall.reservedByReservationId = nextReservation.id;
+      stall.reservedUntil = now + RESERVATION_TIMEOUT_MINUTES * 60 * 1000;
+      saveReservations(reservations);
     } else {
+      stall.status = 'available';
+      saveReservations(reservations);
       popFromQueue(stall.floorId);
     }
+  } else {
+    stall.status = status;
   }
 
   saveStalls(stalls);
@@ -587,33 +650,23 @@ export function occupyReservedStall(stallId: string): Stall | null {
 
 export function releaseExpiredReservedStalls(): Stall[] {
   const stalls = getStalls();
-  const reservations = getReservations();
   const now = Date.now();
-  const released: Stall[] = [];
+  const expiredStallIds: string[] = [];
 
   stalls.forEach((stall) => {
     if (stall.status === 'reserved' && stall.reservedUntil && now >= stall.reservedUntil) {
-      const reservationId = stall.reservedByReservationId;
-      stall.status = 'available';
-      stall.reservedByReservationId = undefined;
-      stall.reservedUntil = undefined;
-      stall.lastUpdated = now;
-      released.push(stall);
-
-      if (reservationId) {
-        const reservation = reservations.find((r) => r.id === reservationId);
-        if (reservation && reservation.status === 'fulfilled') {
-          reservation.status = 'expired';
-        }
-      }
+      expiredStallIds.push(stall.id);
     }
   });
 
-  if (released.length > 0) {
-    saveStalls(stalls);
-    saveReservations(reservations);
-  }
+  if (expiredStallIds.length === 0) return [];
 
+  saveStalls(stalls);
+  const released: Stall[] = [];
+  expiredStallIds.forEach((stallId) => {
+    const updated = updateStallStatus(stallId, 'available');
+    if (updated) released.push(updated);
+  });
   return released;
 }
 
