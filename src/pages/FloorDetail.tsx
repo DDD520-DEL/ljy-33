@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle, CalendarCheck, ChevronLeft, ChevronRight, History, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle, CalendarCheck, ChevronLeft, ChevronRight, History, ArrowRight, Star, MessageSquare } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import StallCard from '../components/StallCard';
 import ErrorAlert from '../components/ErrorAlert';
+import StarRating from '../components/StarRating';
 import { getStallDurationRanking, createReservation as apiCreateReservation, getFloorReservations } from '../utils/api';
-import type { StallStatus, QueueItem, StallDurationRank, Reservation, StallStatusLog } from '../types';
+import type { StallStatus, QueueItem, StallDurationRank, Reservation, StallStatusLog, FloorReviewSummary } from '../types';
 
 export default function FloorDetail() {
   const { floorId } = useParams<{ floorId: string }>();
@@ -26,6 +27,12 @@ export default function FloorDetail() {
     stallStatusLogs,
     stallStatusLogsLoading,
     fetchStallStatusLogs,
+    createReview,
+    floorReviewSummary,
+    fetchFloorReviewSummary,
+    reviews,
+    reviewsLoading,
+    fetchReviewsByFloor,
   } = useBathroomStore();
 
   const [visitorName, setVisitorName] = useState('');
@@ -46,6 +53,15 @@ export default function FloorDetail() {
   const [reservationError, setReservationError] = useState<string | null>(null);
   const [isCreatingReservation, setIsCreatingReservation] = useState(false);
   const [floorReservations, setFloorReservations] = useState<Reservation[]>([]);
+
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewVisitorName, setReviewVisitorName] = useState('');
+  const [cleanliness, setCleanliness] = useState(5);
+  const [odor, setOdor] = useState(5);
+  const [facilities, setFacilities] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewError, setReviewError] = useState<string | null>(null);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   useEffect(() => {
     if (floorId) {
@@ -94,6 +110,44 @@ export default function FloorDetail() {
       fetchStallStatusLogs(floorId, 50);
     }
   }, [floorId, fetchStallStatusLogs]);
+
+  useEffect(() => {
+    if (floorId) {
+      fetchFloorReviewSummary(floorId, 7);
+      fetchReviewsByFloor(floorId, 10);
+    }
+  }, [floorId, fetchFloorReviewSummary, fetchReviewsByFloor]);
+
+  const handleSubmitReview = async () => {
+    if (!floorId || !reviewVisitorName.trim()) return;
+
+    setIsSubmittingReview(true);
+    setReviewError(null);
+    try {
+      await createReview(
+        floorId,
+        reviewVisitorName.trim(),
+        cleanliness,
+        odor,
+        facilities,
+        reviewComment.trim() || undefined
+      );
+      setShowReviewModal(false);
+      setReviewVisitorName('');
+      setCleanliness(5);
+      setOdor(5);
+      setFacilities(5);
+      setReviewComment('');
+      if (floorId) {
+        fetchFloorReviewSummary(floorId, 7);
+        fetchReviewsByFloor(floorId, 10);
+      }
+    } catch (err) {
+      setReviewError((err as Error).message);
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
 
   const generateTimeSlots = (dateStr: string): string[] => {
     const slots: string[] = [];
@@ -594,6 +648,110 @@ export default function FloorDetail() {
                 ))}
             </div>
 
+            {floorReviewSummary && (
+              <div className="mt-8 bg-gradient-to-r from-primary-50 to-blue-50 rounded-2xl p-6 border border-primary-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
+                    <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                    <span>卫生间评分</span>
+                  </h3>
+                  <button
+                    onClick={() => setShowReviewModal(true)}
+                    className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors text-sm flex items-center space-x-1.5"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>我要评价</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                    <p className="text-sm text-gray-500 mb-1">综合评分</p>
+                    <div className="flex items-end space-x-2">
+                      <span className="text-3xl font-bold text-primary-600">
+                        {floorReviewSummary.avgOverall}
+                      </span>
+                      <span className="text-sm text-gray-400 mb-1">/ 5.0</span>
+                    </div>
+                    <div className="mt-2">
+                      <StarRating value={Math.round(floorReviewSummary.avgOverall)} readonly size="sm" />
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">
+                      共 {floorReviewSummary.totalReviews} 条评价
+                    </p>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                    <p className="text-sm text-gray-500 mb-1">整洁度</p>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl font-bold text-gray-800">
+                        {floorReviewSummary.avgCleanliness}
+                      </span>
+                    </div>
+                    <div className="mt-2">
+                      <StarRating value={Math.round(floorReviewSummary.avgCleanliness)} readonly size="sm" />
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                    <p className="text-sm text-gray-500 mb-1">气味</p>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl font-bold text-gray-800">
+                        {floorReviewSummary.avgOdor}
+                      </span>
+                    </div>
+                    <div className="mt-2">
+                      <StarRating value={Math.round(floorReviewSummary.avgOdor)} readonly size="sm" />
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                    <p className="text-sm text-gray-500 mb-1">设施完好度</p>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl font-bold text-gray-800">
+                        {floorReviewSummary.avgFacilities}
+                      </span>
+                    </div>
+                    <div className="mt-2">
+                      <StarRating value={Math.round(floorReviewSummary.avgFacilities)} readonly size="sm" />
+                    </div>
+                  </div>
+                </div>
+
+                {reviews.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-primary-100">
+                    <h4 className="text-sm font-medium text-gray-700 mb-3">最新评价</h4>
+                    <div className="space-y-3 max-h-48 overflow-y-auto">
+                      {reviews.slice(0, 3).map((review) => (
+                        <div key={review.id} className="bg-white rounded-lg p-3">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-medium text-sm text-gray-800">
+                              {review.visitorName}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {new Date(review.createdAt).toLocaleDateString('zh-CN', {
+                                month: 'numeric',
+                                day: 'numeric',
+                              })}
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2 mb-1">
+                            <StarRating value={Math.round((review.cleanliness + review.odor + review.facilities) / 3)} readonly size="sm" />
+                            <span className="text-xs text-gray-500">
+                              整洁{review.cleanliness} · 气味{review.odor} · 设施{review.facilities}
+                            </span>
+                          </div>
+                          {review.comment && (
+                            <p className="text-sm text-gray-600 mt-1">{review.comment}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="mt-8 bg-amber-50 rounded-2xl p-6 border border-amber-100">
               <h3 className="font-bold text-amber-900 mb-2">温馨提示</h3>
               <ul className="space-y-1.5 text-sm text-amber-700">
@@ -920,6 +1078,122 @@ export default function FloorDetail() {
                 className="flex-1 py-3 px-4 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isCreatingReservation ? '预约中...' : '确认预约'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showReviewModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                <span>评价卫生间</span>
+              </h3>
+              <button
+                onClick={() => {
+                  setShowReviewModal(false);
+                  setReviewVisitorName('');
+                  setCleanliness(5);
+                  setOdor(5);
+                  setFacilities(5);
+                  setReviewComment('');
+                  setReviewError(null);
+                }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="mb-4 p-4 bg-gray-50 rounded-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">楼层</span>
+                <span className="font-medium text-gray-900">
+                  {currentFloor?.floorNumber}楼 {currentFloor?.floorName}
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                您的称呼
+              </label>
+              <input
+                type="text"
+                value={reviewVisitorName}
+                onChange={(e) => setReviewVisitorName(e.target.value)}
+                placeholder="请输入您的称呼"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-medium text-gray-700">整洁度</label>
+                  <span className="text-sm text-gray-500">{cleanliness} 分</span>
+                </div>
+                <StarRating value={cleanliness} onChange={setCleanliness} size="lg" />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-medium text-gray-700">气味</label>
+                  <span className="text-sm text-gray-500">{odor} 分</span>
+                </div>
+                <StarRating value={odor} onChange={setOdor} size="lg" />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-medium text-gray-700">设施完好度</label>
+                  <span className="text-sm text-gray-500">{facilities} 分</span>
+                </div>
+                <StarRating value={facilities} onChange={setFacilities} size="lg" />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                文字评价（选填）
+              </label>
+              <textarea
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                placeholder="分享您的使用体验..."
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+              />
+            </div>
+
+            {reviewError && (
+              <p className="mb-4 text-sm text-red-600">{reviewError}</p>
+            )}
+
+            <div className="flex space-x-3">
+              <button
+                onClick={() => {
+                  setShowReviewModal(false);
+                  setReviewVisitorName('');
+                  setCleanliness(5);
+                  setOdor(5);
+                  setFacilities(5);
+                  setReviewComment('');
+                  setReviewError(null);
+                }}
+                className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleSubmitReview}
+                disabled={!reviewVisitorName.trim() || isSubmittingReview}
+                className="flex-1 py-3 px-4 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmittingReview ? '提交中...' : '提交评价'}
               </button>
             </div>
           </div>

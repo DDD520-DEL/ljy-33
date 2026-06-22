@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { TIMEOUT_THRESHOLD_MS, RESERVATION_TIMEOUT_MINUTES } from '../../shared/types.js';
-import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats, Reservation, ReservationStatus, StallStatusLog } from '../../shared/types.js';
+import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats, Reservation, ReservationStatus, StallStatusLog, Review, FloorReviewSummary } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +17,7 @@ const ALERTS_FILE = path.join(DATA_DIR, 'alerts.json');
 const WORK_ORDERS_FILE = path.join(DATA_DIR, 'work_orders.json');
 const RESERVATIONS_FILE = path.join(DATA_DIR, 'reservations.json');
 const STATUS_LOGS_FILE = path.join(DATA_DIR, 'stall_status_logs.json');
+const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -487,34 +488,41 @@ export function checkTimeoutStalls(): AlertRecord[] {
 
 export function initializeData(): void {
   const existingFloors = getFloors();
-  if (existingFloors.length > 0) return;
+  const isFirstInit = existingFloors.length === 0;
 
-  const floors: Floor[] = [
-    { id: 'floor-1', floorNumber: 1, floorName: '1楼 大堂', totalStalls: 6 },
-    { id: 'floor-2', floorNumber: 2, floorName: '2楼 办公区', totalStalls: 6 },
-    { id: 'floor-3', floorNumber: 3, floorName: '3楼 办公区', totalStalls: 6 },
-    { id: 'floor-4', floorNumber: 4, floorName: '4楼 办公区', totalStalls: 6 },
-    { id: 'floor-5', floorNumber: 5, floorName: '5楼 高管层', totalStalls: 4 },
-  ];
+  if (isFirstInit) {
+    const floors: Floor[] = [
+      { id: 'floor-1', floorNumber: 1, floorName: '1楼 大堂', totalStalls: 6 },
+      { id: 'floor-2', floorNumber: 2, floorName: '2楼 办公区', totalStalls: 6 },
+      { id: 'floor-3', floorNumber: 3, floorName: '3楼 办公区', totalStalls: 6 },
+      { id: 'floor-4', floorNumber: 4, floorName: '4楼 办公区', totalStalls: 6 },
+      { id: 'floor-5', floorNumber: 5, floorName: '5楼 高管层', totalStalls: 4 },
+    ];
 
-  const stalls: Stall[] = [];
-  floors.forEach((floor) => {
-    for (let i = 1; i <= floor.totalStalls; i++) {
-      stalls.push({
-        id: `stall-${floor.floorNumber}-${i}`,
-        floorId: floor.id,
-        stallNumber: i,
-        status: 'available',
-        lastUpdated: Date.now(),
-        occupiedStartTime: undefined,
-        isAbnormal: false,
-      });
-    }
-  });
+    const stalls: Stall[] = [];
+    floors.forEach((floor) => {
+      for (let i = 1; i <= floor.totalStalls; i++) {
+        stalls.push({
+          id: `stall-${floor.floorNumber}-${i}`,
+          floorId: floor.id,
+          stallNumber: i,
+          status: 'available',
+          lastUpdated: Date.now(),
+          occupiedStartTime: undefined,
+          isAbnormal: false,
+        });
+      }
+    });
 
-  saveFloors(floors);
-  saveStalls(stalls);
-  generateMockUsageData();
+    saveFloors(floors);
+    saveStalls(stalls);
+    generateMockUsageData();
+  }
+
+  const existingReviews = getReviews();
+  if (existingReviews.length === 0) {
+    generateMockReviewData();
+  }
 }
 
 function generateMockUsageData(): void {
@@ -801,4 +809,155 @@ export function isVisitorAlreadyReserved(floorId: string, visitorName: string, t
       r.timeSlot === timeSlot &&
       r.status === 'pending'
   );
+}
+
+export function getReviews(): Review[] {
+  return readJSON<Review[]>(REVIEWS_FILE, []);
+}
+
+export function saveReviews(reviews: Review[]): void {
+  writeJSON(REVIEWS_FILE, reviews);
+}
+
+export function addReview(
+  review: Omit<Review, 'id' | 'createdAt'>
+): Review {
+  const reviews = getReviews();
+  const newReview: Review = {
+    ...review,
+    id: uuidv4(),
+    createdAt: Date.now(),
+  };
+  reviews.push(newReview);
+  saveReviews(reviews);
+  return newReview;
+}
+
+export function getReviewsByFloor(floorId: string, limit?: number): Review[] {
+  const reviews = getReviews();
+  const filtered = reviews
+    .filter((r) => r.floorId === floorId)
+    .sort((a, b) => b.createdAt - a.createdAt);
+  return limit ? filtered.slice(0, limit) : filtered;
+}
+
+export function getRecentReviews(days: number = 7, floorId?: string): Review[] {
+  const reviews = getReviews();
+  const now = Date.now();
+  const startTime = now - days * 24 * 60 * 60 * 1000;
+  let filtered = reviews.filter((r) => r.createdAt >= startTime);
+  if (floorId) {
+    filtered = filtered.filter((r) => r.floorId === floorId);
+  }
+  return filtered.sort((a, b) => b.createdAt - a.createdAt);
+}
+
+function calculateAvg(reviews: Review[]): {
+  avgCleanliness: number;
+  avgOdor: number;
+  avgFacilities: number;
+  avgOverall: number;
+} {
+  if (reviews.length === 0) {
+    return { avgCleanliness: 0, avgOdor: 0, avgFacilities: 0, avgOverall: 0 };
+  }
+  const totalCleanliness = reviews.reduce((sum, r) => sum + r.cleanliness, 0);
+  const totalOdor = reviews.reduce((sum, r) => sum + r.odor, 0);
+  const totalFacilities = reviews.reduce((sum, r) => sum + r.facilities, 0);
+  const avgCleanliness = Math.round((totalCleanliness / reviews.length) * 10) / 10;
+  const avgOdor = Math.round((totalOdor / reviews.length) * 10) / 10;
+  const avgFacilities = Math.round((totalFacilities / reviews.length) * 10) / 10;
+  const avgOverall = Math.round(((avgCleanliness + avgOdor + avgFacilities) / 3) * 10) / 10;
+  return { avgCleanliness, avgOdor, avgFacilities, avgOverall };
+}
+
+export function getFloorReviewSummary(floorId: string, days: number = 7): FloorReviewSummary | null {
+  const floors = getFloors();
+  const floor = floors.find((f) => f.id === floorId);
+  if (!floor) return null;
+
+  const recentReviews = getRecentReviews(days, floorId);
+  const allReviews = getReviewsByFloor(floorId);
+  const avgs = calculateAvg(recentReviews);
+
+  return {
+    floorId: floor.id,
+    floorNumber: floor.floorNumber,
+    floorName: floor.floorName,
+    totalReviews: allReviews.length,
+    ...avgs,
+    recentReviews: recentReviews.slice(0, 10),
+  };
+}
+
+export function getAllFloorReviewSummaries(days: number = 7): FloorReviewSummary[] {
+  const floors = getFloors();
+  return floors
+    .map((floor) => getFloorReviewSummary(floor.id, days))
+    .filter((s): s is FloorReviewSummary => s !== null)
+    .sort((a, b) => b.avgOverall - a.avgOverall);
+}
+
+function generateMockReviewData(): void {
+  const reviews: Review[] = [];
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  const floors = getFloors();
+  const visitorNames = ['张三', '李四', '王五', '赵六', '陈七', '刘八', '杨九', '周十', '吴一', '郑二'];
+  const comments = [
+    '整体还不错，挺干净的',
+    '气味有点大，需要加强通风',
+    '设施很完善，用着方便',
+    '卫生纸有时候不够用',
+    '洗手台很干净，好评',
+    '地面有点滑，要小心',
+    '镜子擦得很亮',
+    '洗手液味道很好闻',
+    '隔间门锁有点小问题',
+    '整体体验一般',
+    '非常干净，值得表扬',
+    '味道有点重，需要改善',
+    '设施完好，用着放心',
+    '',
+    '',
+    '',
+  ];
+
+  for (let day = 14; day >= 0; day--) {
+    const dayTime = now - day * oneDay;
+    const date = new Date(dayTime);
+    const weekday = date.getDay();
+
+    if (weekday === 0 || weekday === 6) continue;
+
+    const reviewsPerDay = Math.floor(Math.random() * 5) + 2;
+
+    for (let i = 0; i < reviewsPerDay; i++) {
+      const floor = floors[Math.floor(Math.random() * floors.length)];
+      const visitor = visitorNames[Math.floor(Math.random() * visitorNames.length)];
+      const hour = Math.floor(Math.random() * 12) + 8;
+      const minute = Math.floor(Math.random() * 60);
+      const createdAt = dayTime + hour * 60 * 60 * 1000 + minute * 60 * 1000;
+
+      const cleanliness = Math.floor(Math.random() * 3) + 3;
+      const odor = Math.floor(Math.random() * 3) + 3;
+      const facilities = Math.floor(Math.random() * 3) + 3;
+      const comment = comments[Math.floor(Math.random() * comments.length)];
+
+      reviews.push({
+        id: uuidv4(),
+        floorId: floor.id,
+        floorNumber: floor.floorNumber,
+        floorName: floor.floorName,
+        visitorName: visitor,
+        cleanliness,
+        odor,
+        facilities,
+        comment: comment || undefined,
+        createdAt,
+      });
+    }
+  }
+
+  saveReviews(reviews);
 }

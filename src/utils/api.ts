@@ -20,6 +20,8 @@ import type {
   StallStatusLog,
   SmartRecommendation,
   FloorHourlyOccupancy,
+  Review,
+  FloorReviewSummary,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -246,4 +248,56 @@ export async function getFloorHourlyOccupancy(
   const params = new URLSearchParams();
   params.append('days', days.toString());
   return request<FloorHourlyOccupancy[]>(`/api/stats/hourly-occupancy?${params.toString()}`);
+}
+
+export async function createReview(
+  floorId: string,
+  visitorName: string,
+  cleanliness: number,
+  odor: number,
+  facilities: number,
+  comment?: string,
+  stallId?: string,
+  stallNumber?: number
+): Promise<{ data: Review }> {
+  return request<Review>('/api/reviews', {
+    method: 'POST',
+    body: JSON.stringify({ floorId, visitorName, cleanliness, odor, facilities, comment, stallId, stallNumber }),
+  });
+}
+
+export async function getReviewsByFloor(
+  floorId: string,
+  limit?: number
+): Promise<{ data: Review[] }> {
+  const params = new URLSearchParams();
+  if (limit) params.append('limit', limit.toString());
+  return request<Review[]>(`/api/reviews/floor/${floorId}?${params.toString()}`);
+}
+
+export async function getRecentReviews(
+  days: number = 7,
+  floorId?: string
+): Promise<{ data: Review[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorId) params.append('floorId', floorId);
+  return request<Review[]>(`/api/reviews/recent?${params.toString()}`);
+}
+
+export async function getFloorReviewSummary(
+  floorId: string,
+  days: number = 7
+): Promise<{ data: FloorReviewSummary }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  return request<FloorReviewSummary>(`/api/reviews/summary/${floorId}?${params.toString()}`);
+}
+
+export async function getAllFloorReviewSummaries(
+  days: number = 7
+): Promise<{ data: FloorReviewSummary[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  return request<FloorReviewSummary[]>(`/api/reviews/summaries?${params.toString()}`);
 }

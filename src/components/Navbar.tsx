@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Building2, BarChart3, Menu, X, Wrench, CalendarCheck } from 'lucide-react';
+import { Building2, BarChart3, Menu, X, Wrench, CalendarCheck, Star } from 'lucide-react';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,6 +10,7 @@ export default function Navbar() {
     { path: '/', label: '实时状态', icon: Building2 },
     { path: '/reservations', label: '我的预约', icon: CalendarCheck },
     { path: '/work-orders', label: '维护工单', icon: Wrench },
+    { path: '/reviews', label: '评分榜', icon: Star },
     { path: '/stats', label: '统计分析', icon: BarChart3 },
   ];
 

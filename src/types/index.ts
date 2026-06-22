@@ -224,3 +224,30 @@ export interface SmartRecommendation {
   analysisWindowMinutes: number;
   historicalDays: number;
 }
+
+export interface Review {
+  id: string;
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  stallId?: string;
+  stallNumber?: number;
+  visitorName: string;
+  cleanliness: number;
+  odor: number;
+  facilities: number;
+  comment?: string;
+  createdAt: number;
+}
+
+export interface FloorReviewSummary {
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  totalReviews: number;
+  avgCleanliness: number;
+  avgOdor: number;
+  avgFacilities: number;
+  avgOverall: number;
+  recentReviews: Review[];
+}

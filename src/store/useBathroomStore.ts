@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation, StallStatusLog, SmartRecommendation } from '../types';
+import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation, StallStatusLog, SmartRecommendation, Review, FloorReviewSummary } from '../types';
 import {
   getAllFloors,
   getFloorStatus,
@@ -16,6 +16,10 @@ import {
   getVisitorReservations as apiGetVisitorReservations,
   getStallStatusLogs as apiGetStallStatusLogs,
   getSmartRecommendation as apiGetSmartRecommendation,
+  createReview as apiCreateReview,
+  getReviewsByFloor as apiGetReviewsByFloor,
+  getFloorReviewSummary as apiGetFloorReviewSummary,
+  getAllFloorReviewSummaries as apiGetAllFloorReviewSummaries,
 } from '../utils/api';
 
 interface BathroomState {
@@ -38,6 +42,11 @@ interface BathroomState {
   stallStatusLogsLoading: boolean;
   smartRecommendation: SmartRecommendation | null;
   smartRecommendationLoading: boolean;
+  reviews: Review[];
+  reviewsLoading: boolean;
+  floorReviewSummary: FloorReviewSummary | null;
+  allFloorReviewSummaries: FloorReviewSummary[];
+  reviewSummariesLoading: boolean;
   fetchFloors: () => Promise<void>;
   fetchFloorStatus: (floorId: string) => Promise<void>;
   fetchFloorQueue: (floorId: string) => Promise<void>;
@@ -59,6 +68,10 @@ interface BathroomState {
   cancelReservation: (reservationId: string) => Promise<void>;
   fetchStallStatusLogs: (floorId: string, limit?: number) => Promise<void>;
   fetchSmartRecommendation: (days?: number) => Promise<void>;
+  createReview: (floorId: string, visitorName: string, cleanliness: number, odor: number, facilities: number, comment?: string, stallId?: string, stallNumber?: number) => Promise<Review>;
+  fetchReviewsByFloor: (floorId: string, limit?: number) => Promise<void>;
+  fetchFloorReviewSummary: (floorId: string, days?: number) => Promise<void>;
+  fetchAllFloorReviewSummaries: (days?: number) => Promise<void>;
 }
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
@@ -84,6 +97,11 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
   stallStatusLogsLoading: false,
   smartRecommendation: null,
   smartRecommendationLoading: false,
+  reviews: [],
+  reviewsLoading: false,
+  floorReviewSummary: null,
+  allFloorReviewSummaries: [],
+  reviewSummariesLoading: false,
 
   processNewAlerts: (newAlerts?: AlertRecord[]) => {
     if (!newAlerts || newAlerts.length === 0) return;
@@ -335,6 +353,60 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
       set({ smartRecommendation: recommendation, smartRecommendationLoading: false });
     } catch (err) {
       set({ error: (err as Error).message, smartRecommendationLoading: false });
+    }
+  },
+
+  createReview: async (
+    floorId: string,
+    visitorName: string,
+    cleanliness: number,
+    odor: number,
+    facilities: number,
+    comment?: string,
+    stallId?: string,
+    stallNumber?: number
+  ): Promise<Review> => {
+    const { data: review } = await apiCreateReview(
+      floorId,
+      visitorName,
+      cleanliness,
+      odor,
+      facilities,
+      comment,
+      stallId,
+      stallNumber
+    );
+    const { reviews } = get();
+    set({ reviews: [review, ...reviews] });
+    return review;
+  },
+
+  fetchReviewsByFloor: async (floorId: string, limit?: number) => {
+    set({ reviewsLoading: true });
+    try {
+      const { data: reviews } = await apiGetReviewsByFloor(floorId, limit);
+      set({ reviews, reviewsLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, reviewsLoading: false });
+    }
+  },
+
+  fetchFloorReviewSummary: async (floorId: string, days: number = 7) => {
+    try {
+      const { data: summary } = await apiGetFloorReviewSummary(floorId, days);
+      set({ floorReviewSummary: summary });
+    } catch (err) {
+      set({ error: (err as Error).message });
+    }
+  },
+
+  fetchAllFloorReviewSummaries: async (days: number = 7) => {
+    set({ reviewSummariesLoading: true });
+    try {
+      const { data: summaries } = await apiGetAllFloorReviewSummaries(days);
+      set({ allFloorReviewSummaries: summaries, reviewSummariesLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, reviewSummariesLoading: false });
     }
   },
 }));

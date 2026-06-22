@@ -24,6 +24,11 @@ import {
   isVisitorAlreadyReserved as dbIsVisitorAlreadyReserved,
   releaseExpiredReservedStalls as dbReleaseExpiredReservedStalls,
   getStallStatusLogsByFloor as dbGetStallStatusLogsByFloor,
+  addReview as dbAddReview,
+  getReviewsByFloor as dbGetReviewsByFloor,
+  getRecentReviews as dbGetRecentReviews,
+  getFloorReviewSummary as dbGetFloorReviewSummary,
+  getAllFloorReviewSummaries as dbGetAllFloorReviewSummaries,
 } from '../db/database.js';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
 import type {
@@ -49,6 +54,8 @@ import type {
   FloorHourlyOccupancy,
   FloorPrediction,
   SmartRecommendation,
+  Review,
+  FloorReviewSummary,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -726,3 +733,51 @@ export function getSmartRecommendation(days: number = 30): SmartRecommendation {
 }
 
 export { initializeData };
+
+export function createReview(
+  review: Omit<Review, 'id' | 'createdAt' | 'floorNumber' | 'floorName'> & { floorName?: string; floorNumber?: number }
+): Review {
+  const floors = getFloors();
+  const floor = floors.find((f) => f.id === review.floorId);
+  if (!floor) {
+    throw new Error('楼层不存在');
+  }
+
+  if (!review.visitorName || review.visitorName.trim().length === 0) {
+    throw new Error('请输入您的称呼');
+  }
+
+  if (review.cleanliness < 1 || review.cleanliness > 5) {
+    throw new Error('整洁度评分必须在1-5之间');
+  }
+  if (review.odor < 1 || review.odor > 5) {
+    throw new Error('气味评分必须在1-5之间');
+  }
+  if (review.facilities < 1 || review.facilities > 5) {
+    throw new Error('设施完好度评分必须在1-5之间');
+  }
+
+  return dbAddReview({
+    ...review,
+    floorNumber: floor.floorNumber,
+    floorName: floor.floorName,
+    visitorName: review.visitorName.trim(),
+    comment: review.comment?.trim() || undefined,
+  });
+}
+
+export function getReviewsByFloor(floorId: string, limit?: number): Review[] {
+  return dbGetReviewsByFloor(floorId, limit);
+}
+
+export function getRecentReviews(days: number = 7, floorId?: string): Review[] {
+  return dbGetRecentReviews(days, floorId);
+}
+
+export function getFloorReviewSummary(floorId: string, days: number = 7): FloorReviewSummary | null {
+  return dbGetFloorReviewSummary(floorId, days);
+}
+
+export function getAllFloorReviewSummaries(days: number = 7): FloorReviewSummary[] {
+  return dbGetAllFloorReviewSummaries(days);
+}

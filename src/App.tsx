@@ -4,6 +4,7 @@ import FloorDetail from "@/pages/FloorDetail";
 import Statistics from "@/pages/Statistics";
 import WorkOrders from "@/pages/WorkOrders";
 import MyReservations from "@/pages/MyReservations";
+import Reviews from "@/pages/Reviews";
 import Navbar from "@/components/Navbar";
 import AlertModal from "@/components/AlertModal";
 import { useBathroomStore } from "@/store/useBathroomStore";
@@ -20,6 +21,7 @@ function AppContent() {
         <Route path="/stats" element={<Statistics />} />
         <Route path="/work-orders" element={<WorkOrders />} />
         <Route path="/reservations" element={<MyReservations />} />
+        <Route path="/reviews" element={<Reviews />} />
       </Routes>
       {showAlertModal && currentAlert && (
         <AlertModal alert={currentAlert} onDismiss={dismissAlert} />
