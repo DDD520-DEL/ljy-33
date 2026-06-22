@@ -114,7 +114,7 @@ export default function FloorDetail() {
   useEffect(() => {
     if (floorId) {
       fetchFloorReviewSummary(floorId, 7);
-      fetchReviewsByFloor(floorId, 10);
+      fetchReviewsByFloor(floorId, 10, 7);
     }
   }, [floorId, fetchFloorReviewSummary, fetchReviewsByFloor]);
 
@@ -140,7 +140,7 @@ export default function FloorDetail() {
       setReviewComment('');
       if (floorId) {
         fetchFloorReviewSummary(floorId, 7);
-        fetchReviewsByFloor(floorId, 10);
+        fetchReviewsByFloor(floorId, 10, 7);
       }
     } catch (err) {
       setReviewError((err as Error).message);

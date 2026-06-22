@@ -766,8 +766,8 @@ export function createReview(
   });
 }
 
-export function getReviewsByFloor(floorId: string, limit?: number): Review[] {
-  return dbGetReviewsByFloor(floorId, limit);
+export function getReviewsByFloor(floorId: string, limit?: number, days?: number): Review[] {
+  return dbGetReviewsByFloor(floorId, limit, days);
 }
 
 export function getRecentReviews(days: number = 7, floorId?: string): Review[] {

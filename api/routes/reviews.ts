@@ -39,7 +39,8 @@ router.get('/floor/:floorId', (req: Request, res: Response): void => {
   try {
     const { floorId } = req.params;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
-    const reviews = getReviewsByFloor(floorId, limit);
+    const days = req.query.days ? parseInt(req.query.days as string) : undefined;
+    const reviews = getReviewsByFloor(floorId, limit, days);
     res.status(200).json({
       success: true,
       data: reviews,

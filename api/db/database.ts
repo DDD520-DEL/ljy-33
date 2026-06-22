@@ -833,11 +833,16 @@ export function addReview(
   return newReview;
 }
 
-export function getReviewsByFloor(floorId: string, limit?: number): Review[] {
+export function getReviewsByFloor(floorId: string, limit?: number, days?: number): Review[] {
   const reviews = getReviews();
-  const filtered = reviews
-    .filter((r) => r.floorId === floorId)
-    .sort((a, b) => b.createdAt - a.createdAt);
+  const now = Date.now();
+  let filtered = reviews
+    .filter((r) => r.floorId === floorId);
+  if (days) {
+    const startTime = now - days * 24 * 60 * 60 * 1000;
+    filtered = filtered.filter((r) => r.createdAt >= startTime);
+  }
+  filtered = filtered.sort((a, b) => b.createdAt - a.createdAt);
   return limit ? filtered.slice(0, limit) : filtered;
 }
 
@@ -877,14 +882,13 @@ export function getFloorReviewSummary(floorId: string, days: number = 7): FloorR
   if (!floor) return null;
 
   const recentReviews = getRecentReviews(days, floorId);
-  const allReviews = getReviewsByFloor(floorId);
   const avgs = calculateAvg(recentReviews);
 
   return {
     floorId: floor.id,
     floorNumber: floor.floorNumber,
     floorName: floor.floorName,
-    totalReviews: allReviews.length,
+    totalReviews: recentReviews.length,
     ...avgs,
     recentReviews: recentReviews.slice(0, 10),
   };

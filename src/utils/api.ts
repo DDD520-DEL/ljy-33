@@ -268,10 +268,12 @@ export async function createReview(
 
 export async function getReviewsByFloor(
   floorId: string,
-  limit?: number
+  limit?: number,
+  days?: number
 ): Promise<{ data: Review[] }> {
   const params = new URLSearchParams();
   if (limit) params.append('limit', limit.toString());
+  if (days) params.append('days', days.toString());
   return request<Review[]>(`/api/reviews/floor/${floorId}?${params.toString()}`);
 }
 

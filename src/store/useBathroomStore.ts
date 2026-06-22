@@ -69,7 +69,7 @@ interface BathroomState {
   fetchStallStatusLogs: (floorId: string, limit?: number) => Promise<void>;
   fetchSmartRecommendation: (days?: number) => Promise<void>;
   createReview: (floorId: string, visitorName: string, cleanliness: number, odor: number, facilities: number, comment?: string, stallId?: string, stallNumber?: number) => Promise<Review>;
-  fetchReviewsByFloor: (floorId: string, limit?: number) => Promise<void>;
+  fetchReviewsByFloor: (floorId: string, limit?: number, days?: number) => Promise<void>;
   fetchFloorReviewSummary: (floorId: string, days?: number) => Promise<void>;
   fetchAllFloorReviewSummaries: (days?: number) => Promise<void>;
 }
@@ -381,10 +381,10 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
     return review;
   },
 
-  fetchReviewsByFloor: async (floorId: string, limit?: number) => {
+  fetchReviewsByFloor: async (floorId: string, limit?: number, days?: number) => {
     set({ reviewsLoading: true });
     try {
-      const { data: reviews } = await apiGetReviewsByFloor(floorId, limit);
+      const { data: reviews } = await apiGetReviewsByFloor(floorId, limit, days);
       set({ reviews, reviewsLoading: false });
     } catch (err) {
       set({ error: (err as Error).message, reviewsLoading: false });

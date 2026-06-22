@@ -23,9 +23,9 @@ export default function Reviews() {
 
   useEffect(() => {
     if (selectedFloorId) {
-      fetchReviewsByFloor(selectedFloorId, 20);
+      fetchReviewsByFloor(selectedFloorId, 20, days);
     }
-  }, [selectedFloorId, fetchReviewsByFloor]);
+  }, [selectedFloorId, fetchReviewsByFloor, days]);
 
   const formatDateTime = (timestamp: number) => {
     const date = new Date(timestamp);
