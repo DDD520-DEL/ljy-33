@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle, CalendarCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle, CalendarCheck, ChevronLeft, ChevronRight, History, ArrowRight } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import StallCard from '../components/StallCard';
 import ErrorAlert from '../components/ErrorAlert';
 import { getStallDurationRanking, createReservation as apiCreateReservation, getFloorReservations } from '../utils/api';
-import type { StallStatus, QueueItem, StallDurationRank, Reservation } from '../types';
+import type { StallStatus, QueueItem, StallDurationRank, Reservation, StallStatusLog } from '../types';
 
 export default function FloorDetail() {
   const { floorId } = useParams<{ floorId: string }>();
@@ -23,6 +23,9 @@ export default function FloorDetail() {
     startPolling,
     stopPolling,
     clearError,
+    stallStatusLogs,
+    stallStatusLogsLoading,
+    fetchStallStatusLogs,
   } = useBathroomStore();
 
   const [visitorName, setVisitorName] = useState('');
@@ -85,6 +88,12 @@ export default function FloorDetail() {
       fetchFloorReservationsList(floorId);
     }
   }, [floorId]);
+
+  useEffect(() => {
+    if (floorId) {
+      fetchStallStatusLogs(floorId, 50);
+    }
+  }, [floorId, fetchStallStatusLogs]);
 
   const generateTimeSlots = (dateStr: string): string[] => {
     const slots: string[] = [];
@@ -204,6 +213,24 @@ export default function FloorDetail() {
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const formatDateTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('zh-CN', {
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  };
+
+  const statusLabelConfig: Record<StallStatus, { label: string; bgColor: string; textColor: string }> = {
+    available: { label: '空闲', bgColor: 'bg-success-100', textColor: 'text-success-700' },
+    occupied: { label: '使用中', bgColor: 'bg-danger-100', textColor: 'text-danger-700' },
+    maintenance: { label: '维护中', bgColor: 'bg-warning-100', textColor: 'text-warning-700' },
+    reserved: { label: '已预约', bgColor: 'bg-primary-100', textColor: 'text-primary-700' },
   };
 
   return (
@@ -577,6 +604,91 @@ export default function FloorDetail() {
                 <li>• 可提前预约蹲位（按半小时档位），蹲位释放后优先分配给预约用户</li>
                 <li>• 预约超时30分钟未使用将自动取消</li>
               </ul>
+            </div>
+
+            <div className="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
+                  <History className="w-5 h-5 text-primary-600" />
+                  <span>变更日志</span>
+                  <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full font-medium">
+                    最近 {stallStatusLogs.length} 条
+                  </span>
+                </h3>
+                <button
+                  onClick={() => floorId && fetchStallStatusLogs(floorId, 50)}
+                  disabled={stallStatusLogsLoading}
+                  className="flex items-center space-x-1 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-4 h-4 ${stallStatusLogsLoading ? 'animate-spin' : ''}`} />
+                  <span>刷新</span>
+                </button>
+              </div>
+
+              {stallStatusLogsLoading ? (
+                <div className="space-y-3">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="flex items-start space-x-4 p-3 animate-pulse">
+                      <div className="w-2 h-2 rounded-full bg-gray-200 mt-2" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-4 w-40 bg-gray-200 rounded" />
+                        <div className="h-3 w-56 bg-gray-100 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : stallStatusLogs.length > 0 ? (
+                <div className="relative">
+                  <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-200" />
+                  <div className="space-y-1 max-h-[480px] overflow-y-auto pr-2">
+                    {stallStatusLogs.map((log: StallStatusLog, index: number) => {
+                      const prevCfg = statusLabelConfig[log.previousStatus];
+                      const newCfg = statusLabelConfig[log.newStatus];
+                      return (
+                        <div
+                          key={log.id}
+                          className="relative flex items-start space-x-4 p-3 pl-6 hover:bg-gray-50 rounded-xl transition-colors animate-fade-in-up"
+                          style={{ animationDelay: `${index * 0.03}s`, opacity: 0 }}
+                        >
+                          <div className={`absolute left-0 top-4 w-3.5 h-3.5 rounded-full border-2 border-white shadow-sm ${
+                            log.newStatus === 'available'
+                              ? 'bg-success-500'
+                              : log.newStatus === 'occupied'
+                              ? 'bg-danger-500'
+                              : log.newStatus === 'maintenance'
+                              ? 'bg-warning-500'
+                              : 'bg-primary-500'
+                          }`} />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+                              <span className="font-semibold text-gray-900">
+                                {log.stallNumber} 号隔间
+                              </span>
+                              <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-md ${prevCfg.bgColor} ${prevCfg.textColor}`}>
+                                {prevCfg.label}
+                              </span>
+                              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
+                              <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-md ${newCfg.bgColor} ${newCfg.textColor}`}>
+                                {newCfg.label}
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-1 mt-1 text-xs text-gray-500">
+                              <Clock className="w-3 h-3" />
+                              <span>{formatDateTime(log.changedAt)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <div className="py-12 text-center">
+                  <History className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">暂无变更记录</p>
+                  <p className="text-xs text-gray-400 mt-1">蹲位状态发生变化后将在此处显示</p>
+                </div>
+              )}
             </div>
           </>
         ) : null}

@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { TIMEOUT_THRESHOLD_MS, RESERVATION_TIMEOUT_MINUTES } from '../../shared/types.js';
-import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats, Reservation, ReservationStatus } from '../../shared/types.js';
+import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats, Reservation, ReservationStatus, StallStatusLog } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +16,7 @@ const QUEUE_FILE = path.join(DATA_DIR, 'queue.json');
 const ALERTS_FILE = path.join(DATA_DIR, 'alerts.json');
 const WORK_ORDERS_FILE = path.join(DATA_DIR, 'work_orders.json');
 const RESERVATIONS_FILE = path.join(DATA_DIR, 'reservations.json');
+const STATUS_LOGS_FILE = path.join(DATA_DIR, 'stall_status_logs.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -148,6 +149,39 @@ export function completeWorkOrder(stallId: string): WorkOrder | null {
 export function getPendingWorkOrderByStall(stallId: string): WorkOrder | null {
   const orders = getWorkOrders();
   return orders.find((o) => o.stallId === stallId && o.status !== 'completed') || null;
+}
+
+export function getStallStatusLogs(): StallStatusLog[] {
+  return readJSON<StallStatusLog[]>(STATUS_LOGS_FILE, []);
+}
+
+export function saveStallStatusLogs(logs: StallStatusLog[]): void {
+  writeJSON(STATUS_LOGS_FILE, logs);
+}
+
+export function addStallStatusLog(
+  log: Omit<StallStatusLog, 'id' | 'changedAt'>
+): StallStatusLog {
+  const logs = getStallStatusLogs();
+  const newLog: StallStatusLog = {
+    ...log,
+    id: uuidv4(),
+    changedAt: Date.now(),
+  };
+  logs.push(newLog);
+  saveStallStatusLogs(logs);
+  return newLog;
+}
+
+export function getStallStatusLogsByFloor(
+  floorId: string,
+  limit: number = 50
+): StallStatusLog[] {
+  const logs = getStallStatusLogs();
+  return logs
+    .filter((log) => log.floorId === floorId)
+    .sort((a, b) => b.changedAt - a.changedAt)
+    .slice(0, limit);
 }
 
 export function getWorkOrderStats(days: number = 30): WorkOrderStats {
@@ -391,6 +425,24 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
   }
 
   saveStalls(stalls);
+
+  const finalStatus = stall.status;
+  if (previousStatus !== finalStatus) {
+    const floors = getFloors();
+    const floor = floors.find((f) => f.id === stall.floorId);
+    if (floor) {
+      addStallStatusLog({
+        stallId: stall.id,
+        floorId: stall.floorId,
+        stallNumber: stall.stallNumber,
+        floorNumber: floor.floorNumber,
+        floorName: floor.floorName,
+        previousStatus,
+        newStatus: finalStatus,
+      });
+    }
+  }
+
   return stall;
 }
 
@@ -559,12 +611,27 @@ export function cancelReservation(reservationId: string): Reservation | null {
   reservation.cancelledAt = Date.now();
 
   const stalls = getStalls();
+  const floors = getFloors();
   stalls.forEach((stall) => {
     if (stall.reservedByReservationId === reservationId) {
+      const previousStatus = stall.status;
       stall.status = 'available';
       stall.reservedByReservationId = undefined;
       stall.reservedUntil = undefined;
       stall.lastUpdated = Date.now();
+
+      const floor = floors.find((f) => f.id === stall.floorId);
+      if (floor && previousStatus !== stall.status) {
+        addStallStatusLog({
+          stallId: stall.id,
+          floorId: stall.floorId,
+          stallNumber: stall.stallNumber,
+          floorNumber: floor.floorNumber,
+          floorName: floor.floorName,
+          previousStatus,
+          newStatus: stall.status,
+        });
+      }
     }
   });
   saveStalls(stalls);
@@ -590,11 +657,26 @@ export function fulfillReservation(
   const stalls = getStalls();
   const stall = stalls.find((s) => s.id === stallId);
   if (stall) {
+    const previousStatus = stall.status;
     stall.status = 'reserved';
     stall.reservedByReservationId = reservationId;
     stall.reservedUntil = Date.now() + RESERVATION_TIMEOUT_MINUTES * 60 * 1000;
     stall.lastUpdated = Date.now();
     saveStalls(stalls);
+
+    const floors = getFloors();
+    const floor = floors.find((f) => f.id === stall.floorId);
+    if (floor && previousStatus !== stall.status) {
+      addStallStatusLog({
+        stallId: stall.id,
+        floorId: stall.floorId,
+        stallNumber: stall.stallNumber,
+        floorNumber: floor.floorNumber,
+        floorName: floor.floorName,
+        previousStatus,
+        newStatus: stall.status,
+      });
+    }
   }
 
   saveReservations(reservations);
@@ -627,6 +709,7 @@ export function occupyReservedStall(stallId: string): Stall | null {
   const stall = stalls.find((s) => s.id === stallId);
   if (!stall || stall.status !== 'reserved') return null;
 
+  const previousStatus = stall.status;
   const reservations = getReservations();
   const reservation = reservations.find((r) => r.id === stall.reservedByReservationId);
 
@@ -644,6 +727,20 @@ export function occupyReservedStall(stallId: string): Stall | null {
 
   saveStalls(stalls);
   saveReservations(reservations);
+
+  const floors = getFloors();
+  const floor = floors.find((f) => f.id === stall.floorId);
+  if (floor) {
+    addStallStatusLog({
+      stallId: stall.id,
+      floorId: stall.floorId,
+      stallNumber: stall.stallNumber,
+      floorNumber: floor.floorNumber,
+      floorName: floor.floorName,
+      previousStatus,
+      newStatus: stall.status,
+    });
+  }
 
   return stall;
 }

@@ -3,6 +3,7 @@ import {
   getAllFloors,
   getFloorById,
   checkForNewAlerts,
+  getStallStatusLogs,
 } from '../services/bathroomService.js';
 import type { AlertRecord } from '../../shared/types.js';
 
@@ -64,6 +65,24 @@ router.get('/alerts/check', (req: Request, res: Response): void => {
     res.status(500).json({
       success: false,
       error: 'Failed to check alerts',
+    });
+  }
+});
+
+router.get('/:id/status-logs', (req: Request, res: Response): void => {
+  try {
+    const { id } = req.params;
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 50;
+    const logs = getStallStatusLogs(id, limit);
+    res.status(200).json({
+      success: true,
+      data: logs,
+    });
+  } catch (error) {
+    console.error('Get stall status logs error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get stall status logs',
     });
   }
 });

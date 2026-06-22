@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation } from '../types';
+import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation, StallStatusLog } from '../types';
 import {
   getAllFloors,
   getFloorStatus,
@@ -14,6 +14,7 @@ import {
   createReservation as apiCreateReservation,
   cancelReservation as apiCancelReservation,
   getVisitorReservations as apiGetVisitorReservations,
+  getStallStatusLogs as apiGetStallStatusLogs,
 } from '../utils/api';
 
 interface BathroomState {
@@ -32,6 +33,8 @@ interface BathroomState {
   workOrdersLoading: boolean;
   reservations: Reservation[];
   reservationsLoading: boolean;
+  stallStatusLogs: StallStatusLog[];
+  stallStatusLogsLoading: boolean;
   fetchFloors: () => Promise<void>;
   fetchFloorStatus: (floorId: string) => Promise<void>;
   fetchFloorQueue: (floorId: string) => Promise<void>;
@@ -51,6 +54,7 @@ interface BathroomState {
   fetchVisitorReservations: (visitorName: string) => Promise<void>;
   createReservation: (floorId: string, visitorName: string, timeSlot: string) => Promise<Reservation>;
   cancelReservation: (reservationId: string) => Promise<void>;
+  fetchStallStatusLogs: (floorId: string, limit?: number) => Promise<void>;
 }
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
@@ -72,6 +76,8 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
   workOrdersLoading: false,
   reservations: [],
   reservationsLoading: false,
+  stallStatusLogs: [],
+  stallStatusLogsLoading: false,
 
   processNewAlerts: (newAlerts?: AlertRecord[]) => {
     if (!newAlerts || newAlerts.length === 0) return;
@@ -194,6 +200,8 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
         const floorId = currentQueue.floorId;
         await get().fetchFloorQueue(floorId);
       }
+
+      await get().fetchStallStatusLogs(updatedStall.floorId);
     } catch (err) {
       set({ error: (err as Error).message });
     }
@@ -302,5 +310,15 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
         r.id === cancelled.id ? cancelled : r
       ),
     });
+  },
+
+  fetchStallStatusLogs: async (floorId: string, limit: number = 50) => {
+    set({ stallStatusLogsLoading: true });
+    try {
+      const { data: logs } = await apiGetStallStatusLogs(floorId, limit);
+      set({ stallStatusLogs: logs, stallStatusLogsLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, stallStatusLogsLoading: false });
+    }
   },
 }));

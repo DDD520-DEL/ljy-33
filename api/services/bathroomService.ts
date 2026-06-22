@@ -23,6 +23,7 @@ import {
   expireReservations as dbExpireReservations,
   isVisitorAlreadyReserved as dbIsVisitorAlreadyReserved,
   releaseExpiredReservedStalls as dbReleaseExpiredReservedStalls,
+  getStallStatusLogsByFloor as dbGetStallStatusLogsByFloor,
 } from '../db/database.js';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
 import type {
@@ -44,6 +45,7 @@ import type {
   FloorDailyUsage,
   FloorComparisonData,
   Reservation,
+  StallStatusLog,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -558,6 +560,10 @@ export function getNextReservationForFloor(floorId: string): Reservation | null 
 
 export function expireAllReservations(): Reservation[] {
   return dbExpireReservations();
+}
+
+export function getStallStatusLogs(floorId: string, limit: number = 50): StallStatusLog[] {
+  return dbGetStallStatusLogsByFloor(floorId, limit);
 }
 
 export { initializeData };

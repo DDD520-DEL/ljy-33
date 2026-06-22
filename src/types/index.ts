@@ -175,3 +175,15 @@ export interface Reservation {
   assignedStallId?: string;
   assignedStallNumber?: number;
 }
+
+export interface StallStatusLog {
+  id: string;
+  stallId: string;
+  floorId: string;
+  stallNumber: number;
+  floorNumber: number;
+  floorName: string;
+  previousStatus: StallStatus;
+  newStatus: StallStatus;
+  changedAt: number;
+}

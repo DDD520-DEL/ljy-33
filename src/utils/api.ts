@@ -17,6 +17,7 @@ import type {
   FloorDailyUsage,
   FloorComparisonData,
   Reservation,
+  StallStatusLog,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -218,4 +219,13 @@ export async function expireReservations(): Promise<{ data: Reservation[] }> {
   return request<Reservation[]>('/api/reservations/expire', {
     method: 'POST',
   });
+}
+
+export async function getStallStatusLogs(
+  floorId: string,
+  limit: number = 50
+): Promise<{ data: StallStatusLog[] }> {
+  const params = new URLSearchParams();
+  params.append('limit', limit.toString());
+  return request<StallStatusLog[]>(`/api/floors/${floorId}/status-logs?${params.toString()}`);
 }
