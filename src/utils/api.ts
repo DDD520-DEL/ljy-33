@@ -73,16 +73,31 @@ export async function updateStallStatus(
   });
 }
 
-export async function getHeatmapData(days: number = 30): Promise<{ data: HeatmapPoint[] }> {
-  return request<HeatmapPoint[]>(`/api/stats/heatmap?days=${days}`);
+export async function getHeatmapData(days: number = 30, floorId?: string): Promise<{ data: HeatmapPoint[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorId) {
+    params.append('floorId', floorId);
+  }
+  return request<HeatmapPoint[]>(`/api/stats/heatmap?${params.toString()}`);
 }
 
-export async function getTrendData(days: number = 30): Promise<{ data: TrendPoint[] }> {
-  return request<TrendPoint[]>(`/api/stats/trend?days=${days}`);
+export async function getTrendData(days: number = 30, floorId?: string): Promise<{ data: TrendPoint[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorId) {
+    params.append('floorId', floorId);
+  }
+  return request<TrendPoint[]>(`/api/stats/trend?${params.toString()}`);
 }
 
-export async function getPeakPeriods(): Promise<{ data: PeakPeriod[] }> {
-  return request<PeakPeriod[]>('/api/stats/peak');
+export async function getPeakPeriods(days: number = 30, floorId?: string): Promise<{ data: PeakPeriod[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorId) {
+    params.append('floorId', floorId);
+  }
+  return request<PeakPeriod[]>(`/api/stats/peak?${params.toString()}`);
 }
 
 export async function getFloorQueue(floorId: string): Promise<{ data: FloorQueue }> {

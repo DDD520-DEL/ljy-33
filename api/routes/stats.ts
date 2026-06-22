@@ -16,7 +16,8 @@ const router = Router();
 router.get('/heatmap', (req: Request, res: Response): void => {
   try {
     const days = parseInt(req.query.days as string) || 30;
-    const data = getHeatmapData(days);
+    const floorId = req.query.floorId as string | undefined;
+    const data = getHeatmapData(days, floorId);
     res.status(200).json({
       success: true,
       data,
@@ -33,7 +34,8 @@ router.get('/heatmap', (req: Request, res: Response): void => {
 router.get('/trend', (req: Request, res: Response): void => {
   try {
     const days = parseInt(req.query.days as string) || 30;
-    const data = getTrendData(days);
+    const floorId = req.query.floorId as string | undefined;
+    const data = getTrendData(days, floorId);
     res.status(200).json({
       success: true,
       data,
@@ -49,7 +51,9 @@ router.get('/trend', (req: Request, res: Response): void => {
 
 router.get('/peak', (req: Request, res: Response): void => {
   try {
-    const data = getPeakPeriods();
+    const floorId = req.query.floorId as string | undefined;
+    const days = parseInt(req.query.days as string) || 30;
+    const data = getPeakPeriods(days, floorId);
     res.status(200).json({
       success: true,
       data,

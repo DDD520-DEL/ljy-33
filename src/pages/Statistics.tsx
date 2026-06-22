@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin, Wrench, CheckCircle2, Timer, Zap, Trophy, ChevronDown, Filter, Building2 } from 'lucide-react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { BarChart3, Calendar, TrendingUp, RefreshCw, AlertTriangle, Clock, MapPin, Wrench, CheckCircle2, Timer, Zap, Trophy, ChevronDown, Filter, Building2, Download, CalendarRange } from 'lucide-react';
 import Heatmap from '../components/Heatmap';
 import TrendChart from '../components/TrendChart';
 import PeakPeriods from '../components/PeakPeriods';
@@ -8,9 +8,11 @@ import ErrorAlert from '../components/ErrorAlert';
 import EmptyState from '../components/EmptyState';
 import { getHeatmapData, getTrendData, getPeakPeriods, getAbnormalStats, getWorkOrderStats, getStallDurationRanking, getFloorComparisonData } from '../utils/api';
 import { getAllFloors } from '../utils/api';
+import { exportToCSV, formatDate, getDateRange } from '../lib/utils';
 import type { HeatmapPoint, TrendPoint, PeakPeriod, AbnormalStats, WorkOrderStats, StallDurationRank, FloorWithStatus, FloorComparisonData } from '../types';
 
 type ViewMode = 'overview' | 'comparison';
+type DateRangeOption = 7 | 14 | 30 | 90;
 
 export default function Statistics() {
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
@@ -27,19 +29,38 @@ export default function Statistics() {
   const [error, setError] = useState<string | null>(null);
   const [hasTried, setHasTried] = useState(false);
   const [showFloorDropdown, setShowFloorDropdown] = useState(false);
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRangeOption>(30);
+  const [exporting, setExporting] = useState(false);
+
+  const dateRangeOptions: { value: DateRangeOption; label: string }[] = [
+    { value: 7, label: '近7天' },
+    { value: 14, label: '近14天' },
+    { value: 30, label: '近30天' },
+    { value: 90, label: '近90天' },
+  ];
+
+  const { startDate, endDate } = useMemo(() => getDateRange(dateRange), [dateRange]);
+
+  const selectedFloorName = useMemo(() => {
+    if (!selectedFloorId) return '';
+    const floor = floors.find(f => f.id === selectedFloorId);
+    return floor ? `${floor.floorNumber}楼${floor.floorName}` : '';
+  }, [selectedFloorId, floors]);
 
   const fetchOverviewData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
+      const floorId = selectedFloorId || undefined;
       const [heatmapRes, trendRes, peaksRes, abnormalRes, workOrderRes, floorsRes, rankingRes] = await Promise.all([
-        getHeatmapData(30),
-        getTrendData(30),
-        getPeakPeriods(),
-        getAbnormalStats(30),
-        getWorkOrderStats(30),
+        getHeatmapData(dateRange, floorId),
+        getTrendData(dateRange, floorId),
+        getPeakPeriods(dateRange, floorId),
+        getAbnormalStats(dateRange),
+        getWorkOrderStats(dateRange),
         getAllFloors(),
-        getStallDurationRanking(30, selectedFloorId || undefined),
+        getStallDurationRanking(dateRange, floorId),
       ]);
       setHeatmapData(heatmapRes.data);
       setTrendData(trendRes.data);
@@ -54,7 +75,7 @@ export default function Statistics() {
       setLoading(false);
       setHasTried(true);
     }
-  }, [selectedFloorId]);
+  }, [dateRange, selectedFloorId]);
 
   const fetchComparisonData = useCallback(async () => {
     setLoading(true);
@@ -86,6 +107,24 @@ export default function Statistics() {
     fetchData();
   }, [fetchData]);
 
+  const handleExport = useCallback(async () => {
+    setExporting(true);
+    try {
+      exportToCSV({
+        startDate,
+        endDate,
+        floorName: selectedFloorName,
+        heatmapData,
+        trendData,
+        peakPeriods,
+      });
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setExporting(false);
+    }
+  }, [startDate, endDate, selectedFloorName, heatmapData, trendData, peakPeriods]);
+
   const totalUsage = trendData.reduce((sum, d) => sum + d.count, 0);
   const avgDaily = trendData.length > 0 ? Math.round(totalUsage / trendData.length) : 0;
   const maxDay = trendData.reduce(
@@ -101,24 +140,115 @@ export default function Statistics() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
             <div className="flex items-center space-x-4">
               <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center">
                 <BarChart3 className="w-7 h-7" />
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold">统计分析</h1>
-                <p className="text-primary-100 mt-1">近30天使用数据统计</p>
+                <p className="text-primary-100 mt-1">{startDate} 至 {endDate} 使用数据统计</p>
               </div>
             </div>
-            <button
-              onClick={fetchData}
-              disabled={loading}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur rounded-xl transition-all disabled:opacity-50 active:scale-95"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              <span className="text-sm font-medium">刷新数据</span>
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative">
+                <button
+                  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                  className="flex items-center space-x-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur rounded-xl transition-all active:scale-95"
+                >
+                  <Filter className="w-4 h-4" />
+                  <span className="text-sm font-medium">筛选条件</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showFilterDropdown ? 'rotate-180' : ''}`} />
+                </button>
+                {showFilterDropdown && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowFilterDropdown(false)}
+                    />
+                    <div className="absolute right-0 top-12 z-20 bg-white rounded-xl shadow-lg border border-gray-200 p-4 w-72">
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <CalendarRange className="w-4 h-4 inline mr-1" />
+                          日期范围
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {dateRangeOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              onClick={() => {
+                                setDateRange(option.value);
+                                setShowFilterDropdown(false);
+                              }}
+                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                dateRange === option.value
+                                  ? 'bg-primary-500 text-white'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <Building2 className="w-4 h-4 inline mr-1" />
+                          楼层筛选
+                        </label>
+                        <div className="space-y-1 max-h-40 overflow-y-auto">
+                          <button
+                            onClick={() => {
+                              setSelectedFloorId('');
+                              setShowFilterDropdown(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-lg text-left text-sm font-medium transition-colors ${
+                              !selectedFloorId
+                                ? 'bg-primary-500 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                          >
+                            全部楼层
+                          </button>
+                          {floors.map((floor) => (
+                            <button
+                              key={floor.id}
+                              onClick={() => {
+                                setSelectedFloorId(floor.id);
+                                setShowFilterDropdown(false);
+                              }}
+                              className={`w-full px-3 py-2 rounded-lg text-left text-sm font-medium transition-colors ${
+                                selectedFloorId === floor.id
+                                  ? 'bg-primary-500 text-white'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              }`}
+                            >
+                              {floor.floorNumber}楼 {floor.floorName}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={handleExport}
+                disabled={loading || exporting || !hasData}
+                className="flex items-center space-x-2 px-4 py-2.5 bg-white text-primary-700 hover:bg-gray-100 backdrop-blur rounded-xl transition-all disabled:opacity-50 active:scale-95 font-medium"
+              >
+                <Download className={`w-4 h-4 ${exporting ? 'animate-bounce' : ''}`} />
+                <span className="text-sm font-medium">{exporting ? '导出中...' : '导出数据'}</span>
+              </button>
+              <button
+                onClick={fetchData}
+                disabled={loading}
+                className="flex items-center space-x-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur rounded-xl transition-all disabled:opacity-50 active:scale-95"
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                <span className="text-sm font-medium">刷新数据</span>
+              </button>
+            </div>
           </div>
 
           <div className="flex space-x-2 bg-white/10 backdrop-blur p-1 rounded-xl w-fit">
@@ -546,7 +676,7 @@ export default function Statistics() {
                       <Trophy className="w-5 h-5 text-amber-500" />
                       <span>蹲位使用时长排行榜</span>
                       <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-sm rounded-full">
-                        近30天
+                        近{dateRange}天
                       </span>
                     </h3>
                     <div className="relative">

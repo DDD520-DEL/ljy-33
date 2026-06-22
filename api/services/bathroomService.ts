@@ -86,12 +86,15 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
   return dbUpdateStallStatus(stallId, status);
 }
 
-export function getHeatmapData(days: number = 30): HeatmapPoint[] {
+export function getHeatmapData(days: number = 30, floorId?: string): HeatmapPoint[] {
   const records = getUsageRecords();
   const now = Date.now();
   const cutoff = now - days * 24 * 60 * 60 * 1000;
 
-  const filtered = records.filter((r) => r.startTime >= cutoff);
+  let filtered = records.filter((r) => r.startTime >= cutoff);
+  if (floorId) {
+    filtered = filtered.filter((r) => r.floorId === floorId);
+  }
 
   const heatmap: Record<string, number> = {};
 
@@ -123,12 +126,15 @@ export function getHeatmapData(days: number = 30): HeatmapPoint[] {
   return result;
 }
 
-export function getTrendData(days: number = 30): TrendPoint[] {
+export function getTrendData(days: number = 30, floorId?: string): TrendPoint[] {
   const records = getUsageRecords();
   const now = Date.now();
   const cutoff = now - days * 24 * 60 * 60 * 1000;
 
-  const filtered = records.filter((r) => r.startTime >= cutoff);
+  let filtered = records.filter((r) => r.startTime >= cutoff);
+  if (floorId) {
+    filtered = filtered.filter((r) => r.floorId === floorId);
+  }
 
   const dailyCount: Record<string, number> = {};
 
@@ -151,12 +157,14 @@ export function getTrendData(days: number = 30): TrendPoint[] {
   return result;
 }
 
-export function getPeakPeriods(): PeakPeriod[] {
+export function getPeakPeriods(days: number = 30, floorId?: string): PeakPeriod[] {
   const records = getUsageRecords();
   const now = Date.now();
-  const days = 30;
   const cutoff = now - days * 24 * 60 * 60 * 1000;
-  const filtered = records.filter((r) => r.startTime >= cutoff);
+  let filtered = records.filter((r) => r.startTime >= cutoff);
+  if (floorId) {
+    filtered = filtered.filter((r) => r.floorId === floorId);
+  }
 
   const periods = [
     { name: '早高峰 (8:00-10:00)', start: 8, end: 10 },
