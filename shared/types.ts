@@ -187,3 +187,40 @@ export interface StallStatusLog {
   newStatus: StallStatus;
   changedAt: number;
 }
+
+export interface FloorHourlyOccupancy {
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  totalStalls: number;
+  hourlyData: {
+    hour: number;
+    avgOccupiedCount: number;
+    avgOccupancyRate: number;
+    sampleDays: number;
+  }[];
+}
+
+export interface FloorPrediction {
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  totalStalls: number;
+  predictedAvailableStalls: number;
+  predictedOccupancyRate: number;
+  predictedVacancyRate: number;
+  next30MinAvgVacancyRate: number;
+  confidence: number;
+  currentAvailableStalls: number;
+  currentOccupancyRate: number;
+}
+
+export interface SmartRecommendation {
+  recommendedFloor: FloorPrediction;
+  allFloorPredictions: FloorPrediction[];
+  currentTime: string;
+  currentHour: number;
+  isWeekend: boolean;
+  analysisWindowMinutes: number;
+  historicalDays: number;
+}

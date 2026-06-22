@@ -3,15 +3,36 @@ import { Building2, Users, CheckCircle, RefreshCw, AlertTriangle } from 'lucide-
 import { useBathroomStore } from '../store/useBathroomStore';
 import FloorCard from '../components/FloorCard';
 import ErrorAlert from '../components/ErrorAlert';
+import SmartRecommendationBanner from '../components/SmartRecommendationBanner';
 
 export default function Home() {
-  const { floors, loading, error, currentAlertCount, fetchFloors, startPolling, stopPolling, clearError } = useBathroomStore();
+  const {
+    floors,
+    loading,
+    error,
+    currentAlertCount,
+    smartRecommendation,
+    smartRecommendationLoading,
+    fetchFloors,
+    fetchSmartRecommendation,
+    startPolling,
+    stopPolling,
+    clearError,
+  } = useBathroomStore();
 
   useEffect(() => {
     fetchFloors();
+    fetchSmartRecommendation(30);
     startPolling();
     return () => stopPolling();
-  }, [fetchFloors, startPolling, stopPolling]);
+  }, [fetchFloors, fetchSmartRecommendation, startPolling, stopPolling]);
+
+  useEffect(() => {
+    const recPollInterval = setInterval(() => {
+      fetchSmartRecommendation(30);
+    }, 60000);
+    return () => clearInterval(recPollInterval);
+  }, [fetchSmartRecommendation]);
 
   const totalStalls = floors.reduce((sum, f) => sum + f.totalStalls, 0);
   const totalOccupied = floors.reduce((sum, f) => sum + f.occupiedStalls, 0);
@@ -104,6 +125,13 @@ export default function Home() {
             message={error}
             onRetry={fetchFloors}
             onDismiss={clearError}
+          />
+        )}
+
+        {smartRecommendation && (
+          <SmartRecommendationBanner
+            recommendation={smartRecommendation}
+            loading={smartRecommendationLoading}
           />
         )}
 

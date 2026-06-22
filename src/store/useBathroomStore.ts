@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation, StallStatusLog } from '../types';
+import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation, StallStatusLog, SmartRecommendation } from '../types';
 import {
   getAllFloors,
   getFloorStatus,
@@ -15,6 +15,7 @@ import {
   cancelReservation as apiCancelReservation,
   getVisitorReservations as apiGetVisitorReservations,
   getStallStatusLogs as apiGetStallStatusLogs,
+  getSmartRecommendation as apiGetSmartRecommendation,
 } from '../utils/api';
 
 interface BathroomState {
@@ -35,6 +36,8 @@ interface BathroomState {
   reservationsLoading: boolean;
   stallStatusLogs: StallStatusLog[];
   stallStatusLogsLoading: boolean;
+  smartRecommendation: SmartRecommendation | null;
+  smartRecommendationLoading: boolean;
   fetchFloors: () => Promise<void>;
   fetchFloorStatus: (floorId: string) => Promise<void>;
   fetchFloorQueue: (floorId: string) => Promise<void>;
@@ -55,6 +58,7 @@ interface BathroomState {
   createReservation: (floorId: string, visitorName: string, timeSlot: string) => Promise<Reservation>;
   cancelReservation: (reservationId: string) => Promise<void>;
   fetchStallStatusLogs: (floorId: string, limit?: number) => Promise<void>;
+  fetchSmartRecommendation: (days?: number) => Promise<void>;
 }
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
@@ -78,6 +82,8 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
   reservationsLoading: false,
   stallStatusLogs: [],
   stallStatusLogsLoading: false,
+  smartRecommendation: null,
+  smartRecommendationLoading: false,
 
   processNewAlerts: (newAlerts?: AlertRecord[]) => {
     if (!newAlerts || newAlerts.length === 0) return;
@@ -319,6 +325,16 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
       set({ stallStatusLogs: logs, stallStatusLogsLoading: false });
     } catch (err) {
       set({ error: (err as Error).message, stallStatusLogsLoading: false });
+    }
+  },
+
+  fetchSmartRecommendation: async (days: number = 30) => {
+    set({ smartRecommendationLoading: true });
+    try {
+      const { data: recommendation } = await apiGetSmartRecommendation(days);
+      set({ smartRecommendation: recommendation, smartRecommendationLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, smartRecommendationLoading: false });
     }
   },
 }));

@@ -18,6 +18,8 @@ import type {
   FloorComparisonData,
   Reservation,
   StallStatusLog,
+  SmartRecommendation,
+  FloorHourlyOccupancy,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -228,4 +230,20 @@ export async function getStallStatusLogs(
   const params = new URLSearchParams();
   params.append('limit', limit.toString());
   return request<StallStatusLog[]>(`/api/floors/${floorId}/status-logs?${params.toString()}`);
+}
+
+export async function getSmartRecommendation(
+  days: number = 30
+): Promise<{ data: SmartRecommendation }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  return request<SmartRecommendation>(`/api/stats/smart-recommendation?${params.toString()}`);
+}
+
+export async function getFloorHourlyOccupancy(
+  days: number = 30
+): Promise<{ data: FloorHourlyOccupancy[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  return request<FloorHourlyOccupancy[]>(`/api/stats/hourly-occupancy?${params.toString()}`);
 }

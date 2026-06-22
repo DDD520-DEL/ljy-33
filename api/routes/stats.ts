@@ -9,6 +9,8 @@ import {
   getFloorTrendData,
   getFloorPeakPeriods,
   getFloorDailyUsage,
+  getSmartRecommendation,
+  getFloorHourlyOccupancy,
 } from '../services/bathroomService.js';
 
 const router = Router();
@@ -173,6 +175,40 @@ router.get('/floor-daily-usage', (req: Request, res: Response): void => {
     res.status(500).json({
       success: false,
       error: 'Failed to get floor daily usage',
+    });
+  }
+});
+
+router.get('/hourly-occupancy', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const data = getFloorHourlyOccupancy(days);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get hourly occupancy error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get hourly occupancy data',
+    });
+  }
+});
+
+router.get('/smart-recommendation', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const data = getSmartRecommendation(days);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get smart recommendation error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get smart recommendation',
     });
   }
 });

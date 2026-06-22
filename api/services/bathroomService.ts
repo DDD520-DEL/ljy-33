@@ -46,6 +46,9 @@ import type {
   FloorComparisonData,
   Reservation,
   StallStatusLog,
+  FloorHourlyOccupancy,
+  FloorPrediction,
+  SmartRecommendation,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -564,6 +567,162 @@ export function expireAllReservations(): Reservation[] {
 
 export function getStallStatusLogs(floorId: string, limit: number = 50): StallStatusLog[] {
   return dbGetStallStatusLogsByFloor(floorId, limit);
+}
+
+export function getFloorHourlyOccupancy(days: number = 30): FloorHourlyOccupancy[] {
+  const records = getUsageRecords();
+  const floors = getFloors();
+  const now = Date.now();
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
+  const filteredRecords = records.filter((r) => r.startTime >= cutoff);
+
+  return floors.map((floor) => {
+    const floorRecords = filteredRecords.filter((r) => r.floorId === floor.id);
+    const hourlyByDate: Record<string, Record<number, number>> = {};
+
+    floorRecords.forEach((record) => {
+      const date = new Date(record.startTime);
+      const weekday = date.getDay();
+      if (weekday === 0 || weekday === 6) return;
+
+      const dateStr = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const hourSlot = minute < 30 ? hour : (hour + 1) % 24;
+
+      if (!hourlyByDate[dateStr]) {
+        hourlyByDate[dateStr] = {};
+      }
+      hourlyByDate[dateStr][hourSlot] = (hourlyByDate[dateStr][hourSlot] || 0) + 1;
+    });
+
+    const uniqueDays = Object.keys(hourlyByDate).length || 1;
+    const hourlyData: FloorHourlyOccupancy['hourlyData'] = [];
+
+    for (let h = 0; h < 24; h++) {
+      let totalCount = 0;
+      Object.values(hourlyByDate).forEach((hourly) => {
+        totalCount += hourly[h] || 0;
+      });
+      const avgOccupied = Math.round((totalCount / uniqueDays) * 10) / 10;
+      const occupancyRate = floor.totalStalls > 0
+        ? Math.round((avgOccupied / floor.totalStalls) * 1000) / 10
+        : 0;
+
+      hourlyData.push({
+        hour: h,
+        avgOccupiedCount: avgOccupied,
+        avgOccupancyRate: Math.min(occupancyRate, 100),
+        sampleDays: uniqueDays,
+      });
+    }
+
+    return {
+      floorId: floor.id,
+      floorNumber: floor.floorNumber,
+      floorName: floor.floorName,
+      totalStalls: floor.totalStalls,
+      hourlyData,
+    };
+  });
+}
+
+export function getSmartRecommendation(days: number = 30): SmartRecommendation {
+  checkTimeoutStalls();
+  dbReleaseExpiredReservedStalls();
+  dbExpireReservations();
+
+  const { floors } = getAllFloors();
+  const hourlyOccupancies = getFloorHourlyOccupancy(days);
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  const weekday = now.getDay();
+  const isWeekend = weekday === 0 || weekday === 6;
+
+  const currentHourSlot = currentMinute < 30 ? currentHour : (currentHour + 1) % 24;
+  const nextHourSlot = (currentHourSlot + 1) % 24;
+  const currentWeight = currentMinute < 30
+    ? (30 - currentMinute) / 30
+    : (60 - currentMinute) / 30;
+  const nextWeight = 1 - currentWeight;
+
+  const predictions: FloorPrediction[] = floors.map((floor) => {
+    const hourly = hourlyOccupancies.find((h) => h.floorId === floor.id);
+    const currentHourData = hourly?.hourlyData.find((h) => h.hour === currentHourSlot);
+    const nextHourData = hourly?.hourlyData.find((h) => h.hour === nextHourSlot);
+
+    const currentHistoricalOccupancy = currentHourData?.avgOccupancyRate || 0;
+    const nextHistoricalOccupancy = nextHourData?.avgOccupancyRate || 0;
+    const weightedHistoricalOccupancy =
+      currentHistoricalOccupancy * currentWeight +
+      nextHistoricalOccupancy * nextWeight;
+
+    const currentRealOccupancy = floor.totalStalls > 0
+      ? Math.round((floor.occupiedStalls / floor.totalStalls) * 1000) / 10
+      : 0;
+
+    const weekendAdjustment = isWeekend ? 0.6 : 1.0;
+
+    const currentRealtimeWeight = 0.35;
+    const historicalWeight = 0.65;
+
+    let predictedOccupancy =
+      currentRealOccupancy * currentRealtimeWeight +
+      weightedHistoricalOccupancy * historicalWeight * weekendAdjustment;
+
+    predictedOccupancy = Math.max(0, Math.min(predictedOccupancy, 98));
+    const predictedVacancy = 100 - predictedOccupancy;
+    const predictedAvailable = Math.max(
+      0,
+      Math.round((predictedVacancy / 100) * floor.totalStalls * 10) / 10
+    );
+
+    const sampleDays = currentHourData?.sampleDays || 1;
+    const confidence = Math.min(95, 50 + sampleDays * 1.5);
+
+    const next30MinSlots: number[] = [];
+    for (let i = 0; i < 2; i++) {
+      const slotHour = (currentHourSlot + i) % 24;
+      const slotData = hourly?.hourlyData.find((h) => h.hour === slotHour);
+      const slotOccupancy = (slotData?.avgOccupancyRate || 0) * weekendAdjustment;
+      const w = i === 0 ? currentWeight : nextWeight;
+      next30MinSlots.push((100 - slotOccupancy) * w);
+    }
+    const next30MinAvgVacancy = next30MinSlots.reduce((a, b) => a + b, 0);
+
+    return {
+      floorId: floor.id,
+      floorNumber: floor.floorNumber,
+      floorName: floor.floorName,
+      totalStalls: floor.totalStalls,
+      predictedAvailableStalls: predictedAvailable,
+      predictedOccupancyRate: Math.round(predictedOccupancy * 10) / 10,
+      predictedVacancyRate: Math.round(predictedVacancy * 10) / 10,
+      next30MinAvgVacancyRate: Math.round(next30MinAvgVacancy * 10) / 10,
+      confidence: Math.round(confidence * 10) / 10,
+      currentAvailableStalls: floor.availableStalls,
+      currentOccupancyRate: currentRealOccupancy,
+    };
+  });
+
+  predictions.sort((a, b) => {
+    const scoreA = a.next30MinAvgVacancyRate * 0.6 + a.predictedVacancyRate * 0.4 + a.currentAvailableStalls * 2;
+    const scoreB = b.next30MinAvgVacancyRate * 0.6 + b.predictedVacancyRate * 0.4 + b.currentAvailableStalls * 2;
+    return scoreB - scoreA;
+  });
+
+  const timeStr = `${String(currentHour).padStart(2, '0')}:${String(currentMinute).padStart(2, '0')}`;
+
+  return {
+    recommendedFloor: predictions[0],
+    allFloorPredictions: predictions,
+    currentTime: timeStr,
+    currentHour,
+    isWeekend,
+    analysisWindowMinutes: 30,
+    historicalDays: days,
+  };
 }
 
 export { initializeData };
