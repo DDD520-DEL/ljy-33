@@ -334,8 +334,30 @@ export default function MyReservations() {
                     <div className="mt-4 p-3 bg-success-50 rounded-xl border border-success-100">
                       <div className="flex items-start space-x-2">
                         <CheckCircle2 className="w-4 h-4 text-success-600 mt-0.5 flex-shrink-0" />
-                        <p className="text-sm text-success-700">
-                          已在 {formatCreatedAt(reservation.fulfilledAt)} 分配蹲位，请及时前往使用。
+                        <div className="text-sm text-success-700">
+                          <p className="font-medium mb-0.5">
+                            已在 {formatCreatedAt(reservation.fulfilledAt)} 分配蹲位
+                          </p>
+                          <p>
+                            楼层：{reservation.floorNumber}楼 {reservation.floorName}
+                            {reservation.assignedStallNumber && (
+                              <> · 隔间：{reservation.assignedStallNumber} 号</>
+                            )}
+                          </p>
+                          <p className="text-xs text-success-600 mt-1">
+                            请在30分钟内前往对应楼层点击"我要使用这个隔间"开始使用，超时将自动释放。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {reservation.status === 'expired' && (
+                    <div className="mt-4 p-3 bg-danger-50 rounded-xl border border-danger-100">
+                      <div className="flex items-start space-x-2">
+                        <AlertCircle className="w-4 h-4 text-danger-600 mt-0.5 flex-shrink-0" />
+                        <p className="text-sm text-danger-700">
+                          预约超时未使用，已自动取消。时段：{formatTimeSlot(reservation.timeSlot)}
                         </p>
                       </div>
                     </div>

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
+import { TIMEOUT_THRESHOLD_MS, RESERVATION_TIMEOUT_MINUTES } from '../../shared/types.js';
 import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats, Reservation, ReservationStatus } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -260,6 +260,12 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
 
   const previousStatus = stall.status;
   const now = Date.now();
+
+  if (previousStatus === 'reserved' && status === 'occupied') {
+    saveStalls(stalls);
+    return occupyReservedStall(stallId);
+  }
+
   stall.status = status;
   stall.lastUpdated = now;
 
@@ -280,7 +286,17 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
     completeWorkOrder(stallId);
   }
 
-  if (previousStatus === 'available' && status === 'occupied') {
+  if (previousStatus === 'reserved' && status === 'available') {
+    stall.reservedByReservationId = undefined;
+    stall.reservedUntil = undefined;
+
+    const reservations = getReservations();
+    const pendingReservation = getFirstPendingReservation(stall.floorId);
+    if (pendingReservation) {
+      fulfillReservation(pendingReservation.id, stall.id, stall.stallNumber);
+    }
+    saveReservations(reservations);
+  } else if (previousStatus === 'available' && status === 'occupied') {
     stall.occupiedStartTime = now;
     stall.isAbnormal = false;
   } else if (previousStatus === 'occupied' && status === 'available') {
@@ -305,7 +321,7 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
 
     const pendingReservation = getFirstPendingReservation(stall.floorId);
     if (pendingReservation) {
-      fulfillReservation(pendingReservation.id);
+      fulfillReservation(pendingReservation.id, stall.id, stall.stallNumber);
     } else {
       popFromQueue(stall.floorId);
     }
@@ -478,33 +494,135 @@ export function cancelReservation(reservationId: string): Reservation | null {
 
   reservation.status = 'cancelled';
   reservation.cancelledAt = Date.now();
+
+  const stalls = getStalls();
+  stalls.forEach((stall) => {
+    if (stall.reservedByReservationId === reservationId) {
+      stall.status = 'available';
+      stall.reservedByReservationId = undefined;
+      stall.reservedUntil = undefined;
+      stall.lastUpdated = Date.now();
+    }
+  });
+  saveStalls(stalls);
+
   saveReservations(reservations);
   return reservation;
 }
 
-export function fulfillReservation(reservationId: string): Reservation | null {
+export function fulfillReservation(
+  reservationId: string,
+  stallId: string,
+  stallNumber: number
+): Reservation | null {
   const reservations = getReservations();
   const reservation = reservations.find((r) => r.id === reservationId);
   if (!reservation || reservation.status !== 'pending') return null;
 
   reservation.status = 'fulfilled';
   reservation.fulfilledAt = Date.now();
+  reservation.assignedStallId = stallId;
+  reservation.assignedStallNumber = stallNumber;
+
+  const stalls = getStalls();
+  const stall = stalls.find((s) => s.id === stallId);
+  if (stall) {
+    stall.status = 'reserved';
+    stall.reservedByReservationId = reservationId;
+    stall.reservedUntil = Date.now() + RESERVATION_TIMEOUT_MINUTES * 60 * 1000;
+    stall.lastUpdated = Date.now();
+    saveStalls(stalls);
+  }
+
   saveReservations(reservations);
   return reservation;
 }
 
 export function getFirstPendingReservation(floorId: string): Reservation | null {
   const reservations = getReservations();
-  const pending = reservations
+  const now = Date.now();
+  const GRACE_BEFORE = 5 * 60 * 1000;
+
+  const ready = reservations
     .filter((r) => r.floorId === floorId && r.status === 'pending')
-    .sort((a, b) => a.createdAt - b.createdAt);
-  return pending.length > 0 ? pending[0] : null;
+    .filter((r) => {
+      const slotTime = new Date(r.timeSlot).getTime();
+      return now >= slotTime - GRACE_BEFORE;
+    })
+    .sort((a, b) => {
+      const slotA = new Date(a.timeSlot).getTime();
+      const slotB = new Date(b.timeSlot).getTime();
+      if (slotA !== slotB) return slotA - slotB;
+      return a.createdAt - b.createdAt;
+    });
+
+  return ready.length > 0 ? ready[0] : null;
+}
+
+export function occupyReservedStall(stallId: string): Stall | null {
+  const stalls = getStalls();
+  const stall = stalls.find((s) => s.id === stallId);
+  if (!stall || stall.status !== 'reserved') return null;
+
+  const reservations = getReservations();
+  const reservation = reservations.find((r) => r.id === stall.reservedByReservationId);
+
+  stall.status = 'occupied';
+  stall.occupiedStartTime = Date.now();
+  stall.isAbnormal = false;
+  stall.lastUpdated = Date.now();
+
+  if (reservation) {
+    reservation.status = 'fulfilled';
+  }
+
+  stall.reservedByReservationId = undefined;
+  stall.reservedUntil = undefined;
+
+  saveStalls(stalls);
+  saveReservations(reservations);
+
+  return stall;
+}
+
+export function releaseExpiredReservedStalls(): Stall[] {
+  const stalls = getStalls();
+  const reservations = getReservations();
+  const now = Date.now();
+  const released: Stall[] = [];
+
+  stalls.forEach((stall) => {
+    if (stall.status === 'reserved' && stall.reservedUntil && now >= stall.reservedUntil) {
+      const reservationId = stall.reservedByReservationId;
+      stall.status = 'available';
+      stall.reservedByReservationId = undefined;
+      stall.reservedUntil = undefined;
+      stall.lastUpdated = now;
+      released.push(stall);
+
+      if (reservationId) {
+        const reservation = reservations.find((r) => r.id === reservationId);
+        if (reservation && reservation.status === 'fulfilled') {
+          reservation.status = 'expired';
+        }
+      }
+    }
+  });
+
+  if (released.length > 0) {
+    saveStalls(stalls);
+    saveReservations(reservations);
+  }
+
+  return released;
 }
 
 export function expireReservations(): Reservation[] {
-  const reservations = getReservations();
   const now = Date.now();
-  const RESERVATION_TIMEOUT_MS = 30 * 60 * 1000;
+  releaseExpiredReservedStalls();
+
+  const reservations = getReservations();
+  const RESERVATION_TIMEOUT_MS = RESERVATION_TIMEOUT_MINUTES * 60 * 1000;
   const expired: Reservation[] = [];
 
   reservations.forEach((r) => {

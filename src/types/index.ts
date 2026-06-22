@@ -1,4 +1,4 @@
-export type StallStatus = 'available' | 'occupied' | 'maintenance';
+export type StallStatus = 'available' | 'occupied' | 'maintenance' | 'reserved';
 
 export const TIMEOUT_THRESHOLD_MINUTES = 20;
 export const TIMEOUT_THRESHOLD_MS = TIMEOUT_THRESHOLD_MINUTES * 60 * 1000;
@@ -11,6 +11,8 @@ export interface Stall {
   lastUpdated: number;
   occupiedStartTime?: number;
   isAbnormal?: boolean;
+  reservedByReservationId?: string;
+  reservedUntil?: number;
 }
 
 export interface Floor {
@@ -170,4 +172,6 @@ export interface Reservation {
   fulfilledAt?: number;
   cancelledAt?: number;
   queuePosition: number;
+  assignedStallId?: string;
+  assignedStallNumber?: number;
 }

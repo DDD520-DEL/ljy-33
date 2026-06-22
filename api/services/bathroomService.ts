@@ -22,6 +22,7 @@ import {
   getFirstPendingReservation as dbGetFirstPendingReservation,
   expireReservations as dbExpireReservations,
   isVisitorAlreadyReserved as dbIsVisitorAlreadyReserved,
+  releaseExpiredReservedStalls as dbReleaseExpiredReservedStalls,
 } from '../db/database.js';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
 import type {
@@ -47,6 +48,8 @@ import type {
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
   const newAlerts = checkTimeoutStalls();
+  dbReleaseExpiredReservedStalls();
+  dbExpireReservations();
   const floors = getFloors();
   const stalls = getStalls();
 
@@ -73,6 +76,8 @@ export function getFloorById(floorId: string): { floor: FloorWithStatus | null; 
 
 export function getStallsByFloor(floorId: string): Stall[] {
   checkTimeoutStalls();
+  dbReleaseExpiredReservedStalls();
+  dbExpireReservations();
   const stalls = getStalls();
   return stalls.filter((s) => s.floorId === floorId);
 }
@@ -537,10 +542,6 @@ export function createReservation(
 
 export function cancelReservationById(reservationId: string): Reservation | null {
   return dbCancelReservation(reservationId);
-}
-
-export function fulfillReservationById(reservationId: string): Reservation | null {
-  return dbFulfillReservation(reservationId);
 }
 
 export function getNextReservationForFloor(floorId: string): Reservation | null {
