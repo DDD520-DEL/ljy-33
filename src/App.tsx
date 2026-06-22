@@ -3,6 +3,7 @@ import Home from "@/pages/Home";
 import FloorDetail from "@/pages/FloorDetail";
 import Statistics from "@/pages/Statistics";
 import WorkOrders from "@/pages/WorkOrders";
+import MyReservations from "@/pages/MyReservations";
 import Navbar from "@/components/Navbar";
 import AlertModal from "@/components/AlertModal";
 import { useBathroomStore } from "@/store/useBathroomStore";
@@ -18,6 +19,7 @@ function AppContent() {
         <Route path="/floor/:floorId" element={<FloorDetail />} />
         <Route path="/stats" element={<Statistics />} />
         <Route path="/work-orders" element={<WorkOrders />} />
+        <Route path="/reservations" element={<MyReservations />} />
       </Routes>
       {showAlertModal && currentAlert && (
         <AlertModal alert={currentAlert} onDismiss={dismissAlert} />

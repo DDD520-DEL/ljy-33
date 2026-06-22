@@ -16,6 +16,7 @@ import type {
   FloorPeakData,
   FloorDailyUsage,
   FloorComparisonData,
+  Reservation,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -165,4 +166,41 @@ export async function getFloorDailyUsage(
     params.append('floorIds', floorIds.join(','));
   }
   return request<FloorDailyUsage[]>(`/api/stats/floor-daily-usage?${params.toString()}`);
+}
+
+export async function getFloorReservations(
+  floorId: string
+): Promise<{ data: Reservation[] }> {
+  return request<Reservation[]>(`/api/reservations/floor/${floorId}`);
+}
+
+export async function getVisitorReservations(
+  visitorName: string
+): Promise<{ data: Reservation[] }> {
+  return request<Reservation[]>(`/api/reservations/visitor/${encodeURIComponent(visitorName)}`);
+}
+
+export async function createReservation(
+  floorId: string,
+  visitorName: string,
+  timeSlot: string
+): Promise<{ data: Reservation }> {
+  return request<Reservation>('/api/reservations', {
+    method: 'POST',
+    body: JSON.stringify({ floorId, visitorName, timeSlot }),
+  });
+}
+
+export async function cancelReservation(
+  reservationId: string
+): Promise<{ data: Reservation }> {
+  return request<Reservation>(`/api/reservations/${reservationId}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function expireReservations(): Promise<{ data: Reservation[] }> {
+  return request<Reservation[]>('/api/reservations/expire', {
+    method: 'POST',
+  });
 }

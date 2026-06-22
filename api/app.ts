@@ -12,6 +12,7 @@ import stallRoutes from './routes/stalls.js'
 import statsRoutes from './routes/stats.js'
 import queueRoutes from './routes/queue.js'
 import workOrderRoutes from './routes/workOrders.js'
+import reservationRoutes from './routes/reservations.js'
 import { initializeData } from './services/bathroomService.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -32,6 +33,7 @@ app.use('/api/stalls', stallRoutes)
 app.use('/api/stats', statsRoutes)
 app.use('/api/queue', queueRoutes)
 app.use('/api/work-orders', workOrderRoutes)
+app.use('/api/reservations', reservationRoutes)
 
 app.use(
   '/api/health',

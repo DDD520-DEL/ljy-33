@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, Clock, RefreshCw, UserPlus, X, Timer, AlertCircle, AlertTriangle, CalendarCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useBathroomStore } from '../store/useBathroomStore';
 import StallCard from '../components/StallCard';
 import ErrorAlert from '../components/ErrorAlert';
-import { getStallDurationRanking } from '../utils/api';
-import type { StallStatus, QueueItem, StallDurationRank } from '../types';
+import { getStallDurationRanking, createReservation as apiCreateReservation, getFloorReservations } from '../utils/api';
+import type { StallStatus, QueueItem, StallDurationRank, Reservation } from '../types';
 
 export default function FloorDetail() {
   const { floorId } = useParams<{ floorId: string }>();
@@ -33,6 +33,17 @@ export default function FloorDetail() {
   const [stallDurations, setStallDurations] = useState<StallDurationRank[]>([]);
   const [durationsLoading, setDurationsLoading] = useState(false);
 
+  const [showReservationModal, setShowReservationModal] = useState(false);
+  const [reservationVisitorName, setReservationVisitorName] = useState('');
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  });
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [reservationError, setReservationError] = useState<string | null>(null);
+  const [isCreatingReservation, setIsCreatingReservation] = useState(false);
+  const [floorReservations, setFloorReservations] = useState<Reservation[]>([]);
+
   useEffect(() => {
     if (floorId) {
       fetchFloorStatus(floorId);
@@ -59,6 +70,74 @@ export default function FloorDetail() {
       fetchStallDurations(floorId);
     }
   }, [floorId]);
+
+  const fetchFloorReservationsList = async (fid: string) => {
+    try {
+      const { data } = await getFloorReservations(fid);
+      setFloorReservations(data);
+    } catch (err) {
+      console.error('Fetch floor reservations error:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (floorId) {
+      fetchFloorReservationsList(floorId);
+    }
+  }, [floorId]);
+
+  const generateTimeSlots = (dateStr: string): string[] => {
+    const slots: string[] = [];
+    const [year, month, day] = dateStr.split('-').map(Number);
+    for (let h = 8; h < 20; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const slotDate = new Date(year, month - 1, day, h, m, 0, 0);
+        slots.push(slotDate.toISOString());
+      }
+    }
+    return slots;
+  };
+
+  const getSlotLabel = (isoString: string): string => {
+    const d = new Date(isoString);
+    const end = new Date(d.getTime() + 30 * 60 * 1000);
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}-${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+  };
+
+  const isSlotPast = (isoString: string): boolean => {
+    return new Date(isoString).getTime() < Date.now();
+  };
+
+  const getSlotReservationCount = (isoString: string): number => {
+    return floorReservations.filter(
+      (r) => r.timeSlot === isoString && r.status === 'pending'
+    ).length;
+  };
+
+  const navigateDate = (direction: number) => {
+    const current = new Date(selectedDate);
+    current.setDate(current.getDate() + direction);
+    const newDate = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`;
+    setSelectedDate(newDate);
+    setSelectedSlot(null);
+  };
+
+  const handleCreateReservation = async () => {
+    if (!floorId || !reservationVisitorName.trim() || !selectedSlot) return;
+    setIsCreatingReservation(true);
+    setReservationError(null);
+    try {
+      await apiCreateReservation(floorId, reservationVisitorName.trim(), selectedSlot);
+      setShowReservationModal(false);
+      setReservationVisitorName('');
+      setSelectedSlot(null);
+      await fetchFloorReservationsList(floorId);
+    } catch (err) {
+      setReservationError((err as Error).message);
+    } finally {
+      setIsCreatingReservation(false);
+    }
+  };
 
   const getAvgDurationForStall = (stallId: string): number | undefined => {
     const stall = stallDurations.find((s) => s.stallId === stallId);
@@ -304,16 +383,46 @@ export default function FloorDetail() {
                 <div>
                   <h3 className="font-bold text-amber-900">所有隔间已满</h3>
                   <p className="text-sm text-amber-700 mt-0.5">
-                    当前有 {currentQueue?.count ?? 0} 人在排队，加入队列后空位释放时自动通知您
+                    当前有 {currentQueue?.count ?? 0} 人在排队，您可以排队等待或预约未来时段
                   </p>
                 </div>
               </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setShowReservationModal(true)}
+                  className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors flex items-center space-x-2"
+                >
+                  <CalendarCheck className="w-4 h-4" />
+                  <span>预约蹲位</span>
+                </button>
+                <button
+                  onClick={() => setShowJoinModal(true)}
+                  className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl transition-colors flex items-center space-x-2"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>加入排队</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!allOccupied && currentFloor && (
+          <div className="mb-6 bg-primary-50 border border-primary-200 rounded-2xl p-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <CalendarCheck className="w-5 h-5 text-primary-600" />
+                <div>
+                  <p className="text-sm font-medium text-primary-800">提前预约蹲位</p>
+                  <p className="text-xs text-primary-600">选择未来时段预约，蹲位释放后优先分配</p>
+                </div>
+              </div>
               <button
-                onClick={() => setShowJoinModal(true)}
-                className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl transition-colors flex items-center space-x-2"
+                onClick={() => setShowReservationModal(true)}
+                className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors text-sm flex items-center space-x-1.5"
               >
-                <UserPlus className="w-4 h-4" />
-                <span>加入排队</span>
+                <CalendarCheck className="w-4 h-4" />
+                <span>预约蹲位</span>
               </button>
             </div>
           </div>
@@ -465,6 +574,8 @@ export default function FloorDetail() {
                 <li>• 使用完毕后请记得标记"空闲"，方便他人查看</li>
                 <li>• 如发现设施故障，请联系物业进行维修</li>
                 <li>• 所有隔间满时可加入等待队列，有空位时自动按顺序通知</li>
+                <li>• 可提前预约蹲位（按半小时档位），蹲位释放后优先分配给预约用户</li>
+                <li>• 预约超时30分钟未使用将自动取消</li>
               </ul>
             </div>
           </>
@@ -541,6 +652,162 @@ export default function FloorDetail() {
                 className="flex-1 py-3 px-4 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isJoining ? '加入中...' : '确认排队'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showReservationModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <CalendarCheck className="w-5 h-5 text-primary-600" />
+                <span>预约蹲位</span>
+              </h3>
+              <button
+                onClick={() => {
+                  setShowReservationModal(false);
+                  setReservationVisitorName('');
+                  setSelectedSlot(null);
+                  setReservationError(null);
+                }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="mb-4 p-4 bg-gray-50 rounded-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">楼层</span>
+                <span className="font-medium text-gray-900">
+                  {currentFloor?.floorNumber}楼 {currentFloor?.floorName}
+                </span>
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-gray-600">当前排队人数</span>
+                <span className="font-medium text-amber-600">
+                  {currentQueue?.count ?? 0} 人
+                </span>
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-gray-600">当前预约等待</span>
+                <span className="font-medium text-primary-600">
+                  {floorReservations.filter((r) => r.status === 'pending').length} 人
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                您的称呼
+              </label>
+              <input
+                type="text"
+                value={reservationVisitorName}
+                onChange={(e) => setReservationVisitorName(e.target.value)}
+                placeholder="请输入您的称呼"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-sm font-medium text-gray-700">选择日期</label>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => navigateDate(-1)}
+                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <span className="text-sm font-medium text-gray-900 min-w-[100px] text-center">
+                    {new Date(selectedDate).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' })}
+                  </span>
+                  <button
+                    onClick={() => navigateDate(1)}
+                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">选择时段（半小时）</label>
+              <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                {generateTimeSlots(selectedDate).map((slot) => {
+                  const isPast = isSlotPast(slot);
+                  const isSelected = selectedSlot === slot;
+                  const resCount = getSlotReservationCount(slot);
+                  return (
+                    <button
+                      key={slot}
+                      onClick={() => !isPast && setSelectedSlot(slot)}
+                      disabled={isPast}
+                      className={`py-2.5 px-2 rounded-lg text-xs font-medium transition-all ${
+                        isPast
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : isSelected
+                          ? 'bg-primary-600 text-white shadow-md'
+                          : resCount > 0
+                          ? 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100'
+                          : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div>{getSlotLabel(slot)}</div>
+                      {resCount > 0 && !isPast && (
+                        <div className={`text-[10px] mt-0.5 ${isSelected ? 'text-white/80' : 'text-amber-500'}`}>
+                          {resCount}人预约
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {selectedSlot && (
+              <div className="mb-4 p-3 bg-primary-50 rounded-xl border border-primary-100">
+                <div className="flex items-start space-x-2">
+                  <CalendarCheck className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-primary-800">
+                      预约时段: {new Date(selectedDate).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })} {getSlotLabel(selectedSlot)}
+                    </p>
+                    <p className="text-xs text-primary-600 mt-0.5">
+                      预约后蹲位释放时优先分配，超时30分钟未使用自动取消
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {reservationError && (
+              <p className="mb-4 text-sm text-red-600">{reservationError}</p>
+            )}
+
+            <div className="flex space-x-3">
+              <button
+                onClick={() => {
+                  setShowReservationModal(false);
+                  setReservationVisitorName('');
+                  setSelectedSlot(null);
+                  setReservationError(null);
+                }}
+                className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleCreateReservation}
+                disabled={!reservationVisitorName.trim() || !selectedSlot || isCreatingReservation}
+                className="flex-1 py-3 px-4 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isCreatingReservation ? '预约中...' : '确认预约'}
               </button>
             </div>
           </div>

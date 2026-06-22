@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats } from '../types';
+import type { FloorWithStatus, Stall, StallStatus, FloorQueue, QueueItem, AlertRecord, WorkOrder, WorkOrderStats, Reservation } from '../types';
 import {
   getAllFloors,
   getFloorStatus,
@@ -10,6 +10,10 @@ import {
   checkAlerts,
   getWorkOrders as apiGetWorkOrders,
   getWorkOrderStats as apiGetWorkOrderStats,
+  getFloorReservations as apiGetFloorReservations,
+  createReservation as apiCreateReservation,
+  cancelReservation as apiCancelReservation,
+  getVisitorReservations as apiGetVisitorReservations,
 } from '../utils/api';
 
 interface BathroomState {
@@ -26,6 +30,8 @@ interface BathroomState {
   workOrders: WorkOrder[];
   workOrderStats: WorkOrderStats | null;
   workOrdersLoading: boolean;
+  reservations: Reservation[];
+  reservationsLoading: boolean;
   fetchFloors: () => Promise<void>;
   fetchFloorStatus: (floorId: string) => Promise<void>;
   fetchFloorQueue: (floorId: string) => Promise<void>;
@@ -41,6 +47,10 @@ interface BathroomState {
   processNewAlerts: (newAlerts?: AlertRecord[]) => void;
   fetchWorkOrders: () => Promise<void>;
   fetchWorkOrderStats: (days?: number) => Promise<void>;
+  fetchFloorReservations: (floorId: string) => Promise<void>;
+  fetchVisitorReservations: (visitorName: string) => Promise<void>;
+  createReservation: (floorId: string, visitorName: string, timeSlot: string) => Promise<Reservation>;
+  cancelReservation: (reservationId: string) => Promise<void>;
 }
 
 let pollInterval: ReturnType<typeof setInterval> | null = null;
@@ -60,6 +70,8 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
   workOrders: [],
   workOrderStats: null,
   workOrdersLoading: false,
+  reservations: [],
+  reservationsLoading: false,
 
   processNewAlerts: (newAlerts?: AlertRecord[]) => {
     if (!newAlerts || newAlerts.length === 0) return;
@@ -253,5 +265,42 @@ export const useBathroomStore = create<BathroomState>((set, get) => ({
     } catch (err) {
       set({ error: (err as Error).message, workOrdersLoading: false });
     }
+  },
+
+  fetchFloorReservations: async (floorId: string) => {
+    set({ reservationsLoading: true });
+    try {
+      const { data: reservations } = await apiGetFloorReservations(floorId);
+      set({ reservations, reservationsLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, reservationsLoading: false });
+    }
+  },
+
+  fetchVisitorReservations: async (visitorName: string) => {
+    set({ reservationsLoading: true });
+    try {
+      const { data: reservations } = await apiGetVisitorReservations(visitorName);
+      set({ reservations, reservationsLoading: false });
+    } catch (err) {
+      set({ error: (err as Error).message, reservationsLoading: false });
+    }
+  },
+
+  createReservation: async (floorId: string, visitorName: string, timeSlot: string): Promise<Reservation> => {
+    const { data: reservation } = await apiCreateReservation(floorId, visitorName, timeSlot);
+    const { reservations } = get();
+    set({ reservations: [reservation, ...reservations] });
+    return reservation;
+  },
+
+  cancelReservation: async (reservationId: string) => {
+    const { data: cancelled } = await apiCancelReservation(reservationId);
+    const { reservations } = get();
+    set({
+      reservations: reservations.map((r) =>
+        r.id === cancelled.id ? cancelled : r
+      ),
+    });
   },
 }));

@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
-import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats } from '../../shared/types.js';
+import type { Stall, Floor, UsageRecord, StallStatus, QueueItem, FloorQueue, AlertRecord, WorkOrder, WorkOrderStats, Reservation, ReservationStatus } from '../../shared/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +15,7 @@ const USAGE_FILE = path.join(DATA_DIR, 'usage_records.json');
 const QUEUE_FILE = path.join(DATA_DIR, 'queue.json');
 const ALERTS_FILE = path.join(DATA_DIR, 'alerts.json');
 const WORK_ORDERS_FILE = path.join(DATA_DIR, 'work_orders.json');
+const RESERVATIONS_FILE = path.join(DATA_DIR, 'reservations.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -301,7 +302,13 @@ export function updateStallStatus(stallId: string, status: StallStatus): Stall |
     stall.isAbnormal = false;
 
     resolveAlert(stallId);
-    popFromQueue(stall.floorId);
+
+    const pendingReservation = getFirstPendingReservation(stall.floorId);
+    if (pendingReservation) {
+      fulfillReservation(pendingReservation.id);
+    } else {
+      popFromQueue(stall.floorId);
+    }
   }
 
   saveStalls(stalls);
@@ -420,4 +427,110 @@ function generateMockUsageData(): void {
   }
 
   saveUsageRecords(records);
+}
+
+export function getReservations(): Reservation[] {
+  return readJSON<Reservation[]>(RESERVATIONS_FILE, []);
+}
+
+export function saveReservations(reservations: Reservation[]): void {
+  writeJSON(RESERVATIONS_FILE, reservations);
+}
+
+export function getReservationsByFloor(floorId: string): Reservation[] {
+  const reservations = getReservations();
+  return reservations
+    .filter((r) => r.floorId === floorId && r.status === 'pending')
+    .sort((a, b) => a.createdAt - b.createdAt)
+    .map((r, index) => ({ ...r, queuePosition: index + 1 }));
+}
+
+export function getReservationsByVisitor(visitorName: string): Reservation[] {
+  const reservations = getReservations();
+  return reservations
+    .filter((r) => r.visitorName === visitorName)
+    .sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export function createReservation(
+  reservation: Omit<Reservation, 'id' | 'createdAt' | 'status' | 'queuePosition'>
+): Reservation {
+  const reservations = getReservations();
+  const pendingCount = reservations.filter(
+    (r) => r.floorId === reservation.floorId && r.status === 'pending'
+  ).length;
+  const newReservation: Reservation = {
+    ...reservation,
+    id: uuidv4(),
+    createdAt: Date.now(),
+    status: 'pending',
+    queuePosition: pendingCount + 1,
+  };
+  reservations.push(newReservation);
+  saveReservations(reservations);
+  return newReservation;
+}
+
+export function cancelReservation(reservationId: string): Reservation | null {
+  const reservations = getReservations();
+  const reservation = reservations.find((r) => r.id === reservationId);
+  if (!reservation || reservation.status !== 'pending') return null;
+
+  reservation.status = 'cancelled';
+  reservation.cancelledAt = Date.now();
+  saveReservations(reservations);
+  return reservation;
+}
+
+export function fulfillReservation(reservationId: string): Reservation | null {
+  const reservations = getReservations();
+  const reservation = reservations.find((r) => r.id === reservationId);
+  if (!reservation || reservation.status !== 'pending') return null;
+
+  reservation.status = 'fulfilled';
+  reservation.fulfilledAt = Date.now();
+  saveReservations(reservations);
+  return reservation;
+}
+
+export function getFirstPendingReservation(floorId: string): Reservation | null {
+  const reservations = getReservations();
+  const pending = reservations
+    .filter((r) => r.floorId === floorId && r.status === 'pending')
+    .sort((a, b) => a.createdAt - b.createdAt);
+  return pending.length > 0 ? pending[0] : null;
+}
+
+export function expireReservations(): Reservation[] {
+  const reservations = getReservations();
+  const now = Date.now();
+  const RESERVATION_TIMEOUT_MS = 30 * 60 * 1000;
+  const expired: Reservation[] = [];
+
+  reservations.forEach((r) => {
+    if (r.status !== 'pending') return;
+
+    const slotTime = new Date(r.timeSlot).getTime();
+    if (now >= slotTime + RESERVATION_TIMEOUT_MS) {
+      r.status = 'expired';
+      expired.push(r);
+    }
+  });
+
+  if (expired.length > 0) {
+    saveReservations(reservations);
+  }
+
+  return expired;
+}
+
+export function isVisitorAlreadyReserved(floorId: string, visitorName: string, timeSlot: string): boolean {
+  const reservations = getReservations();
+  return reservations.some(
+    (r) =>
+      r.floorId === floorId &&
+      r.visitorName === visitorName &&
+      r.timeSlot === timeSlot &&
+      r.status === 'pending'
+  );
 }

@@ -153,3 +153,21 @@ export interface FloorComparisonData {
   peaks: FloorPeakData[];
   dailyUsage: FloorDailyUsage[];
 }
+
+export type ReservationStatus = 'pending' | 'fulfilled' | 'cancelled' | 'expired';
+
+export const RESERVATION_TIMEOUT_MINUTES = 30;
+
+export interface Reservation {
+  id: string;
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  visitorName: string;
+  timeSlot: string;
+  status: ReservationStatus;
+  createdAt: number;
+  fulfilledAt?: number;
+  cancelledAt?: number;
+  queuePosition: number;
+}

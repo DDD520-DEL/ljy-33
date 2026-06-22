@@ -13,6 +13,15 @@ import {
   getUnresolvedAlerts,
   getWorkOrders as dbGetWorkOrders,
   getWorkOrderStats as dbGetWorkOrderStats,
+  getReservations as dbGetReservations,
+  getReservationsByFloor as dbGetReservationsByFloor,
+  getReservationsByVisitor as dbGetReservationsByVisitor,
+  createReservation as dbCreateReservation,
+  cancelReservation as dbCancelReservation,
+  fulfillReservation as dbFulfillReservation,
+  getFirstPendingReservation as dbGetFirstPendingReservation,
+  expireReservations as dbExpireReservations,
+  isVisitorAlreadyReserved as dbIsVisitorAlreadyReserved,
 } from '../db/database.js';
 import { TIMEOUT_THRESHOLD_MS } from '../../shared/types.js';
 import type {
@@ -33,6 +42,7 @@ import type {
   FloorPeakData,
   FloorDailyUsage,
   FloorComparisonData,
+  Reservation,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -470,6 +480,75 @@ export function getFloorComparisonData(days: number = 30, floorIds?: string[]): 
     peaks: getFloorPeakPeriods(floorIds),
     dailyUsage: getFloorDailyUsage(days, floorIds),
   };
+}
+
+export function getFloorReservations(floorId: string): Reservation[] {
+  dbExpireReservations();
+  return dbGetReservationsByFloor(floorId);
+}
+
+export function getVisitorReservations(visitorName: string): Reservation[] {
+  dbExpireReservations();
+  return dbGetReservationsByVisitor(visitorName);
+}
+
+export function getAllReservations(): Reservation[] {
+  dbExpireReservations();
+  return dbGetReservations();
+}
+
+export function createReservation(
+  floorId: string,
+  visitorName: string,
+  timeSlot: string
+): Reservation {
+  const floors = getFloors();
+  const floor = floors.find((f) => f.id === floorId);
+  if (!floor) {
+    throw new Error('楼层不存在');
+  }
+
+  if (!visitorName || visitorName.trim().length === 0) {
+    throw new Error('请输入您的称呼');
+  }
+
+  const slotDate = new Date(timeSlot);
+  if (isNaN(slotDate.getTime())) {
+    throw new Error('无效的时间档位');
+  }
+
+  const now = new Date();
+  if (slotDate.getTime() < now.getTime() - 5 * 60 * 1000) {
+    throw new Error('不能预约过去的时间');
+  }
+
+  if (dbIsVisitorAlreadyReserved(floorId, visitorName.trim(), timeSlot)) {
+    throw new Error('您已预约该楼层的此时段');
+  }
+
+  return dbCreateReservation({
+    floorId,
+    floorNumber: floor.floorNumber,
+    floorName: floor.floorName,
+    visitorName: visitorName.trim(),
+    timeSlot,
+  });
+}
+
+export function cancelReservationById(reservationId: string): Reservation | null {
+  return dbCancelReservation(reservationId);
+}
+
+export function fulfillReservationById(reservationId: string): Reservation | null {
+  return dbFulfillReservation(reservationId);
+}
+
+export function getNextReservationForFloor(floorId: string): Reservation | null {
+  return dbGetFirstPendingReservation(floorId);
+}
+
+export function expireAllReservations(): Reservation[] {
+  return dbExpireReservations();
 }
 
 export { initializeData };
