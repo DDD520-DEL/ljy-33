@@ -12,6 +12,10 @@ import type {
   WorkOrder,
   WorkOrderStats,
   StallDurationRank,
+  FloorTrendData,
+  FloorPeakData,
+  FloorDailyUsage,
+  FloorComparisonData,
 } from '../types';
 
 interface ApiResponse<T> {
@@ -115,4 +119,50 @@ export async function getStallDurationRanking(
     params.append('floorId', floorId);
   }
   return request<StallDurationRank[]>(`/api/stats/stall-duration?${params.toString()}`);
+}
+
+export async function getFloorComparisonData(
+  days: number = 30,
+  floorIds?: string[]
+): Promise<{ data: FloorComparisonData }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorIds && floorIds.length > 0) {
+    params.append('floorIds', floorIds.join(','));
+  }
+  return request<FloorComparisonData>(`/api/stats/floor-comparison?${params.toString()}`);
+}
+
+export async function getFloorTrendData(
+  days: number = 30,
+  floorIds?: string[]
+): Promise<{ data: FloorTrendData[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorIds && floorIds.length > 0) {
+    params.append('floorIds', floorIds.join(','));
+  }
+  return request<FloorTrendData[]>(`/api/stats/floor-trend?${params.toString()}`);
+}
+
+export async function getFloorPeakPeriods(
+  floorIds?: string[]
+): Promise<{ data: FloorPeakData[] }> {
+  const params = new URLSearchParams();
+  if (floorIds && floorIds.length > 0) {
+    params.append('floorIds', floorIds.join(','));
+  }
+  return request<FloorPeakData[]>(`/api/stats/floor-peak?${params.toString()}`);
+}
+
+export async function getFloorDailyUsage(
+  days: number = 30,
+  floorIds?: string[]
+): Promise<{ data: FloorDailyUsage[] }> {
+  const params = new URLSearchParams();
+  params.append('days', days.toString());
+  if (floorIds && floorIds.length > 0) {
+    params.append('floorIds', floorIds.join(','));
+  }
+  return request<FloorDailyUsage[]>(`/api/stats/floor-daily-usage?${params.toString()}`);
 }

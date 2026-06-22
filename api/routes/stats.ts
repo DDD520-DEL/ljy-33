@@ -5,6 +5,10 @@ import {
   getPeakPeriods,
   getAbnormalStats,
   getStallDurationRanking,
+  getFloorComparisonData,
+  getFloorTrendData,
+  getFloorPeakPeriods,
+  getFloorDailyUsage,
 } from '../services/bathroomService.js';
 
 const router = Router();
@@ -90,6 +94,81 @@ router.get('/stall-duration', (req: Request, res: Response): void => {
     res.status(500).json({
       success: false,
       error: 'Failed to get stall duration ranking',
+    });
+  }
+});
+
+router.get('/floor-comparison', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const floorIdsParam = req.query.floorIds as string | undefined;
+    const floorIds = floorIdsParam ? floorIdsParam.split(',') : undefined;
+    const data = getFloorComparisonData(days, floorIds);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get floor comparison error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get floor comparison data',
+    });
+  }
+});
+
+router.get('/floor-trend', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const floorIdsParam = req.query.floorIds as string | undefined;
+    const floorIds = floorIdsParam ? floorIdsParam.split(',') : undefined;
+    const data = getFloorTrendData(days, floorIds);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get floor trend error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get floor trend data',
+    });
+  }
+});
+
+router.get('/floor-peak', (req: Request, res: Response): void => {
+  try {
+    const floorIdsParam = req.query.floorIds as string | undefined;
+    const floorIds = floorIdsParam ? floorIdsParam.split(',') : undefined;
+    const data = getFloorPeakPeriods(floorIds);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get floor peak periods error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get floor peak periods',
+    });
+  }
+});
+
+router.get('/floor-daily-usage', (req: Request, res: Response): void => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const floorIdsParam = req.query.floorIds as string | undefined;
+    const floorIds = floorIdsParam ? floorIdsParam.split(',') : undefined;
+    const data = getFloorDailyUsage(days, floorIds);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Get floor daily usage error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get floor daily usage',
     });
   }
 });

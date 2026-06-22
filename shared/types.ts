@@ -123,3 +123,33 @@ export interface StallDurationRank {
   totalUsageCount: number;
   totalDurationMinutes: number;
 }
+
+export interface FloorTrendData {
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  data: TrendPoint[];
+}
+
+export interface FloorPeakData {
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  data: PeakPeriod[];
+}
+
+export interface FloorDailyUsage {
+  floorId: string;
+  floorNumber: number;
+  floorName: string;
+  avgDailyUsage: number;
+  totalUsage: number;
+  maxDailyUsage: number;
+  avgOccupancyRate: number;
+}
+
+export interface FloorComparisonData {
+  trends: FloorTrendData[];
+  peaks: FloorPeakData[];
+  dailyUsage: FloorDailyUsage[];
+}

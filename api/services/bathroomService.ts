@@ -29,6 +29,10 @@ import type {
   WorkOrder,
   WorkOrderStats,
   StallDurationRank,
+  FloorTrendData,
+  FloorPeakData,
+  FloorDailyUsage,
+  FloorComparisonData,
 } from '../../shared/types.js';
 
 export function getAllFloors(): { floors: FloorWithStatus[]; newAlerts: AlertRecord[] } {
@@ -306,6 +310,166 @@ export function getStallDurationRanking(days: number = 30, floorId?: string): St
     .sort((a, b) => b.avgDurationMinutes - a.avgDurationMinutes);
 
   return ranking;
+}
+
+export function getFloorTrendData(days: number = 30, floorIds?: string[]): FloorTrendData[] {
+  const records = getUsageRecords();
+  const floors = getFloors();
+  const now = Date.now();
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
+
+  const filteredRecords = records.filter((r) => r.startTime >= cutoff);
+  const targetFloors = floorIds && floorIds.length > 0
+    ? floors.filter((f) => floorIds.includes(f.id))
+    : floors;
+
+  const result: FloorTrendData[] = targetFloors.map((floor) => {
+    const floorRecords = filteredRecords.filter((r) => r.floorId === floor.id);
+
+    const dailyCount: Record<string, number> = {};
+    floorRecords.forEach((record) => {
+      const date = new Date(record.startTime);
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      dailyCount[dateStr] = (dailyCount[dateStr] || 0) + 1;
+    });
+
+    const data: TrendPoint[] = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(now - i * 24 * 60 * 60 * 1000);
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      data.push({
+        date: dateStr,
+        count: dailyCount[dateStr] || 0,
+      });
+    }
+
+    return {
+      floorId: floor.id,
+      floorNumber: floor.floorNumber,
+      floorName: floor.floorName,
+      data,
+    };
+  });
+
+  return result;
+}
+
+export function getFloorPeakPeriods(floorIds?: string[]): FloorPeakData[] {
+  const records = getUsageRecords();
+  const floors = getFloors();
+  const now = Date.now();
+  const days = 30;
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
+  const filteredRecords = records.filter((r) => r.startTime >= cutoff);
+
+  const targetFloors = floorIds && floorIds.length > 0
+    ? floors.filter((f) => floorIds.includes(f.id))
+    : floors;
+
+  const periods = [
+    { name: '早高峰 (8:00-10:00)', start: 8, end: 10 },
+    { name: '午间高峰 (11:30-13:30)', start: 11, end: 14 },
+    { name: '下午高峰 (14:00-16:00)', start: 14, end: 16 },
+    { name: '晚高峰 (17:00-19:00)', start: 17, end: 19 },
+  ];
+
+  const result: FloorPeakData[] = targetFloors.map((floor) => {
+    const floorRecords = filteredRecords.filter((r) => r.floorId === floor.id);
+
+    const dailyRecords: Record<string, number[]> = {};
+    floorRecords.forEach((record) => {
+      const date = new Date(record.startTime);
+      const weekday = date.getDay();
+      if (weekday === 0 || weekday === 6) return;
+
+      const dateStr = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+      if (!dailyRecords[dateStr]) {
+        dailyRecords[dateStr] = [];
+      }
+      dailyRecords[dateStr].push(date.getHours());
+    });
+
+    const weekdayCount = Object.keys(dailyRecords).length || 1;
+
+    const data: PeakPeriod[] = periods.map((period) => {
+      let count = 0;
+      Object.values(dailyRecords).forEach((hours) => {
+        hours.forEach((h) => {
+          if (h >= period.start && h < period.end) {
+            count++;
+          }
+        });
+      });
+
+      return {
+        period: period.name,
+        avgCount: Math.round((count / weekdayCount) * 10) / 10,
+      };
+    });
+
+    return {
+      floorId: floor.id,
+      floorNumber: floor.floorNumber,
+      floorName: floor.floorName,
+      data,
+    };
+  });
+
+  return result;
+}
+
+export function getFloorDailyUsage(days: number = 30, floorIds?: string[]): FloorDailyUsage[] {
+  const records = getUsageRecords();
+  const floors = getFloors();
+  const now = Date.now();
+  const cutoff = now - days * 24 * 60 * 60 * 1000;
+
+  const filteredRecords = records.filter((r) => r.startTime >= cutoff);
+  const targetFloors = floorIds && floorIds.length > 0
+    ? floors.filter((f) => floorIds.includes(f.id))
+    : floors;
+
+  const result: FloorDailyUsage[] = targetFloors.map((floor) => {
+    const floorRecords = filteredRecords.filter((r) => r.floorId === floor.id);
+
+    const dailyCount: Record<string, number> = {};
+    floorRecords.forEach((record) => {
+      const date = new Date(record.startTime);
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      dailyCount[dateStr] = (dailyCount[dateStr] || 0) + 1;
+    });
+
+    const dailyValues = Object.values(dailyCount);
+    const totalUsage = dailyValues.reduce((sum, v) => sum + v, 0);
+    const avgDailyUsage = dailyValues.length > 0 ? Math.round(totalUsage / dailyValues.length) : 0;
+    const maxDailyUsage = dailyValues.length > 0 ? Math.max(...dailyValues) : 0;
+
+    const totalDurationSeconds = floorRecords.reduce((sum, r) => sum + r.durationSeconds, 0);
+    const totalSecondsInPeriod = days * 24 * 60 * 60 * floor.totalStalls;
+    const avgOccupancyRate = totalSecondsInPeriod > 0
+      ? Math.round((totalDurationSeconds / totalSecondsInPeriod) * 1000) / 10
+      : 0;
+
+    return {
+      floorId: floor.id,
+      floorNumber: floor.floorNumber,
+      floorName: floor.floorName,
+      avgDailyUsage,
+      totalUsage,
+      maxDailyUsage,
+      avgOccupancyRate,
+    };
+  });
+
+  return result.sort((a, b) => b.avgDailyUsage - a.avgDailyUsage);
+}
+
+export function getFloorComparisonData(days: number = 30, floorIds?: string[]): FloorComparisonData {
+  return {
+    trends: getFloorTrendData(days, floorIds),
+    peaks: getFloorPeakPeriods(floorIds),
+    dailyUsage: getFloorDailyUsage(days, floorIds),
+  };
 }
 
 export { initializeData };
